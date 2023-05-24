@@ -18,15 +18,23 @@ const register = createAsyncThunk(
 
 const login = createAsyncThunk<{ profile: ProfileType }, ArgLoginType>('auth/login', async (arg, thunkAPI) => {
 	const res = await authApi.login(arg)
+	if (res.status === 200) {
+		thunkAPI.dispatch(setIsLoggedIn({ isLoggedIn: true }))
+	}
 	return { profile: res.data }
 })
 
 const slice = createSlice({
 	name: 'auth',
 	initialState: {
-		profile: null as ProfileType | null
+		profile: null as ProfileType | null,
+		isLoggedIn: false
 	},
-	reducers: {},
+	reducers: {
+		setIsLoggedIn: (state, action: any) => {
+			state.isLoggedIn = action.payload.isLoggedIn
+		}
+	},
 	extraReducers: builder => {
 		builder.addCase(login.fulfilled, (state, action) => {
 			state.profile = action.payload.profile
@@ -35,5 +43,7 @@ const slice = createSlice({
 })
 
 export const authReducer = slice.reducer
+
+export const setIsLoggedIn: any = slice.actions.setIsLoggedIn
 // Санки давайте упакуем в объект, нам это пригодится в дальнейшем
 export const authThunks = { register, login }
