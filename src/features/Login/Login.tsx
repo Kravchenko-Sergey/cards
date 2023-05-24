@@ -18,7 +18,7 @@ export const Login = () => {
 
 	const {
 		register,
-		formState: { errors, isValid },
+		formState: { errors },
 		handleSubmit
 	} = useForm<ArgLoginType>({ mode: 'onSubmit' })
 	const handleLogin = (data: any) => {

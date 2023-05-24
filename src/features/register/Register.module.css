@@ -14,8 +14,20 @@
     line-height: 31.69px;
 }
 
-.checkbox {
-    margin: 10px 0 0 0;
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.inputError {
+    font-size: 12px;
+    color: red;
     align-self: start;
 }
 

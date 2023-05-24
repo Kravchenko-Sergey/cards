@@ -9,10 +9,11 @@ const register = createAsyncThunk(
 	// (если параметров больше чем один упаковываем их в объект)
 	// - вторым параметром thunkAPI, обратившись к которому получим dispatch и др. свойства
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#typing-the-thunkapi-object
-	(arg: ArgRegisterType, thunkAPI) => {
-		authApi.register(arg).then(res => {
-			debugger
-		})
+	async (arg: ArgRegisterType, thunkAPI) => {
+		const res = await authApi.register(arg)
+		if (res.status === 200) {
+			thunkAPI.dispatch(setIsLoggedIn({ isLoggedIn: true }))
+		}
 	}
 )
 
