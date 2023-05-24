@@ -1,6 +1,6 @@
 import React from 'react'
 import { useAppDispatch } from 'app/hooks'
-import { authThunks, setIsLoggedIn } from 'features/auth/auth.slice'
+import { authThunks } from 'features/auth/auth.slice'
 import s from './Login.module.css'
 import TextField from '@mui/material/TextField'
 import { Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
@@ -18,9 +18,9 @@ export const Login = () => {
 
 	const {
 		register,
-		formState: { errors },
+		formState: { errors, isValid },
 		handleSubmit
-	} = useForm()
+	} = useForm<ArgLoginType>({ mode: 'onSubmit' })
 	const handleLogin = (data: any) => {
 		dispatch(authThunks.login(data))
 	}
@@ -46,16 +46,30 @@ export const Login = () => {
 						label='Email'
 						sx={{ m: 1, width: '100%' }}
 						variant='standard'
-						{...register('email')}
+						{...register('email', {
+							required: 'Enter your email!',
+							pattern: {
+								value: /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/,
+								message: 'Wrong or Invalid email address. Please correct and try again'
+							}
+						})}
 					/>
 				</div>
+				{errors.email && <div className={s.inputError}>{errors.email.message}</div>}
 				<div className={s.input}>
 					<FormControl sx={{ m: 1, width: '100%' }} variant='standard'>
 						<InputLabel htmlFor='standard-adornment-password'>Password</InputLabel>
 						<Input
 							id='standard-adornment-password'
 							type={showPassword ? 'text' : 'password'}
-							{...register('password')}
+							{...register('password', {
+								required: 'Enter your password',
+								minLength: { value: 7, message: 'Minimum 7 characters required' },
+								pattern: {
+									value: /(?=.*[0-9])/,
+									message: 'password must contain at least one number'
+								}
+							})}
 							endAdornment={
 								<InputAdornment position='end'>
 									<IconButton
@@ -70,6 +84,7 @@ export const Login = () => {
 						/>
 					</FormControl>
 				</div>
+				{errors.password && <div className={s.inputError}>{errors.password.message}</div>}
 				<div className={s.checkbox}>
 					<FormControlLabel control={<Checkbox defaultChecked {...register('rememberMe')} />} label='Remember me' />
 				</div>
