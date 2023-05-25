@@ -47,7 +47,7 @@ export const Login = () => {
 						sx={{ m: 1, width: '100%' }}
 						variant='standard'
 						{...register('email', {
-							required: 'Enter your email!',
+							required: 'Enter your email',
 							pattern: {
 								value: /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/,
 								message: 'Wrong or Invalid email address. Please correct and try again'
