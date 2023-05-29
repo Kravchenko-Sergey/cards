@@ -19,6 +19,8 @@ import {
 	TableRow
 } from '@mui/material'
 import style from './Packs.module.css'
+import { useSelector } from 'react-redux'
+import { Navigate } from 'react-router-dom'
 
 export const Packs = () => {
 	//slider
@@ -44,6 +46,11 @@ export const Packs = () => {
 	const [age, setAge] = React.useState('')
 	const handleChange2 = (event: SelectChangeEvent) => {
 		setAge(event.target.value)
+	}
+	//
+	const isLoggedIn = useSelector<any>(state => state.auth.isLoggedIn)
+	if (!isLoggedIn) {
+		return <Navigate to={'/login'} />
 	}
 
 	return (

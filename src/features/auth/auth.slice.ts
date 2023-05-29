@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ArgLoginType, ArgRegisterType, authApi, ProfileType } from 'features/auth/auth.api'
+import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
 
-const register = createAsyncThunk(
+const register = createAppAsyncThunk(
 	// 1 - prefix
 	'auth/register',
 	// 2 - callback (условно наша старая санка), в которую:
@@ -11,29 +12,51 @@ const register = createAsyncThunk(
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#typing-the-thunkapi-object
 	async (arg: ArgRegisterType, thunkAPI) => {
 		const res = await authApi.register(arg)
-		if (res.status === 200) {
-			thunkAPI.dispatch(setIsLoggedIn({ isLoggedIn: true }))
+		if (res.status === 201) {
+			thunkAPI.dispatch(authActions.setIsRegisteredIn({ isRegisteredIn: true }))
 		}
 	}
 )
 
-const login = createAsyncThunk<{ profile: ProfileType }, ArgLoginType>('auth/login', async (arg, thunkAPI) => {
+const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>('auth/login', async (arg, thunkAPI) => {
 	const res = await authApi.login(arg)
 	if (res.status === 200) {
-		thunkAPI.dispatch(setIsLoggedIn({ isLoggedIn: true }))
+		thunkAPI.dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
 	}
 	return { profile: res.data }
+})
+
+export const logout = createAppAsyncThunk('auth/logout', async (arg, thunkAPI) => {
+	const res = await authApi.logout()
+	if (res.status === 200) {
+		thunkAPI.dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }))
+	}
+})
+
+export const changeName = createAppAsyncThunk('auth/changeName', async (arg, thunkAPI) => {
+	const res = await authApi.changeName({ name: 'qazxsw' })
+	if (res.status === 200) {
+		console.log(res.data)
+		thunkAPI.dispatch(authActions.setChangeName({ name: res.data.updatedUser.name }))
+	}
 })
 
 const slice = createSlice({
 	name: 'auth',
 	initialState: {
 		profile: null as ProfileType | null,
-		isLoggedIn: false
+		isLoggedIn: false,
+		isRegisteredIn: false
 	},
 	reducers: {
-		setIsLoggedIn: (state, action: any) => {
+		setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
 			state.isLoggedIn = action.payload.isLoggedIn
+		},
+		setIsRegisteredIn: (state, action: PayloadAction<{ isRegisteredIn: boolean }>) => {
+			state.isRegisteredIn = action.payload.isRegisteredIn
+		},
+		setChangeName: (state, action: PayloadAction<any>) => {
+			state!.profile!.name = action.payload.name
 		}
 	},
 	extraReducers: builder => {
@@ -44,7 +67,5 @@ const slice = createSlice({
 })
 
 export const authReducer = slice.reducer
-
-export const setIsLoggedIn: any = slice.actions.setIsLoggedIn
-// Санки давайте упакуем в объект, нам это пригодится в дальнейшем
-export const authThunks = { register, login }
+export const authActions = slice.actions
+export const authThunks = { register, login, logout, changeName }

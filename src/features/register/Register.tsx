@@ -1,10 +1,10 @@
-import { useAppDispatch } from 'app/hooks'
+import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { authThunks } from 'features/auth/auth.slice'
 import s from './Register.module.css'
 import TextField from '@mui/material/TextField'
 import { FormControl, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -16,10 +16,6 @@ type RegType = {
 
 export const Register = () => {
 	const dispatch = useAppDispatch()
-
-	/*const handleRegister = () => {
-		dispatch(authThunks.register({ email: 'sergeyCardsDev@gmail.com', password: '1qazxcvBG' }))
-	}*/
 
 	const {
 		register,
@@ -34,6 +30,11 @@ export const Register = () => {
 	const handleClickShowPassword = () => setShowPassword(show => !show)
 	const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault()
+	}
+
+	const isRegisteredIn = useAppSelector(state => state.auth.isRegisteredIn)
+	if (isRegisteredIn) {
+		return <Navigate to={'/login'} />
 	}
 
 	return (

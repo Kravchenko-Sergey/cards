@@ -1,8 +1,24 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import s from './Profile.module.css'
+import { changeName, logout } from 'features/auth/auth.slice'
+import { useAppDispatch, useAppSelector } from 'app/hooks'
+import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
 
 export const Profile = () => {
+	const dispatch = useAppDispatch()
+	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+	const userName = useAppSelector(state => state.auth.profile?.name)
+	const userEmail = useAppSelector(state => state.auth.profile?.email)
+	const handleLogout = () => {
+		dispatch(logout())
+	}
+	const handleUserName = () => {
+		dispatch(changeName())
+	}
+	if (!isLoggedIn) {
+		return <Navigate to={'/login'} />
+	}
 	return (
 		<div className={s.s}>
 			<Link to='/packs' className={s.backPackList}>
@@ -17,9 +33,13 @@ export const Profile = () => {
 						alt='avatar'
 					/>
 				</div>
-				<div className={s.name}>Sergey</div>
-				<div className={s.email}>sergey.ose.pyatigorsk@gmail.com</div>
-				<button className={s.button}>Log out</button>
+				<div className={s.name}>
+					<EditableSpan value={userName} onChange={handleUserName} />
+				</div>
+				<div className={s.email}>{userEmail}</div>
+				<button onClick={handleLogout} className={s.button}>
+					Log out
+				</button>
 			</div>
 		</div>
 	)

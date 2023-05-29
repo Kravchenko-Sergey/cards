@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAppDispatch } from 'app/hooks'
 import { authThunks } from 'features/auth/auth.slice'
 import s from './Login.module.css'
@@ -12,9 +12,8 @@ import { useSelector } from 'react-redux'
 
 export const Login = () => {
 	const dispatch = useAppDispatch()
-	/*const handleLogin = () => {
-		dispatch(authThunks.login({ email: 'sergeyCardsDev@gmail.com', password: '1qazxcvBG', rememberMe: true }))
-	}*/
+
+	const isInitialized = useSelector<any>(state => state.app.isAppInitialized)
 
 	const {
 		register,
@@ -32,6 +31,7 @@ export const Login = () => {
 	}
 
 	const isLoggedIn = useSelector<any>(state => state.auth.isLoggedIn)
+
 	if (isLoggedIn) {
 		return <Navigate to={'/cards'} />
 	}
