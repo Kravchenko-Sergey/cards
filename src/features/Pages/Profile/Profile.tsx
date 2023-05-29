@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import s from './Profile.module.css'
-import { changeName, logout } from 'features/auth/auth.slice'
+import { authThunks, logout } from 'features/auth/auth.slice'
 import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
 
@@ -13,9 +13,7 @@ export const Profile = () => {
 	const handleLogout = () => {
 		dispatch(logout())
 	}
-	const handleUserName = () => {
-		dispatch(changeName())
-	}
+
 	if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
 	}
@@ -34,7 +32,7 @@ export const Profile = () => {
 					/>
 				</div>
 				<div className={s.name}>
-					<EditableSpan value={userName} onChange={handleUserName} />
+					<EditableSpan value={userName} onChange={authThunks.changeName} />
 				</div>
 				<div className={s.email}>{userEmail}</div>
 				<button onClick={handleLogout} className={s.button}>

@@ -34,9 +34,9 @@ export const logout = createAppAsyncThunk('auth/logout', async (arg, thunkAPI) =
 })
 
 export const changeName = createAppAsyncThunk('auth/changeName', async (arg, thunkAPI) => {
-	const res = await authApi.changeName({ name: 'qazxsw' })
+	const res = await authApi.changeName(arg)
+	console.log(arg)
 	if (res.status === 200) {
-		console.log(res.data)
 		thunkAPI.dispatch(authActions.setChangeName({ name: res.data.updatedUser.name }))
 	}
 })

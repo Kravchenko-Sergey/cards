@@ -1,13 +1,16 @@
 import React, { ChangeEvent, useState } from 'react'
 import TextField from '@mui/material/TextField'
-import s from '../../features/Pages/Profile/Profile.module.css'
+import { authThunks } from '../../features/auth/auth.slice'
+import { useAppDispatch } from '../../app/hooks'
 
 type EditableSpanPropsType = {
 	value: string | undefined
-	onChange: (newValue: string) => void
+	onChange: any
 }
 
 export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
+	const dispatch = useAppDispatch()
+	console.log(props)
 	let [editMode, setEditMode] = useState(false)
 	let [title, setTitle] = useState(props.value)
 
@@ -17,7 +20,7 @@ export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
 	}
 	const activateViewMode = () => {
 		setEditMode(false)
-		props.onChange(title)
+		dispatch(props.onChange({ name: title }))
 	}
 	const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
 		setTitle(e.currentTarget.value)
