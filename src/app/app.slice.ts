@@ -10,8 +10,7 @@ export const initializeApp = createAppAsyncThunk('app/initializeApp', async (arg
 			thunkAPI.dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
 		}
 	} catch (e) {
-		console.log(e)
-		console.log('you are not authorized')
+		console.error('you are not authorized')
 	} finally {
 		thunkAPI.dispatch(appActions.setIsAppInitialized({ isAppInitialized: true }))
 	}
@@ -25,11 +24,7 @@ const slice = createSlice({
 		isAppInitialized: false
 	},
 	reducers: {
-		// Подредьюсер.
-		// Action - это payload объект. Типизация через PayloadAction
 		setIsLoading: (state, action: PayloadAction<{ isLoading: boolean }>) => {
-			// Логику в подредьюсерах пишем мутабельным образом,
-			// т.к. иммутабельность достигается благодаря immer.js
 			state.isLoading = action.payload.isLoading
 		},
 		setIsAppInitialized: (state, action: PayloadAction<{ isAppInitialized: boolean }>) => {
@@ -39,8 +34,5 @@ const slice = createSlice({
 })
 
 export const appReducer = slice.reducer
-// Action creators создаются автоматически для каждого подредьюсера
-// Все экшены упаковываем в объект. В дальнейшем пригодится
 export const appActions = slice.actions
-
 export const appThunks = { initializeApp }

@@ -1,5 +1,5 @@
 import React from 'react'
-import s from './CheckEmail.module.css'
+import s from 'features/auth/CheckEmail/CheckEmail.module.css'
 
 export const CheckEmail = () => {
 	return (

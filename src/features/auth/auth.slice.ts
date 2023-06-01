@@ -1,22 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ArgLoginType, ArgRegisterType, authApi, ProfileType } from 'features/auth/auth.api'
 import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
+import { authApi } from './auth.api'
+import { ArgLoginType, ArgRegisterType, ProfileType } from './auth.api.types'
 
-const register = createAppAsyncThunk(
-	// 1 - prefix
-	'auth/register',
-	// 2 - callback (условно наша старая санка), в которую:
-	// - первым параметром (arg) мы передаем аргументы необходимые для санки
-	// (если параметров больше чем один упаковываем их в объект)
-	// - вторым параметром thunkAPI, обратившись к которому получим dispatch и др. свойства
-	// https://redux-toolkit.js.org/usage/usage-with-typescript#typing-the-thunkapi-object
-	async (arg: ArgRegisterType, thunkAPI) => {
-		const res = await authApi.register(arg)
-		if (res.status === 201) {
-			thunkAPI.dispatch(authActions.setIsRegisteredIn({ isRegisteredIn: true }))
-		}
+const register = createAppAsyncThunk('auth/register', async (arg: ArgRegisterType, thunkAPI) => {
+	const res = await authApi.register(arg)
+	if (res.status === 201) {
+		thunkAPI.dispatch(authActions.setIsRegisteredIn({ isRegisteredIn: true }))
 	}
-)
+})
 
 const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>('auth/login', async (arg, thunkAPI) => {
 	const res = await authApi.login(arg)
@@ -33,12 +25,22 @@ export const logout = createAppAsyncThunk('auth/logout', async (arg, thunkAPI) =
 	}
 })
 
-export const changeName = createAppAsyncThunk('auth/changeName', async (arg, thunkAPI) => {
-	const res = await authApi.changeName(arg)
-	console.log(arg)
+export const changeName = createAppAsyncThunk('auth/changeName', async (arg: { name: string }, thunkAPI) => {
+	const res = await authApi.updateProfile(arg)
 	if (res.status === 200) {
 		thunkAPI.dispatch(authActions.setChangeName({ name: res.data.updatedUser.name }))
 	}
+})
+
+export const forgotPassword = createAppAsyncThunk(
+	'auth/forgotPassword',
+	async (arg: { email: string; message: string }, thunkAPI) => {
+		const res = await authApi.forgotPassword(arg)
+	}
+)
+
+export const setNewPassword = createAppAsyncThunk('auth/setNewPassword', async (arg, thunkAPI) => {
+	const res = await authApi.setNewPassword(arg)
 })
 
 const slice = createSlice({
@@ -68,4 +70,4 @@ const slice = createSlice({
 
 export const authReducer = slice.reducer
 export const authActions = slice.actions
-export const authThunks = { register, login, logout, changeName }
+export const authThunks: any = { register, login, logout, changeName, forgotPassword, setNewPassword }

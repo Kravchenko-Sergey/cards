@@ -1,29 +1,24 @@
-import { useAppDispatch, useAppSelector } from 'app/hooks'
+import React from 'react'
 import { authThunks } from 'features/auth/auth.slice'
-import s from './Register.module.css'
+import s from 'features/auth/Login/Login.module.css'
 import TextField from '@mui/material/TextField'
-import { FormControl, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
+import { Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link, Navigate } from 'react-router-dom'
-import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useAppDispatch, useAppSelector } from '../../../common/hooks'
+import { ArgLoginType } from '../auth.api.types'
 
-type RegType = {
-	email: string
-	password: string
-	confirmPassword: string
-}
-
-export const Register = () => {
+export const Login = () => {
 	const dispatch = useAppDispatch()
 
 	const {
 		register,
 		formState: { errors },
 		handleSubmit
-	} = useForm<RegType>({ mode: 'onSubmit' })
-	const handleRegister = (data: any) => {
-		dispatch(authThunks.register(data))
+	} = useForm<ArgLoginType>({ mode: 'onSubmit' })
+	const handleLogin = (data: any) => {
+		dispatch(authThunks.login(data))
 	}
 
 	const [showPassword, setShowPassword] = React.useState(false)
@@ -32,15 +27,16 @@ export const Register = () => {
 		event.preventDefault()
 	}
 
-	const isRegisteredIn = useAppSelector(state => state.auth.isRegisteredIn)
-	if (isRegisteredIn) {
-		return <Navigate to={'/login'} />
+	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
+	if (isLoggedIn) {
+		return <Navigate to={'/profile'} />
 	}
 
 	return (
 		<div className={s.container}>
-			<h1 className={s.header}>Sign Up</h1>
-			<form onSubmit={handleSubmit(handleRegister)} className={s.form}>
+			<h1 className={s.header}>Sign in</h1>
+			<form onSubmit={handleSubmit(handleLogin)} className={s.form}>
 				<div className={s.input}>
 					<TextField
 						id='standard-basic'
@@ -48,15 +44,15 @@ export const Register = () => {
 						sx={{ m: 1, width: '100%' }}
 						variant='standard'
 						{...register('email', {
-							required: 'Enter your email!',
+							required: 'Enter your email',
 							pattern: {
 								value: /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/,
 								message: 'Wrong or Invalid email address. Please correct and try again'
 							}
 						})}
 					/>
+					{errors.email && <div className={s.inputError}>{errors.email.message}</div>}
 				</div>
-				{errors.email && <div className={s.inputError}>{errors.email.message}</div>}
 				<div className={s.input}>
 					<FormControl sx={{ m: 1, width: '100%' }} variant='standard'>
 						<InputLabel htmlFor='standard-adornment-password'>Password</InputLabel>
@@ -84,39 +80,21 @@ export const Register = () => {
 							}
 						/>
 					</FormControl>
+					{errors.password && <div className={s.inputError}>{errors.password.message}</div>}
 				</div>
-				{errors.password && <div className={s.inputError}>{errors.password.message}</div>}
-				<div className={s.input}>
-					<FormControl sx={{ m: 1, width: '100%' }} variant='standard'>
-						<InputLabel htmlFor='standard-adornment-password'>Confirm password</InputLabel>
-						<Input
-							id='standard-adornment-password'
-							type={showPassword ? 'text' : 'password'}
-							{...register('confirmPassword', {
-								required: 'Type your password again'
-							})}
-							endAdornment={
-								<InputAdornment position='end'>
-									<IconButton
-										aria-label='toggle password visibility'
-										onClick={handleClickShowPassword}
-										onMouseDown={handleMouseDownPassword}
-									>
-										{showPassword ? <VisibilityOff /> : <Visibility />}
-									</IconButton>
-								</InputAdornment>
-							}
-						/>
-					</FormControl>
+				<div className={s.checkbox}>
+					<FormControlLabel control={<Checkbox defaultChecked {...register('rememberMe')} />} label='Remember me' />
 				</div>
-				{errors.confirmPassword && <div className={s.inputError}>{errors.confirmPassword.message}</div>}
-				<button type='submit' onClick={handleRegister} className={s.button}>
-					Sign Up
+				<Link to='/forgot-password' className={s.forgotPassword}>
+					Forgot Password?
+				</Link>
+				<button type='submit' onClick={handleLogin} className={s.button}>
+					Sign in
 				</button>
 			</form>
-			<div className={s.dontAcc}>Already have an account?</div>
-			<Link to='/login' className={s.signUp}>
-				Sign In
+			<div className={s.dontAcc}>Dont have an account?</div>
+			<Link to='/register' className={s.signUp}>
+				Sign Up
 			</Link>
 		</div>
 	)

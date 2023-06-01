@@ -2,8 +2,9 @@ import React from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import s from './Profile.module.css'
 import { authThunks, logout } from 'features/auth/auth.slice'
-import { useAppDispatch, useAppSelector } from 'app/hooks'
 import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
+import { useAppDispatch } from '../../../common/hooks/useAppDispatch'
+import { useAppSelector } from '../../../common/hooks/useAppSelector'
 
 export const Profile = () => {
 	const dispatch = useAppDispatch()

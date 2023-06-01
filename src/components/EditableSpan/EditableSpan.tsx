@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
 import TextField from '@mui/material/TextField'
-import { authThunks } from '../../features/auth/auth.slice'
-import { useAppDispatch } from '../../app/hooks'
+import { useAppDispatch } from '../../common/hooks/useAppDispatch'
 
 type EditableSpanPropsType = {
 	value: string | undefined
@@ -10,7 +9,7 @@ type EditableSpanPropsType = {
 
 export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
 	const dispatch = useAppDispatch()
-	console.log(props)
+
 	let [editMode, setEditMode] = useState(false)
 	let [title, setTitle] = useState(props.value)
 

@@ -1,5 +1,5 @@
 import Pagination from '@mui/material/Pagination'
-import React from 'react'
+import React, { useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import {
 	Button,
@@ -19,10 +19,16 @@ import {
 	TableRow
 } from '@mui/material'
 import style from './Packs.module.css'
-import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../common/hooks'
+import { packsThunks } from './packs.slice'
 
 export const Packs = () => {
+	const dispatch = useAppDispatch()
+	const packs = useAppSelector(state => state.packs.packs)
+	useEffect(() => {
+		dispatch(packsThunks.getPacks())
+	}, [])
 	//slider
 	function valuetext(value: number) {
 		return `${value}°C`
@@ -32,23 +38,21 @@ export const Packs = () => {
 		setValue(newValue as number[])
 	}
 	//table
-	function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-		return { name, calories, fat, carbs, protein }
+	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
+		return { name, cards, lastUpdated, createdBy, actions }
 	}
-	const rows = [
-		createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-		createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-		createData('Eclair', 262, 16.0, 24, 6.0),
-		createData('Cupcake', 305, 3.7, 67, 4.3),
-		createData('Gingerbread', 356, 16.0, 49, 3.9)
-	]
+
+	const rows = packs.map((pack: any) =>
+		createData(`${pack.user_name}`, pack.cardsCount, pack.updated, pack.created, 4.0)
+	)
+
 	//select
 	const [age, setAge] = React.useState('')
 	const handleChange2 = (event: SelectChangeEvent) => {
 		setAge(event.target.value)
 	}
 	//
-	const isLoggedIn = useSelector<any>(state => state.auth.isLoggedIn)
+	const isLoggedIn = useAppSelector<any>(state => state.auth.isLoggedIn)
 	if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
 	}
@@ -109,10 +113,10 @@ export const Packs = () => {
 									<TableCell component='th' scope='row'>
 										{row.name}
 									</TableCell>
-									<TableCell align='right'>{row.calories}</TableCell>
-									<TableCell align='right'>{row.fat}</TableCell>
-									<TableCell align='right'>{row.carbs}</TableCell>
-									<TableCell align='right'>{row.protein}</TableCell>
+									<TableCell align='right'>{row.cards}</TableCell>
+									<TableCell align='right'>{row.lastUpdated}</TableCell>
+									<TableCell align='right'>{row.createdBy}</TableCell>
+									<TableCell align='right'>{row.actions}</TableCell>
 								</TableRow>
 							))}
 						</TableBody>
