@@ -6,7 +6,7 @@ import { Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornm
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link, Navigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useAppDispatch, useAppSelector } from '../../../common/hooks'
+import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { ArgLoginType } from '../auth.api.types'
 
 export const Login = () => {

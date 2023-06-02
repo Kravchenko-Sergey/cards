@@ -33,7 +33,7 @@ export const Profile = () => {
 					/>
 				</div>
 				<div className={s.name}>
-					<EditableSpan value={userName} onChange={authThunks.changeName} />
+					<EditableSpan value={userName} onChange={authThunks.changeName} error={'ghff'} />
 				</div>
 				<div className={s.email}>{userEmail}</div>
 				<button onClick={handleLogout} className={s.button}>

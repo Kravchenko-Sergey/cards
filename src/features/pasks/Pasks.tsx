@@ -20,7 +20,7 @@ import {
 } from '@mui/material'
 import style from './Packs.module.css'
 import { Navigate } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../../common/hooks'
+import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { packsThunks } from './packs.slice'
 
 export const Packs = () => {
@@ -29,6 +29,10 @@ export const Packs = () => {
 	useEffect(() => {
 		dispatch(packsThunks.getPacks())
 	}, [])
+	const handleCreatePack = () => {
+		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
+		dispatch(packsThunks.getPacks())
+	}
 	//slider
 	function valuetext(value: number) {
 		return `${value}°C`
@@ -42,9 +46,7 @@ export const Packs = () => {
 		return { name, cards, lastUpdated, createdBy, actions }
 	}
 
-	const rows = packs.map((pack: any) =>
-		createData(`${pack.user_name}`, pack.cardsCount, pack.updated, pack.created, 4.0)
-	)
+	//const rows = packs.map((pack: any) => createData (`${pack.name}`, pack.cardsCount, pack.updated, pack.created, 4.0))
 
 	//select
 	const [age, setAge] = React.useState('')
@@ -61,7 +63,9 @@ export const Packs = () => {
 		<div className={style.container}>
 			<div className={style.head}>
 				<div className={style.pageName}>Packs list</div>
-				<button className={style.button}>Add new pack</button>
+				<button onClick={handleCreatePack} className={style.button}>
+					Add new pack
+				</button>
 			</div>
 			<div className={style.headersTable}>
 				<div className={`${style.labelBlock} ${style.search}`}>
@@ -108,15 +112,28 @@ export const Packs = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{rows.map(row => (
-								<TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+							{packs.map((row: any) => (
+								<TableRow key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 									<TableCell component='th' scope='row'>
 										{row.name}
 									</TableCell>
-									<TableCell align='right'>{row.cards}</TableCell>
-									<TableCell align='right'>{row.lastUpdated}</TableCell>
-									<TableCell align='right'>{row.createdBy}</TableCell>
-									<TableCell align='right'>{row.actions}</TableCell>
+									<TableCell align='right'>{row.cardsCount}</TableCell>
+									<TableCell align='right'>{row.updated}</TableCell>
+									<TableCell align='right'>{row._id}</TableCell>
+									<TableCell align='right'>
+										<div className={style.qw}>
+											<span
+												onClick={() => {
+													dispatch(packsThunks.deletePack({ id: row._id }))
+													dispatch(packsThunks.getPacks())
+												}}
+											>
+												{'D '}
+											</span>
+											<span>{'U '}</span>
+											<span>T</span>
+										</div>
+									</TableCell>
 								</TableRow>
 							))}
 						</TableBody>
