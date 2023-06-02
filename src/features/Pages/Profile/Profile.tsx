@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import s from './Profile.module.css'
-import { authThunks, logout } from 'features/auth/auth.slice'
+import { authThunks, changeUserName, logout } from 'features/auth/auth.slice'
 import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
 import { useAppDispatch } from '../../../common/hooks/useAppDispatch'
 import { useAppSelector } from '../../../common/hooks/useAppSelector'
@@ -33,7 +33,7 @@ export const Profile = () => {
 					/>
 				</div>
 				<div className={s.name}>
-					<EditableSpan value={userName} onChange={authThunks.changeName} error={'ghff'} />
+					<EditableSpan value={userName} onChange={authThunks.changeUserName} error={'Enter your name'} />
 				</div>
 				<div className={s.email}>{userEmail}</div>
 				<button onClick={handleLogout} className={s.button}>

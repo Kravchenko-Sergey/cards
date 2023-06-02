@@ -6,7 +6,8 @@ import style from './EditableSpan.module.css'
 type EditableSpanPropsType = {
 	value: string | undefined
 	onChange: any
-	error: string
+	error?: string
+	_id?: string
 }
 
 export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
@@ -24,7 +25,7 @@ export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
 		if (title?.length === 0) {
 			setEditMode(true)
 		} else {
-			dispatch(props.onChange({ name: title }))
+			dispatch(props.onChange({ _id: props._id, name: title }))
 		}
 	}
 	const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {

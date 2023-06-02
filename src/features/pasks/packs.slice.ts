@@ -23,6 +23,12 @@ const deletePack = createAsyncThunk('packs/deletePack', async (arg: any, thunkAP
 	thunkAPI.dispatch(packsActions.getPacks({ packs: res.data.cardPacks }))
 })
 
+const updatePackName = createAsyncThunk('packs/updatePacksName', async (arg: any, thunkAPI) => {
+	console.log(arg)
+	const res = await packsApi.updatePackName({ cardsPack: arg })
+	thunkAPI.dispatch(packsActions.updatePackName({ id: arg._id, name: res.data.updatedCardsPack.name }))
+})
+
 const slice = createSlice({
 	name: 'packs',
 	initialState: {
@@ -30,7 +36,6 @@ const slice = createSlice({
 	},
 	reducers: {
 		getPacks: (state, action: PayloadAction<any>) => {
-			console.log(state)
 			state.packs = action.payload.packs
 		},
 		createPack: (state: any, action: PayloadAction<any>) => {
@@ -38,6 +43,12 @@ const slice = createSlice({
 		},
 		deletePack: (state: any, action: PayloadAction<any>) => {
 			state.packs.packs.filter((pack: any) => pack._id !== action.payload.id)
+		},
+		updatePackName: (state: any, action: PayloadAction<any>) => {
+			console.log(action)
+			const packIndex = state.packs.findIndex((pack: any) => pack._id === action.payload.id)
+			console.log(packIndex)
+			state.packs[packIndex].name = action.payload.name
 		}
 	},
 	extraReducers: {}
@@ -45,4 +56,4 @@ const slice = createSlice({
 
 export const packsReducer = slice.reducer
 export const packsActions = slice.actions
-export const packsThunks = { getPacks, createPack, deletePack }
+export const packsThunks = { getPacks, createPack, deletePack, updatePackName }

@@ -25,7 +25,7 @@ export const logout = createAppAsyncThunk('auth/logout', async (arg, thunkAPI) =
 	}
 })
 
-export const changeName = createAppAsyncThunk('auth/changeName', async (arg: { name: string }, thunkAPI) => {
+export const changeUserName = createAppAsyncThunk('auth/changeName', async (arg: { name: string }, thunkAPI) => {
 	const res = await authApi.updateProfile(arg)
 	if (res.status === 200) {
 		thunkAPI.dispatch(authActions.setChangeName({ name: res.data.updatedUser.name }))
@@ -70,4 +70,4 @@ const slice = createSlice({
 
 export const authReducer = slice.reducer
 export const authActions = slice.actions
-export const authThunks: any = { register, login, logout, changeName, forgotPassword, setNewPassword }
+export const authThunks: any = { register, login, logout, changeUserName, forgotPassword, setNewPassword }

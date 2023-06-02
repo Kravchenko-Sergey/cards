@@ -9,6 +9,9 @@ export const packsApi = {
 	},
 	deletePack(id: string) {
 		return instance.delete(`cards/pack/?id=${id}`)
+	},
+	updatePackName(data: any) {
+		return instance.put('cards/pack', data)
 	}
 }
 

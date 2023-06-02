@@ -22,6 +22,7 @@ import style from './Packs.module.css'
 import { Navigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { packsThunks } from './packs.slice'
+import { EditableSpan } from '../../components/EditableSpan/EditableSpan'
 
 export const Packs = () => {
 	const dispatch = useAppDispatch()
@@ -115,13 +116,13 @@ export const Packs = () => {
 							{packs.map((row: any) => (
 								<TableRow key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 									<TableCell component='th' scope='row'>
-										{row.name}
+										<EditableSpan value={row.name} onChange={packsThunks.updatePackName} _id={row._id} />
 									</TableCell>
 									<TableCell align='right'>{row.cardsCount}</TableCell>
 									<TableCell align='right'>{row.updated}</TableCell>
-									<TableCell align='right'>{row._id}</TableCell>
+									<TableCell align='right'>{row.user_name}</TableCell>
 									<TableCell align='right'>
-										<div className={style.qw}>
+										<div>
 											<span
 												onClick={() => {
 													dispatch(packsThunks.deletePack({ id: row._id }))

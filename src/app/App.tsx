@@ -14,8 +14,8 @@ import { PageError } from '../features/Pages/PageError/PageError'
 import { CircularProgress } from '@mui/material'
 import '../app/App.css'
 import { Header } from '../components/Header/Header'
-import { useAppDispatch } from '../common/hooks/useAppDispatch'
-import { useAppSelector } from '../common/hooks/useAppSelector'
+import { useAppDispatch } from '../common/hooks'
+import { useAppSelector } from '../common/hooks'
 
 export const App = () => {
 	const router = [
