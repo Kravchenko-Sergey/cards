@@ -22,7 +22,11 @@ import style from './Packs.module.css'
 import { Navigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { packsThunks } from './packs.slice'
-import { EditableSpan } from '../../components/EditableSpan/EditableSpan'
+import { EditableSpan } from 'components/EditableSpan/EditableSpan'
+import teacherBtn from '../../assets/img/teacher.svg'
+import editBtn from '../../assets/img/edit.svg'
+import deleteBtn from '../../assets/img/delete.svg'
+import resetFilters from '../../assets/img/resetFilters.svg'
 
 export const Packs = () => {
 	const dispatch = useAppDispatch()
@@ -72,7 +76,7 @@ export const Packs = () => {
 				<div className={`${style.labelBlock} ${style.search}`}>
 					<div className={style.label}>Search</div>
 					<div className={style.input}>
-						<TextField id='outlined-basic' placeholder={'Provide your text'} variant='outlined' />
+						<TextField id='outlined-basic' placeholder={'Provide your text'} variant='outlined' size='small' />
 					</div>
 				</div>
 				<div className={`${style.labelBlock} ${style.showButtons}`}>
@@ -98,41 +102,51 @@ export const Packs = () => {
 						<div className={style.sliderValue}>{value[1]}</div>
 					</div>
 				</div>
-				<div className={style.icons}></div>
+				<div className={style.icons}>
+					<img src={resetFilters} alt='resetFilters' />
+				</div>
 			</div>
 			<div className={style.table}>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
 						<TableHead sx={{ backgroundColor: '#efefef', fontWeight: 600 }}>
 							<TableRow>
-								<TableCell>Name</TableCell>
-								<TableCell align='right'>Cards</TableCell>
-								<TableCell align='right'>Last Updated</TableCell>
-								<TableCell align='right'>Created by</TableCell>
-								<TableCell align='right'>Actions</TableCell>
+								<TableCell align='left' width='25%'>
+									Name
+								</TableCell>
+								<TableCell align='left' width='25%'>
+									Cards
+								</TableCell>
+								<TableCell align='left' width='20%'>
+									Last Updated
+								</TableCell>
+								<TableCell align='left' width='20%'>
+									Created by
+								</TableCell>
+								<TableCell align='left' width='10%'>
+									Actions
+								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{packs.map((row: any) => (
-								<TableRow key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-									<TableCell component='th' scope='row'>
-										<EditableSpan value={row.name} onChange={packsThunks.updatePackName} _id={row._id} />
-									</TableCell>
-									<TableCell align='right'>{row.cardsCount}</TableCell>
-									<TableCell align='right'>{row.updated}</TableCell>
-									<TableCell align='right'>{row.user_name}</TableCell>
-									<TableCell align='right'>
-										<div>
-											<span
+								<TableRow key={row._id}>
+									<TableCell align='left'>{row.name}</TableCell>
+									<TableCell align='left'>{row.cardsCount}</TableCell>
+									<TableCell align='left'>{row.updated}</TableCell>
+									<TableCell align='left'>{row.user_name}</TableCell>
+									<TableCell align='left'>
+										<div className={style.actionButtons}>
+											<img src={teacherBtn} alt='teacherBtn' />
+											<img onClick={packsThunks.updatePackName} src={editBtn} alt='changeBtn' />
+											<img
 												onClick={() => {
 													dispatch(packsThunks.deletePack({ id: row._id }))
 													dispatch(packsThunks.getPacks())
 												}}
-											>
-												{'D '}
-											</span>
-											<span>{'U '}</span>
-											<span>T</span>
+												src={deleteBtn}
+												alt='deleteBtn'
+											/>
 										</div>
 									</TableCell>
 								</TableRow>
