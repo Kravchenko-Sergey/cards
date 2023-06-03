@@ -2,11 +2,11 @@ import React, { ChangeEvent, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import { useAppDispatch } from 'common/hooks'
 import style from './EditableSpan.module.css'
+import edit from 'assets/img/edit.svg'
 
 type EditableSpanPropsType = {
 	value: string | undefined
 	onChange: any
-	error?: string
 	_id?: string
 }
 
@@ -32,16 +32,23 @@ export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
 		setTitle(e.currentTarget.value)
 	}
 
-	return editMode ? (
-		<>
-			<TextField value={title} onChange={changeTitle} autoFocus />
-			{title?.length === 0 && <div className={style.inputError}>{props.error}</div>}
-			<button onClick={activateViewMode}>SAVE</button>
-		</>
-	) : (
-		<>
-			<span>{props.value}</span>
-			<button onClick={activateEditMode}>изменить имя</button>
-		</>
+	return (
+		<div className={style.editBlock}>
+			{editMode ? (
+				<>
+					<div>
+						<TextField value={title} onChange={changeTitle} size='small' variant='standard' autoFocus />
+					</div>
+					<button onClick={activateViewMode} className={style.button}>
+						SAVE
+					</button>
+				</>
+			) : (
+				<>
+					<span>{props.value}</span>
+					<img onClick={activateEditMode} src={edit} alt='edit' />
+				</>
+			)}
+		</div>
 	)
 })

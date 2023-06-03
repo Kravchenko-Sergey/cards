@@ -27,10 +27,17 @@
     font-weight: 600;
 }
 
-.avatar {
+.avatarBlock {
+    margin: 0 auto;
+    position: relative;
     width: 96px;
     height: 96px;
     border-radius: 100px;
+}
+
+.changeAvatar {
+    position: absolute;
+    bottom: 0; right: 0;
 }
 
 .name {
@@ -52,4 +59,8 @@
     background-color: #FCFCFC;
     box-shadow: 0 2px 10px rgba(109, 109, 109, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     border-radius: 30px;
+}
+
+.buttonText {
+    padding: 0 0 0 7px;
 }

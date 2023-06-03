@@ -1,10 +1,13 @@
 import React from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import s from './Profile.module.css'
-import { authThunks, changeUserName, logout } from 'features/auth/auth.slice'
-import { EditableSpan } from '../../../components/EditableSpan/EditableSpan'
-import { useAppDispatch } from '../../../common/hooks/useAppDispatch'
-import { useAppSelector } from '../../../common/hooks/useAppSelector'
+import { authThunks, logout } from 'features/auth/auth.slice'
+import { EditableSpan } from 'components/EditableSpan/EditableSpan'
+import { useAppDispatch } from 'common/hooks'
+import { useAppSelector } from 'common/hooks'
+import avatar from '../../../assets/img/userPhoto.svg'
+import changePhoto from 'assets/img/changePhoto.svg'
+import logoutIcon from '../../../assets/img/logout.svg'
 
 export const Profile = () => {
 	const dispatch = useAppDispatch()
@@ -25,19 +28,17 @@ export const Profile = () => {
 			</Link>
 			<div className={s.container}>
 				<div className={s.header}>Personal Information</div>
-				<div>
-					<img
-						className={s.avatar}
-						src='https://w7.pngwing.com/pngs/1009/704/png-transparent-avatar-child-computer-icons-user-profile-smiling-boy-child-face-heroes-thumbnail.png'
-						alt='avatar'
-					/>
+				<div className={s.avatarBlock}>
+					<img src={avatar} alt='avatar' />
+					<img className={s.changeAvatar} src={changePhoto} alt='changePhoto' />
 				</div>
 				<div className={s.name}>
-					<EditableSpan value={userName} onChange={authThunks.changeUserName} error={'Enter your name'} />
+					<EditableSpan value={userName} onChange={authThunks.changeUserName} />
 				</div>
 				<div className={s.email}>{userEmail}</div>
 				<button onClick={handleLogout} className={s.button}>
-					Log out
+					<img src={logoutIcon} alt='logout' />
+					<span className={s.buttonText}>Log out</span>
 				</button>
 			</div>
 		</div>
