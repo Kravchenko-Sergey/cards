@@ -8,6 +8,7 @@ import { useAppSelector } from 'common/hooks'
 import avatar from '../../../assets/img/userPhoto.svg'
 import changePhoto from 'assets/img/changePhoto.svg'
 import logoutIcon from '../../../assets/img/logout.svg'
+import leftArrow from '../../../assets/img/leftArrow.svg'
 
 export const Profile = () => {
 	const dispatch = useAppDispatch()
@@ -24,7 +25,8 @@ export const Profile = () => {
 	return (
 		<div className={s.s}>
 			<Link to='/packs' className={s.backPackList}>
-				Back to Packs List
+				<img src={leftArrow} alt='leftArrow' />
+				<span className={s.backPackListText}>Back to Packs List</span>
 			</Link>
 			<div className={s.container}>
 				<div className={s.header}>Personal Information</div>

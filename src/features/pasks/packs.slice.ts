@@ -1,57 +1,77 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { packsApi } from './packs.api'
 
-const getPacks = createAsyncThunk('packs/getPacks', async (arg, thunkAPI) => {
-	const res = await packsApi.getPacks()
-	thunkAPI.dispatch(packsActions.getPacks({ packs: res.data.cardPacks }))
+const getPacks = createAsyncThunk('packs/getPacks', async arg => {
+	try {
+		const res = await packsApi.getPacks()
+		return { packs: res.data.cardPacks }
+	} catch (e) {
+		console.error(e)
+	}
 })
 
-const createPack = createAsyncThunk('packs/createPack', async (arg: any, thunkAPI) => {
-	const res = await packsApi.createPack(arg)
-	console.log(res.data)
-	thunkAPI.dispatch(
-		packsActions.createPack({ cardsPack: { name: 'new deck', deckCover: 'url or base64', private: false } })
-	)
-	thunkAPI.dispatch(packsActions.getPacks({ packs: res.data.cardPacks }))
+const createPack = createAsyncThunk('packs/createPack', async (arg: any) => {
+	try {
+		const res = await packsApi.createPack(arg)
+		return { cardsPack: { name: 'new deck', deckCover: 'url or base64', private: false }, packs: res.data.cardPacks }
+	} catch (e) {
+		console.error(e)
+	}
 })
 
-const deletePack = createAsyncThunk('packs/deletePack', async (arg: any, thunkAPI) => {
-	console.log(arg.id)
-	const res = await packsApi.deletePack(arg.id)
-	console.log(res)
-	thunkAPI.dispatch(packsActions.deletePack({ id: arg.id }))
-	thunkAPI.dispatch(packsActions.getPacks({ packs: res.data.cardPacks }))
+const deletePack = createAsyncThunk('packs/deletePack', async (arg: any) => {
+	try {
+		const res = await packsApi.deletePack(arg.id)
+		return { id: arg.id, packs: res.data.cardPacks }
+	} catch (e) {
+		console.error(e)
+	}
 })
 
-const updatePackName = createAsyncThunk('packs/updatePacksName', async (arg: any, thunkAPI) => {
-	console.log(arg)
-	const res = await packsApi.updatePackName({ cardsPack: arg })
-	thunkAPI.dispatch(packsActions.updatePackName({ id: arg._id, name: res.data.updatedCardsPack.name }))
+const updatePackName = createAsyncThunk('packs/updatePacksName', async (arg: any) => {
+	try {
+		const res = await packsApi.updatePackName({ cardsPack: arg })
+		return { id: arg._id, name: res.data.updatedCardsPack.name }
+	} catch (e) {
+		console.error(e)
+	}
 })
 
 const slice = createSlice({
 	name: 'packs',
 	initialState: {
-		packs: []
+		packs: [] as any
 	},
-	reducers: {
-		getPacks: (state, action: PayloadAction<any>) => {
-			state.packs = action.payload.packs
-		},
-		createPack: (state: any, action: PayloadAction<any>) => {
-			state.packs.packs.unshift(action.payload.cardsPack)
-		},
-		deletePack: (state: any, action: PayloadAction<any>) => {
-			state.packs.packs.filter((pack: any) => pack._id !== action.payload.id)
-		},
-		updatePackName: (state: any, action: PayloadAction<any>) => {
-			console.log(action)
-			const packIndex = state.packs.findIndex((pack: any) => pack._id === action.payload.id)
-			console.log(packIndex)
-			state.packs[packIndex].name = action.payload.name
-		}
-	},
-	extraReducers: {}
+	reducers: {},
+	extraReducers: builder => {
+		builder.addCase(getPacks.fulfilled, (state, action) => {
+			if (action.payload?.packs) {
+				state.packs = action.payload.packs
+			}
+		})
+		builder.addCase(createPack.fulfilled, (state, action) => {
+			if (action.payload?.cardsPack) {
+				state.packs.packs.unshift(action.payload.cardsPack)
+			}
+			if (action.payload?.packs) {
+				state.packs = action.payload.packs
+			}
+		})
+		builder.addCase(deletePack.fulfilled, (state, action) => {
+			if (action.payload?.id) {
+				return state.packs.packs.filter((pack: any) => pack._id !== action.payload!.id)
+			}
+			if (action.payload?.packs) {
+				state.packs = action.payload.packs
+			}
+		})
+		builder.addCase(updatePackName.fulfilled, (state, action) => {
+			if (action.payload?.id) {
+				const packIndex = state.packs.findIndex((pack: any) => pack._id === action.payload!.id)
+				state.packs[packIndex].name = action.payload.name
+			}
+		})
+	}
 })
 
 export const packsReducer = slice.reducer

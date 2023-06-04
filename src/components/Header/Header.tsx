@@ -2,10 +2,12 @@ import React from 'react'
 import incubatorLogo from 'assets/img/incubatorLogo.svg'
 import { Link } from 'react-router-dom'
 import style from './header.module.css'
-import { useAppSelector } from '../../common/hooks/useAppSelector'
+import { useAppSelector } from '../../common/hooks'
+import { Avatar } from '@mui/material'
 
 export const Header = () => {
 	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+	const userName = useAppSelector(state => state.auth.profile?.name)
 	const handleLogin = (data: any) => {}
 
 	return (
@@ -17,8 +19,9 @@ export const Header = () => {
 						Sign in
 					</button>
 				) : (
-					<Link to={'/profile'}>
-						<div>userName</div>
+					<Link to={'/profile'} className={style.avatarBlock}>
+						<div className={style.userName}>{userName}</div>
+						<Avatar alt={userName} src='/static/images/avatar/1.jpg' />
 					</Link>
 				)}
 			</div>

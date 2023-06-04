@@ -1,46 +1,76 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
 import { authApi } from './auth.api'
-import { ArgLoginType, ArgRegisterType, ProfileType } from './auth.api.types'
+import { ArgsLoginType, ArgsRegisterType, ProfileType } from './auth.api.types'
+import { isAxiosError } from 'axios'
 
-const register = createAppAsyncThunk('auth/register', async (arg: ArgRegisterType, thunkAPI) => {
-	const res = await authApi.register(arg)
-	if (res.status === 201) {
-		thunkAPI.dispatch(authActions.setIsRegisteredIn({ isRegisteredIn: true }))
+const THUNK_PREFIXES = {
+	REGISTER: 'auth/register',
+	LOGIN: 'auth/login',
+	LOGOUT: 'auth/logout',
+	CHANGE_USER_NAME: 'auth/changeName',
+	FORGOT_PASSWORD: 'auth/forgotPassword',
+	SET_NEW_PASSWORD: 'auth/setNewPassword'
+}
+
+const register = createAppAsyncThunk<any, ArgsRegisterType>(THUNK_PREFIXES.REGISTER, async (arg, thunkAPI) => {
+	try {
+		const res = await authApi.register(arg)
+		return { isRegisteredIn: true }
+	} catch (e) {
+		return thunkAPI.rejectWithValue(e)
 	}
 })
 
-const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>('auth/login', async (arg, thunkAPI) => {
-	const res = await authApi.login(arg)
-	if (res.status === 200) {
-		thunkAPI.dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
-	}
-	return { profile: res.data }
-})
-
-export const logout = createAppAsyncThunk('auth/logout', async (arg, thunkAPI) => {
-	const res = await authApi.logout()
-	if (res.status === 200) {
-		thunkAPI.dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }))
-	}
-})
-
-export const changeUserName = createAppAsyncThunk('auth/changeName', async (arg: { name: string }, thunkAPI) => {
-	const res = await authApi.updateProfile(arg)
-	if (res.status === 200) {
-		thunkAPI.dispatch(authActions.setChangeName({ name: res.data.updatedUser.name }))
-	}
-})
-
-export const forgotPassword = createAppAsyncThunk(
-	'auth/forgotPassword',
-	async (arg: { email: string; message: string }, thunkAPI) => {
-		const res = await authApi.forgotPassword(arg)
+const login = createAppAsyncThunk(
+	/*<{ profile: ProfileType; isLoggedIn: boolean }, ArgsLoginType>*/ THUNK_PREFIXES.LOGIN,
+	async (arg: any, thunkAPI) => {
+		try {
+			const res = await authApi.login(arg)
+			return { profile: res.data, isLoggedIn: true }
+		} catch (e) {
+			return thunkAPI.rejectWithValue(e)
+		}
 	}
 )
 
-export const setNewPassword = createAppAsyncThunk('auth/setNewPassword', async (arg, thunkAPI) => {
-	const res = await authApi.setNewPassword(arg)
+export const logout = createAppAsyncThunk(THUNK_PREFIXES.LOGOUT, async (arg, thunkAPI) => {
+	try {
+		const res = await authApi.logout()
+		return { isLoggedIn: false }
+	} catch (e) {
+		return thunkAPI.rejectWithValue(e)
+	}
+})
+
+export const changeUserName = createAppAsyncThunk(
+	THUNK_PREFIXES.CHANGE_USER_NAME,
+	async (arg: { name: string }, thunkAPI) => {
+		try {
+			const res = await authApi.updateProfile(arg)
+			return { name: res.data.updatedUser.name }
+		} catch (e) {
+			return thunkAPI.rejectWithValue(e)
+		}
+	}
+)
+
+export const forgotPassword = createAppAsyncThunk(
+	THUNK_PREFIXES.FORGOT_PASSWORD,
+	async (arg: { email: string; message: string }, thunkAPI) => {
+		try {
+			const res = await authApi.forgotPassword(arg)
+		} catch (e) {
+			return thunkAPI.rejectWithValue(e)
+		}
+	}
+)
+
+export const setNewPassword = createAppAsyncThunk(THUNK_PREFIXES.SET_NEW_PASSWORD, async (arg, thunkAPI) => {
+	try {
+	} catch (e) {
+		return thunkAPI.rejectWithValue(e)
+	}
 })
 
 const slice = createSlice({
@@ -48,23 +78,47 @@ const slice = createSlice({
 	initialState: {
 		profile: null as ProfileType | null,
 		isLoggedIn: false,
-		isRegisteredIn: false
+		isRegisteredIn: false,
+		error: null as null | string
 	},
-	reducers: {
-		setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-			state.isLoggedIn = action.payload.isLoggedIn
-		},
-		setIsRegisteredIn: (state, action: PayloadAction<{ isRegisteredIn: boolean }>) => {
-			state.isRegisteredIn = action.payload.isRegisteredIn
-		},
-		setChangeName: (state, action: PayloadAction<any>) => {
-			state!.profile!.name = action.payload.name
-		}
-	},
+	reducers: {},
 	extraReducers: builder => {
-		builder.addCase(login.fulfilled, (state, action) => {
-			state.profile = action.payload.profile
-		})
+		builder
+			.addCase(register.fulfilled, (state, action) => {
+				if (action.payload?.isRegisteredIn) {
+					state.isRegisteredIn = action.payload.isRegisteredIn
+				}
+			})
+			.addCase(register.rejected, (state, action) => {
+				if (!isAxiosError(action.payload)) {
+					state.error = 'an error has occurred'
+					return
+				}
+				state.error = action.payload?.response?.data?.error
+			})
+			.addCase(login.fulfilled, (state, action) => {
+				if (action.payload?.profile) {
+					state.profile = action.payload.profile
+					state.isLoggedIn = action.payload.isLoggedIn
+				}
+			})
+			.addCase(login.rejected, (state, action) => {
+				if (!isAxiosError(action.payload)) {
+					state.error = 'an error has occurred'
+					return
+				}
+				state.error = action.payload?.response?.data?.error
+			})
+			.addCase(logout.fulfilled, (state, action) => {
+				if (action.payload?.isLoggedIn === false) {
+					state.isLoggedIn = action.payload.isLoggedIn
+				}
+			})
+			.addCase(changeUserName.fulfilled, (state, action) => {
+				if (action.payload?.name) {
+					state!.profile!.name = action.payload.name
+				}
+			})
 	}
 })
 

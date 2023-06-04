@@ -1,8 +1,8 @@
 import { instance } from 'common/api/common.api'
 import axios from 'axios'
 import {
-	ArgLoginType,
-	ArgRegisterType,
+	ArgsLoginType,
+	ArgsRegisterType,
 	ForgotPasswordType,
 	ProfileType,
 	RegisterResponseType,
@@ -14,10 +14,10 @@ const settings = {
 }
 
 export const authApi = {
-	register(arg: ArgRegisterType) {
+	register(arg: ArgsRegisterType) {
 		return instance.post<RegisterResponseType>('auth/register', arg)
 	},
-	login(arg: ArgLoginType) {
+	login(arg: ArgsLoginType) {
 		return instance.post<ProfileType>('auth/login', arg)
 	},
 	me() {

@@ -1,4 +1,6 @@
-export type RegisterResponseType = Omit<ProfileType, 'token' | 'tokenDeathTime'>
+export type RegisterResponseType = {
+	addedUser: Omit<ProfileType, 'token' | 'tokenDeathTime'>
+}
 
 export type ProfileType = {
 	_id: string
@@ -16,9 +18,9 @@ export type ProfileType = {
 	avatar: null | string
 }
 
-export type ArgRegisterType = Omit<ArgLoginType, 'rememberMe'>
+export type ArgsRegisterType = Omit<ArgsLoginType, 'rememberMe'>
 
-export type ArgLoginType = {
+export type ArgsLoginType = {
 	email: string
 	password: string
 	rememberMe: boolean

@@ -7,7 +7,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link, Navigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
-import { ArgLoginType } from '../auth.api.types'
+import { ArgsLoginType } from '../auth.api.types'
 
 export const Login = () => {
 	const dispatch = useAppDispatch()
@@ -16,7 +16,7 @@ export const Login = () => {
 		register,
 		formState: { errors },
 		handleSubmit
-	} = useForm<ArgLoginType>({ mode: 'onSubmit' })
+	} = useForm<ArgsLoginType>({ mode: 'onSubmit' })
 	const handleLogin = (data: any) => {
 		dispatch(authThunks.login(data))
 	}

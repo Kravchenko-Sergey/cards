@@ -5,9 +5,16 @@
 }
 
 .backPackList {
+    padding: 0 0 12px 0;
     font-size: 18px;
     color: inherit;
     align-self: start;
+    align-items: center;
+    display: flex;
+}
+
+.backPackListText {
+    padding: 0 0 0 12px;
 }
 
 .container {

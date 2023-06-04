@@ -76,15 +76,21 @@ export const Packs = () => {
 				<div className={`${style.labelBlock} ${style.search}`}>
 					<div className={style.label}>Search</div>
 					<div className={style.input}>
-						<TextField id='outlined-basic' placeholder={'Provide your text'} variant='outlined' size='small' />
+						<TextField
+							id='outlined-basic'
+							placeholder={'🔍 Provide your text'}
+							variant='outlined'
+							size='small'
+							sx={{ width: '100%' }}
+						/>
 					</div>
 				</div>
 				<div className={`${style.labelBlock} ${style.showButtons}`}>
 					<div className={style.label}>Show packs cards</div>
-					<div>
+					<div className={style.muAllBtnBlock}>
 						<ButtonGroup disableElevation variant='contained' aria-label='Disabled elevation buttons'>
-							<Button>My</Button>
-							<Button>All</Button>
+							<Button className={style.muAllBtn}>My</Button>
+							<Button className={style.muAllBtn}>All</Button>
 						</ButtonGroup>
 					</div>
 				</div>
@@ -111,19 +117,19 @@ export const Packs = () => {
 					<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
 						<TableHead sx={{ backgroundColor: '#efefef', fontWeight: 600 }}>
 							<TableRow>
-								<TableCell align='left' width='25%'>
+								<TableCell align='left' width='28%'>
 									Name
 								</TableCell>
-								<TableCell align='left' width='25%'>
+								<TableCell align='left' width='22%'>
 									Cards
 								</TableCell>
 								<TableCell align='left' width='20%'>
 									Last Updated
 								</TableCell>
-								<TableCell align='left' width='20%'>
+								<TableCell align='left' width='18%'>
 									Created by
 								</TableCell>
-								<TableCell align='left' width='10%'>
+								<TableCell align='left' width='12%'>
 									Actions
 								</TableCell>
 							</TableRow>
@@ -163,7 +169,12 @@ export const Packs = () => {
 				<div className={style.select}>
 					<FormControl sx={{ minWidth: 60 }} size='small'>
 						<InputLabel id='demo-select-small-label'></InputLabel>
-						<Select labelId='demo-select-small-label' id='demo-select-small' onChange={handleChange2}>
+						<Select
+							labelId='demo-select-small-label'
+							id='demo-select-small'
+							onChange={handleChange2}
+							sx={{ minWidth: 64, height: 24 }}
+						>
 							<MenuItem value={5}>5</MenuItem>
 							<MenuItem value={10}>10</MenuItem>
 							<MenuItem value={20}>20</MenuItem>
