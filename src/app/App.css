@@ -28,4 +28,13 @@
   align-items: center;
 }
 
+.linearProgress {
+  background-color: #fcfcfc;
+  height: 4px;
+  z-index: 100;
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
 

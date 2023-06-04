@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
 import { authApi } from './auth.api'
-import { ArgsLoginType, ArgsRegisterType, ProfileType } from './auth.api.types'
+import { ArgsRegisterType, ProfileType } from './auth.api.types'
 import { isAxiosError } from 'axios'
+import { thunkTryCatch } from 'common/utils/thunk-try-catch'
 
 const THUNK_PREFIXES = {
 	REGISTER: 'auth/register',
@@ -14,23 +15,19 @@ const THUNK_PREFIXES = {
 }
 
 const register = createAppAsyncThunk<any, ArgsRegisterType>(THUNK_PREFIXES.REGISTER, async (arg, thunkAPI) => {
-	try {
+	return thunkTryCatch(thunkAPI, async () => {
 		const res = await authApi.register(arg)
 		return { isRegisteredIn: true }
-	} catch (e) {
-		return thunkAPI.rejectWithValue(e)
-	}
+	})
 })
 
 const login = createAppAsyncThunk(
 	/*<{ profile: ProfileType; isLoggedIn: boolean }, ArgsLoginType>*/ THUNK_PREFIXES.LOGIN,
 	async (arg: any, thunkAPI) => {
-		try {
+		return thunkTryCatch(thunkAPI, async () => {
 			const res = await authApi.login(arg)
 			return { profile: res.data, isLoggedIn: true }
-		} catch (e) {
-			return thunkAPI.rejectWithValue(e)
-		}
+		})
 	}
 )
 

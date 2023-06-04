@@ -1,8 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { authApi } from 'features/auth/auth.api'
 import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
+import { isAxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 export const initializeApp = createAppAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
+	try {
+		const res = await authApi.me()
+		return { isLoggedIn: true }
+	} catch (e) {
+		console.error(e)
+	} finally {
+		return { isAppInitialized: true }
+	}
+})
+
+export const setIsLoading = createAppAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
 	try {
 		const res = await authApi.me()
 		return { isLoggedIn: true }
@@ -40,6 +53,40 @@ const slice = createSlice({
 					state.isAppInitialized = action.payload.isAppInitialized
 				}
 			})
+			.addMatcher(
+				action => {
+					return action.type.endsWith('/pending')
+				},
+				(state, action) => {
+					state.isLoading = true
+				}
+			)
+			.addMatcher(
+				action => {
+					return action.type.endsWith('/fulfilled')
+				},
+				(state, action) => {
+					state.isLoading = false
+				}
+			)
+			.addMatcher(
+				action => {
+					return action.type.endsWith('/rejected')
+				},
+				(state, action) => {
+					const e = action.payload
+					state.isLoading = false
+					let errorMessage = ''
+					if (isAxiosError(e)) {
+						errorMessage = e?.response?.data?.error ?? e.message
+					} else if (e instanceof Error) {
+						errorMessage = `Native error: ${e.message}`
+					} else {
+						errorMessage = JSON.stringify(e)
+					}
+					toast.error(errorMessage)
+				}
+			)
 	}
 })
 

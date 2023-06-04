@@ -2,7 +2,7 @@ import React from 'react'
 import incubatorLogo from 'assets/img/incubatorLogo.svg'
 import { Link } from 'react-router-dom'
 import style from './header.module.css'
-import { useAppSelector } from '../../common/hooks'
+import { useAppSelector } from 'common/hooks'
 import { Avatar } from '@mui/material'
 
 export const Header = () => {
