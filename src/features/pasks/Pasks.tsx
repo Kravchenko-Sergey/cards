@@ -1,5 +1,5 @@
 import Pagination from '@mui/material/Pagination'
-import React, { useEffect } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import {
 	Button,
@@ -20,7 +20,7 @@ import {
 } from '@mui/material'
 import style from './Packs.module.css'
 import { Navigate } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from 'common/hooks'
+import { useAppDispatch, useAppSelector, useDebounce } from 'common/hooks'
 import { packsThunks } from './packs.slice'
 import { EditableSpan } from 'components/EditableSpan/EditableSpan'
 import teacherBtn from '../../assets/img/teacher.svg'
@@ -42,6 +42,7 @@ export const Packs = () => {
 	function valuetext(value: number) {
 		return `${value}°C`
 	}
+	//
 	const [value, setValue] = React.useState<number[]>([20, 37])
 	const handleChange = (event: Event, newValue: number | number[]) => {
 		setValue(newValue as number[])
@@ -50,15 +51,23 @@ export const Packs = () => {
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
 		return { name, cards, lastUpdated, createdBy, actions }
 	}
-
-	//const rows = packs.map((pack: any) => createData (`${pack.name}`, pack.cardsCount, pack.updated, pack.created, 4.0))
-
 	//select
 	const [age, setAge] = React.useState('')
 	const handleChange2 = (event: SelectChangeEvent) => {
 		setAge(event.target.value)
 	}
+	//search
+	const [searchValue, setSearchValue] = useState('')
+	const debouncedValue = useDebounce(searchValue, 500)
+	const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		setSearchValue(e.currentTarget.value)
+	}
 	//
+
+	useEffect(() => {
+		dispatch(packsThunks.searchPack({ packName: debouncedValue }))
+	}, [debouncedValue])
+
 	const isLoggedIn = useAppSelector<any>(state => state.auth.isLoggedIn)
 	if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
@@ -78,6 +87,8 @@ export const Packs = () => {
 					<div className={style.input}>
 						<TextField
 							id='outlined-basic'
+							value={searchValue}
+							onChange={handleSearchValue}
 							placeholder={'🔍 Provide your text'}
 							variant='outlined'
 							size='small'
@@ -117,19 +128,19 @@ export const Packs = () => {
 					<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
 						<TableHead sx={{ backgroundColor: '#efefef', fontWeight: 600 }}>
 							<TableRow>
-								<TableCell align='left' width='28%'>
+								<TableCell sx={{ fontWeight: 700 }} align='left' width='28%'>
 									Name
 								</TableCell>
-								<TableCell align='left' width='22%'>
+								<TableCell sx={{ fontWeight: 700 }} align='left' width='22%'>
 									Cards
 								</TableCell>
-								<TableCell align='left' width='20%'>
+								<TableCell sx={{ fontWeight: 700 }} align='left' width='20%'>
 									Last Updated
 								</TableCell>
-								<TableCell align='left' width='18%'>
+								<TableCell sx={{ fontWeight: 700 }} align='left' width='18%'>
 									Created by
 								</TableCell>
-								<TableCell align='left' width='12%'>
+								<TableCell sx={{ fontWeight: 700 }} align='left' width='12%'>
 									Actions
 								</TableCell>
 							</TableRow>

@@ -1,6 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { PropsWithChildren, useEffect } from 'react'
 import { appThunks } from 'app/app.slice'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import {
+	BrowserRouter,
+	createBrowserRouter,
+	Navigate,
+	Outlet,
+	Route,
+	RouterProvider,
+	Routes,
+	useNavigate
+} from 'react-router-dom'
 import { Login } from 'features/auth/Login/Login'
 import { Cards } from 'features/cards/Cards'
 import { Register } from 'features/auth/register/Register'
@@ -20,7 +29,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const App = () => {
-	const router = [
+	/*const router = [
 		{
 			path: '/',
 			element: <Profile />
@@ -69,7 +78,58 @@ export const App = () => {
 			path: '*',
 			element: <Navigate to='/404' />
 		}
-	]
+	]*/
+
+	const router = createBrowserRouter([
+		{
+			path: '/',
+			element: <Profile />
+		},
+		{
+			path: '/login',
+			element: <Login />
+		},
+		{
+			path: '/register',
+			element: <Register />
+		},
+		{
+			path: '/check-email',
+			element: <CheckEmail />
+		},
+		{
+			path: '/set-new-password',
+			element: <SetNewPassword />
+		},
+		{
+			path: '/forgot-password',
+			element: <ForgotPassword />
+		},
+		{
+			path: '/profile',
+			element: <Profile />
+		},
+		{
+			path: '/packs',
+			element: <Packs />
+		},
+		{
+			path: '/cards',
+			element: <Cards />
+		},
+		{
+			path: '/learn',
+			element: <Learn />
+		},
+		{
+			path: '/404',
+			element: <PageError />
+		},
+		{
+			path: '*',
+			element: <Navigate to='/404' />
+		}
+	])
 
 	const dispatch = useAppDispatch()
 	const isInitialized = useAppSelector(state => state.app.isAppInitialized)
@@ -102,11 +162,13 @@ export const App = () => {
 				<Header />
 				<main className='main'>
 					<div className={'mainContainer'}>
-						<Routes>
-							{router.map((rout, index) => (
-								<Route key={index} path={rout.path} element={rout.element} />
-							))}
-						</Routes>
+						{
+							<Routes>
+								{router.routes.map((rout: any, index) => (
+									<Route key={index} path={rout.path} element={rout.element} />
+								))}
+							</Routes>
+						}
 					</div>
 				</main>
 			</div>

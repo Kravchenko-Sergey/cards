@@ -4,21 +4,28 @@ import s from 'features/auth/Login/Login.module.css'
 import TextField from '@mui/material/TextField'
 import { Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { ArgsLoginType } from '../auth.api.types'
+import { toast } from 'react-toastify'
 
 export const Login = () => {
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 
 	const {
 		register,
 		formState: { errors },
 		handleSubmit
 	} = useForm<ArgsLoginType>({ mode: 'onSubmit' })
-	const handleLogin = (data: any) => {
-		dispatch(authThunks.login(data))
+	const handleLogin = async (data: any) => {
+		try {
+			await dispatch(authThunks.login(data)).unwrap()
+			navigate('/profile')
+		} catch (e: any) {
+			toast.error(e)
+		}
 	}
 
 	const [showPassword, setShowPassword] = React.useState(false)
@@ -29,9 +36,9 @@ export const Login = () => {
 
 	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
-	if (isLoggedIn) {
+	/*if (isLoggedIn) {
 		return <Navigate to={'/profile'} />
-	}
+	}*/
 
 	return (
 		<div className={s.container}>

@@ -15,10 +15,13 @@ const THUNK_PREFIXES = {
 }
 
 const register = createAppAsyncThunk<any, ArgsRegisterType>(THUNK_PREFIXES.REGISTER, async (arg, thunkAPI) => {
-	return thunkTryCatch(thunkAPI, async () => {
-		const res = await authApi.register(arg)
-		return { isRegisteredIn: true }
-	})
+	return (
+		thunkTryCatch(thunkAPI, async () => {
+			const res = await authApi.register(arg)
+			return { isRegisteredIn: true }
+		}),
+		false
+	)
 })
 
 const login = createAppAsyncThunk(

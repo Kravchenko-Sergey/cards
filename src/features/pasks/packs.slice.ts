@@ -3,7 +3,7 @@ import { packsApi } from './packs.api'
 
 const getPacks = createAsyncThunk('packs/getPacks', async arg => {
 	try {
-		const res = await packsApi.getPacks()
+		const res = await packsApi.getPacks({})
 		return { packs: res.data.cardPacks }
 	} catch (e) {
 		console.error(e)
@@ -13,7 +13,7 @@ const getPacks = createAsyncThunk('packs/getPacks', async arg => {
 const createPack = createAsyncThunk('packs/createPack', async (arg: any) => {
 	try {
 		const res = await packsApi.createPack(arg)
-		return { cardsPack: { name: 'new deck', deckCover: 'url or base64', private: false }, packs: res.data.cardPacks }
+		return { cardsPack: { name: 'new deck', deckCover: 'url or base64', private: false }, packs: res.data.newCardsPack }
 	} catch (e) {
 		console.error(e)
 	}
@@ -22,7 +22,7 @@ const createPack = createAsyncThunk('packs/createPack', async (arg: any) => {
 const deletePack = createAsyncThunk('packs/deletePack', async (arg: any) => {
 	try {
 		const res = await packsApi.deletePack(arg.id)
-		return { id: arg.id, packs: res.data.cardPacks }
+		return { id: arg.id, packs: res.data.deletedCardsPack }
 	} catch (e) {
 		console.error(e)
 	}
@@ -32,6 +32,17 @@ const updatePackName = createAsyncThunk('packs/updatePacksName', async (arg: any
 	try {
 		const res = await packsApi.updatePackName({ cardsPack: arg })
 		return { id: arg._id, name: res.data.updatedCardsPack.name }
+	} catch (e) {
+		console.error(e)
+	}
+})
+
+const searchPack = createAsyncThunk('packs/searchPack', async (arg: any) => {
+	console.log(arg)
+	try {
+		const res = await packsApi.getPacks({ packName: arg.packName })
+		console.log(res)
+		return { packs: res.data.cardPacks }
 	} catch (e) {
 		console.error(e)
 	}
@@ -71,9 +82,14 @@ const slice = createSlice({
 				state.packs[packIndex].name = action.payload.name
 			}
 		})
+		builder.addCase(searchPack.fulfilled, (state, action) => {
+			if (action.payload?.packs) {
+				state.packs = action.payload.packs
+			}
+		})
 	}
 })
 
 export const packsReducer = slice.reducer
 export const packsActions = slice.actions
-export const packsThunks = { getPacks, createPack, deletePack, updatePackName }
+export const packsThunks = { getPacks, createPack, deletePack, updatePackName, searchPack }

@@ -74,8 +74,9 @@ const slice = createSlice({
 					return action.type.endsWith('/rejected')
 				},
 				(state, action) => {
-					const e = action.payload
+					const { e, showGlobalError = true } = action.payload
 					state.isLoading = false
+					if (!showGlobalError) return
 					let errorMessage = ''
 					if (isAxiosError(e)) {
 						errorMessage = e?.response?.data?.error ?? e.message
