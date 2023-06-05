@@ -38,10 +38,18 @@ const updatePackName = createAsyncThunk('packs/updatePacksName', async (arg: any
 })
 
 const searchPack = createAsyncThunk('packs/searchPack', async (arg: any) => {
-	console.log(arg)
 	try {
 		const res = await packsApi.getPacks({ packName: arg.packName })
 		console.log(res)
+		return { packs: res.data.cardPacks }
+	} catch (e) {
+		console.error(e)
+	}
+})
+
+const resetFilter = createAsyncThunk('packs/resetFilter', async (arg: any) => {
+	try {
+		const res = await packsApi.getPacks({})
 		return { packs: res.data.cardPacks }
 	} catch (e) {
 		console.error(e)
@@ -87,9 +95,14 @@ const slice = createSlice({
 				state.packs = action.payload.packs
 			}
 		})
+		builder.addCase(resetFilter.fulfilled, (state, action) => {
+			if (action.payload?.packs) {
+				state.packs = action.payload.packs
+			}
+		})
 	}
 })
 
 export const packsReducer = slice.reducer
 export const packsActions = slice.actions
-export const packsThunks = { getPacks, createPack, deletePack, updatePackName, searchPack }
+export const packsThunks = { getPacks, createPack, deletePack, updatePackName, searchPack, resetFilter }

@@ -62,7 +62,11 @@ export const Packs = () => {
 	const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setSearchValue(e.currentTarget.value)
 	}
-	//
+	//reset filter
+	const handleResetFilter = () => {
+		dispatch(packsThunks.resetFilter({}))
+		setSearchValue('')
+	}
 
 	useEffect(() => {
 		dispatch(packsThunks.searchPack({ packName: debouncedValue }))
@@ -120,7 +124,7 @@ export const Packs = () => {
 					</div>
 				</div>
 				<div className={style.icons}>
-					<img src={resetFilters} alt='resetFilters' />
+					<img onClick={handleResetFilter} src={resetFilters} alt='resetFilters' />
 				</div>
 			</div>
 			<div className={style.table}>
