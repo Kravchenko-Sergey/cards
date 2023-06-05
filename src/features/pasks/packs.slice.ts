@@ -10,6 +10,16 @@ const getPacks = createAsyncThunk('packs/getPacks', async arg => {
 	}
 })
 
+const getMyPacks = createAsyncThunk('packs/getMyPacks', async arg => {
+	console.log(arg)
+	try {
+		const res = await packsApi.getPacks(arg)
+		return { packs: res.data.cardPacks }
+	} catch (e) {
+		console.error(e)
+	}
+})
+
 const createPack = createAsyncThunk('packs/createPack', async (arg: any) => {
 	try {
 		const res = await packsApi.createPack(arg)
@@ -63,46 +73,52 @@ const slice = createSlice({
 	},
 	reducers: {},
 	extraReducers: builder => {
-		builder.addCase(getPacks.fulfilled, (state, action) => {
-			if (action.payload?.packs) {
-				state.packs = action.payload.packs
-			}
-		})
-		builder.addCase(createPack.fulfilled, (state, action) => {
-			if (action.payload?.cardsPack) {
-				state.packs.packs.unshift(action.payload.cardsPack)
-			}
-			if (action.payload?.packs) {
-				state.packs = action.payload.packs
-			}
-		})
-		builder.addCase(deletePack.fulfilled, (state, action) => {
-			if (action.payload?.id) {
-				return state.packs.packs.filter((pack: any) => pack._id !== action.payload!.id)
-			}
-			if (action.payload?.packs) {
-				state.packs = action.payload.packs
-			}
-		})
-		builder.addCase(updatePackName.fulfilled, (state, action) => {
-			if (action.payload?.id) {
-				const packIndex = state.packs.findIndex((pack: any) => pack._id === action.payload!.id)
-				state.packs[packIndex].name = action.payload.name
-			}
-		})
-		builder.addCase(searchPack.fulfilled, (state, action) => {
-			if (action.payload?.packs) {
-				state.packs = action.payload.packs
-			}
-		})
-		builder.addCase(resetFilter.fulfilled, (state, action) => {
-			if (action.payload?.packs) {
-				state.packs = action.payload.packs
-			}
-		})
+		builder
+			.addCase(getPacks.fulfilled, (state, action) => {
+				if (action.payload?.packs) {
+					state.packs = action.payload.packs
+				}
+			})
+			.addCase(getMyPacks.fulfilled, (state, action) => {
+				if (action.payload?.packs) {
+					state.packs = action.payload.packs
+				}
+			})
+			.addCase(createPack.fulfilled, (state, action) => {
+				if (action.payload?.cardsPack) {
+					state.packs.packs.unshift(action.payload.cardsPack)
+				}
+				if (action.payload?.packs) {
+					state.packs = action.payload.packs
+				}
+			})
+			.addCase(deletePack.fulfilled, (state, action) => {
+				if (action.payload?.id) {
+					return state.packs.packs.filter((pack: any) => pack._id !== action.payload!.id)
+				}
+				if (action.payload?.packs) {
+					state.packs = action.payload.packs
+				}
+			})
+			.addCase(updatePackName.fulfilled, (state, action) => {
+				if (action.payload?.id) {
+					const packIndex = state.packs.findIndex((pack: any) => pack._id === action.payload!.id)
+					state.packs[packIndex].name = action.payload.name
+				}
+			})
+			.addCase(searchPack.fulfilled, (state, action) => {
+				if (action.payload?.packs) {
+					state.packs = action.payload.packs
+				}
+			})
+			.addCase(resetFilter.fulfilled, (state, action) => {
+				if (action.payload?.packs) {
+					state.packs = action.payload.packs
+				}
+			})
 	}
 })
 
 export const packsReducer = slice.reducer
 export const packsActions = slice.actions
-export const packsThunks = { getPacks, createPack, deletePack, updatePackName, searchPack, resetFilter }
+export const packsThunks = { getPacks, getMyPacks, createPack, deletePack, updatePackName, searchPack, resetFilter }

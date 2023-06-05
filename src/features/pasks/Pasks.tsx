@@ -31,6 +31,7 @@ import resetFilters from '../../assets/img/resetFilters.svg'
 export const Packs = () => {
 	const dispatch = useAppDispatch()
 	const packs = useAppSelector(state => state.packs.packs)
+	const myId = useAppSelector(state => state.auth.profile?._id)
 	useEffect(() => {
 		dispatch(packsThunks.getPacks())
 	}, [])
@@ -61,6 +62,13 @@ export const Packs = () => {
 	const debouncedValue = useDebounce(searchValue, 500)
 	const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setSearchValue(e.currentTarget.value)
+	}
+	//my all
+	const handleMyPacksButton = () => {
+		dispatch(packsThunks.getMyPacks({ user_id: myId }))
+	}
+	const handleAllPacksButton = () => {
+		dispatch(packsThunks.getPacks())
 	}
 	//reset filter
 	const handleResetFilter = () => {
@@ -104,8 +112,12 @@ export const Packs = () => {
 					<div className={style.label}>Show packs cards</div>
 					<div className={style.muAllBtnBlock}>
 						<ButtonGroup disableElevation variant='contained' aria-label='Disabled elevation buttons'>
-							<Button className={style.muAllBtn}>My</Button>
-							<Button className={style.muAllBtn}>All</Button>
+							<Button onClick={handleMyPacksButton} className={style.muAllBtn}>
+								My
+							</Button>
+							<Button onClick={handleAllPacksButton} className={style.muAllBtn}>
+								All
+							</Button>
 						</ButtonGroup>
 					</div>
 				</div>
