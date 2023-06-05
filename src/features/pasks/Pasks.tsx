@@ -40,13 +40,12 @@ export const Packs = () => {
 		dispatch(packsThunks.getPacks())
 	}
 	//slider
-	function valuetext(value: number) {
-		return `${value}°C`
-	}
-	//
-	const [value, setValue] = React.useState<number[]>([20, 37])
+	const [sliderValue, setSliderValue] = React.useState<number[]>([20, 37])
 	const handleChange = (event: Event, newValue: number | number[]) => {
-		setValue(newValue as number[])
+		setSliderValue(newValue as number[])
+	}
+	const handleSliderValueCommitted = (event: Event, newValue: number | number[]) => {
+		dispatch(packsThunks.sliderFilter({ min: sliderValue[0], max: sliderValue[1] }))
 	}
 	//table
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
@@ -74,6 +73,8 @@ export const Packs = () => {
 	const handleResetFilter = () => {
 		dispatch(packsThunks.resetFilter({}))
 		setSearchValue('')
+		sliderValue[0] = 0
+		sliderValue[1] = 100
 	}
 
 	useEffect(() => {
@@ -124,15 +125,14 @@ export const Packs = () => {
 				<div className={`${style.labelBlock} ${style.slider}`}>
 					<div className={style.label}>Number of cards</div>
 					<div className={style.sliderBlock}>
-						<div className={style.sliderValue}>{value[0]}</div>
+						<div className={style.sliderValue}>{sliderValue[0]}</div>
 						<Slider
-							getAriaLabel={() => 'Temperature range'}
-							value={value}
+							value={sliderValue}
 							onChange={handleChange}
+							onChangeCommitted={handleSliderValueCommitted}
 							valueLabelDisplay='auto'
-							getAriaValueText={valuetext}
 						/>
-						<div className={style.sliderValue}>{value[1]}</div>
+						<div className={style.sliderValue}>{sliderValue[1]}</div>
 					</div>
 				</div>
 				<div className={style.icons}>
