@@ -1,5 +1,10 @@
 .container{
+    width: 1008px;
+    height: 100vh;
+    margin: 0 auto;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .textBlock {

@@ -1,16 +1,4 @@
-/*import React from 'react'
-import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
-
-export const Cards = () => {
-	const isLoggedIn = useSelector<any>(state => state.auth.isLoggedIn)
-	if (!isLoggedIn) {
-		return <Navigate to={'/login'} />
-	}
-	return <div>Cards</div>
-}*/
-
-import { useAppDispatch, useAppSelector } from '../../common/hooks'
+import { useAppDispatch, useAppSelector } from 'common/hooks'
 import React, { useEffect, useState } from 'react'
 import { packsThunks } from '../pasks/packs.slice'
 import {
@@ -43,13 +31,13 @@ export const Cards = () => {
 	const [value, setValue] = useState<any>(4)
 	//
 	const dispatch = useAppDispatch()
-	const packs = useAppSelector(state => state.packs.packs)
+	const cards = useAppSelector(state => state.cards.cards)
 	useEffect(() => {
-		dispatch(packsThunks.getPacks())
+		dispatch(packsThunks.getPacks({}))
 	}, [])
 	const handleCreatePack = () => {
 		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
-		dispatch(packsThunks.getPacks())
+		dispatch(packsThunks.getPacks({}))
 	}
 	//table
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
@@ -62,9 +50,9 @@ export const Cards = () => {
 	}
 	//
 	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-	if (!isLoggedIn) {
+	/*if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
-	}
+	}*/
 
 	return (
 		<div className={style.container}>
@@ -118,7 +106,7 @@ export const Cards = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{packs.map((row: any) => (
+							{cards.map((row: any) => (
 								<TableRow key={row._id}>
 									<TableCell align='left'>{`How "This" works in JavaScript?`}</TableCell>
 									<TableCell align='left'>{'This is how "This" works in JavaScript'}</TableCell>
@@ -139,7 +127,7 @@ export const Cards = () => {
 											<img
 												onClick={() => {
 													dispatch(packsThunks.deletePack({ id: row._id }))
-													dispatch(packsThunks.getPacks())
+													dispatch(packsThunks.getPacks({}))
 												}}
 												src={deleteBtn}
 												alt='deleteBtn'

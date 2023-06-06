@@ -1,16 +1,21 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { packsApi } from './packs.api'
 
-const getPacks = createAsyncThunk('packs/getPacks', async arg => {
+const getPacks = createAsyncThunk('packs/getPacks', async (arg: any) => {
 	try {
 		const res = await packsApi.getPacks(arg)
-		return { packs: res.data.cardPacks, cardsPackTotalCount: res.data.cardPacksTotalCount }
+		return {
+			packs: res.data.cardPacks,
+			cardsPackTotalCount: res.data.cardPacksTotalCount,
+			minCardsCount: res.data.minCardsCount,
+			maxCardsCount: res.data.maxCardsCount
+		}
 	} catch (e) {
 		console.error(e)
 	}
 })
 
-const getMyPacks = createAsyncThunk('packs/getMyPacks', async arg => {
+const getMyPacks = createAsyncThunk('packs/getMyPacks', async (arg: any) => {
 	try {
 		const res = await packsApi.getPacks(arg)
 		return { packs: res.data.cardPacks }

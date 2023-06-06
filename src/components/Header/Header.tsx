@@ -11,20 +11,18 @@ export const Header = () => {
 	const handleLogin = (data: any) => {}
 
 	return (
-		<header className={style.header}>
-			<div className={style.headerContainer}>
-				<img src={incubatorLogo} alt='incubatorLogo' />
-				{!isLoggedIn ? (
-					<button onClick={handleLogin} className={style.button}>
-						Sign in
-					</button>
-				) : (
-					<Link to={'/profile'} className={style.avatarBlock}>
-						<div className={style.userName}>{userName}</div>
-						<Avatar alt={userName} src='/static/images/avatar/1.jpg' />
-					</Link>
-				)}
-			</div>
-		</header>
+		<div className={style.headerContainer}>
+			<img src={incubatorLogo} alt='incubatorLogo' />
+			{!isLoggedIn ? (
+				<button onClick={handleLogin} className={style.button}>
+					Sign in
+				</button>
+			) : (
+				<Link to={'/profile'} className={style.avatarBlock}>
+					<div className={style.userName}>{userName}</div>
+					<Avatar alt={userName} src='/static/images/avatar/1.jpg' />
+				</Link>
+			)}
+		</div>
 	)
 }

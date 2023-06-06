@@ -22,11 +22,11 @@ import style from './Packs.module.css'
 import { Navigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector, useDebounce } from 'common/hooks'
 import { packsThunks } from './packs.slice'
-import { EditableSpan } from 'components/EditableSpan/EditableSpan'
 import teacherBtn from '../../assets/img/teacher.svg'
 import editBtn from '../../assets/img/edit.svg'
 import deleteBtn from '../../assets/img/delete.svg'
 import resetFilters from '../../assets/img/resetFilters.svg'
+import { cardsThunks } from 'features/cards/cards.slice'
 
 export const Packs = () => {
 	const dispatch = useAppDispatch()
@@ -41,27 +41,27 @@ export const Packs = () => {
 	const handleChange2 = (event: SelectChangeEvent) => {
 		setAge(event.target.value)
 	}
-	console.log(age)
+	//slider
+	const [sliderValue, setSliderValue] = React.useState<number[]>([0, 0])
+	const handleChange = (event: Event, newValue: number | number[]) => {
+		setSliderValue(newValue as number[])
+	}
+	const handleSliderValueCommitted: any = (event: Event, newValue: number | number[]) => {
+		dispatch(packsThunks.sliderFilter({ min: sliderValue[0], max: sliderValue[1] }))
+	}
 	//
 	useEffect(() => {
 		dispatch(packsThunks.getPacks({ page: page, pageCount: age }))
 			.unwrap()
 			.then(res => {
 				setLastPage(res?.cardsPackTotalCount)
+				setSliderValue([res!.minCardsCount, res!.maxCardsCount])
 			})
 	}, [page, age])
 
 	const handleCreatePack = () => {
 		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
-		dispatch(packsThunks.getPacks())
-	}
-	//slider
-	const [sliderValue, setSliderValue] = React.useState<number[]>([20, 37])
-	const handleChange = (event: Event, newValue: number | number[]) => {
-		setSliderValue(newValue as number[])
-	}
-	const handleSliderValueCommitted = (event: Event, newValue: number | number[]) => {
-		dispatch(packsThunks.sliderFilter({ min: sliderValue[0], max: sliderValue[1] }))
+		dispatch(packsThunks.getPacks({}))
 	}
 	//table
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
@@ -78,7 +78,7 @@ export const Packs = () => {
 		dispatch(packsThunks.getMyPacks({ user_id: myId }))
 	}
 	const handleAllPacksButton = () => {
-		dispatch(packsThunks.getPacks())
+		dispatch(packsThunks.getPacks({}))
 	}
 	//reset filter
 	const handleResetFilter = () => {
@@ -86,11 +86,19 @@ export const Packs = () => {
 		setSearchValue('')
 		sliderValue[0] = 0
 		sliderValue[1] = 100
+		setPage(1)
 	}
 
 	useEffect(() => {
 		dispatch(packsThunks.searchPack({ packName: debouncedValue }))
 	}, [debouncedValue])
+	useEffect(() => {
+		dispatch(packsThunks.sliderFilter({ min: sliderValue[0], max: sliderValue[1] }))
+	}, [])
+	//open packs
+	const handleRowName = (id: string) => {
+		dispatch(cardsThunks.getCards({ cardsPack_id: id }))
+	}
 	//
 	const isLoggedIn = useAppSelector<any>(state => state.auth.isLoggedIn)
 	if (!isLoggedIn) {
@@ -177,7 +185,9 @@ export const Packs = () => {
 							<TableBody>
 								{packs.map((row: any) => (
 									<TableRow key={row._id}>
-										<TableCell align='left'>{row.name}</TableCell>
+										<TableCell onClick={e => handleRowName(row._id)} align='left'>
+											{row.name}
+										</TableCell>
 										<TableCell align='left'>{row.cardsCount}</TableCell>
 										<TableCell align='left'>{row.updated}</TableCell>
 										<TableCell align='left'>{row.user_name}</TableCell>
@@ -188,7 +198,7 @@ export const Packs = () => {
 												<img
 													onClick={() => {
 														dispatch(packsThunks.deletePack({ id: row._id }))
-														dispatch(packsThunks.getPacks())
+														dispatch(packsThunks.getPacks({}))
 													}}
 													src={deleteBtn}
 													alt='deleteBtn'

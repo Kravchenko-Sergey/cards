@@ -1,13 +1,15 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { appReducer } from 'app/app.slice'
 import { authReducer } from 'features/auth/auth.slice'
-import { packsReducer } from '../features/pasks/packs.slice'
+import { packsReducer } from 'features/pasks/packs.slice'
+import { cardsReducer } from 'features/cards/cards.slice'
 
 export const store = configureStore({
 	reducer: {
 		app: appReducer,
 		auth: authReducer,
-		packs: packsReducer
+		packs: packsReducer,
+		cards: cardsReducer
 	}
 })
 
