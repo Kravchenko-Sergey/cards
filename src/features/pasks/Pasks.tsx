@@ -36,14 +36,21 @@ export const Packs = () => {
 	//pagination
 	const [lastPage, setLastPage] = useState<any>(0)
 	const [page, setPage] = useState<any>(1)
+	//select
+	const [age, setAge] = React.useState('')
+	const handleChange2 = (event: SelectChangeEvent) => {
+		setAge(event.target.value)
+	}
+	console.log(age)
 	//
 	useEffect(() => {
-		dispatch(packsThunks.getPacks({ page: page }))
+		dispatch(packsThunks.getPacks({ page: page, pageCount: age }))
 			.unwrap()
 			.then(res => {
 				setLastPage(res?.cardsPackTotalCount)
 			})
-	}, [page])
+	}, [page, age])
+
 	const handleCreatePack = () => {
 		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
 		dispatch(packsThunks.getPacks())
@@ -59,11 +66,6 @@ export const Packs = () => {
 	//table
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
 		return { name, cards, lastUpdated, createdBy, actions }
-	}
-	//select
-	const [age, setAge] = React.useState('')
-	const handleChange2 = (event: SelectChangeEvent) => {
-		setAge(event.target.value)
 	}
 	//search
 	const [searchValue, setSearchValue] = useState('')
@@ -89,7 +91,7 @@ export const Packs = () => {
 	useEffect(() => {
 		dispatch(packsThunks.searchPack({ packName: debouncedValue }))
 	}, [debouncedValue])
-
+	//
 	const isLoggedIn = useAppSelector<any>(state => state.auth.isLoggedIn)
 	if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
