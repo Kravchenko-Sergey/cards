@@ -32,9 +32,18 @@ export const Packs = () => {
 	const dispatch = useAppDispatch()
 	const packs = useAppSelector(state => state.packs.packs)
 	const myId = useAppSelector(state => state.auth.profile?._id)
+	const isLoading = useAppSelector(state => state.app.isLoading)
+	//pagination
+	const [lastPage, setLastPage] = useState<any>(0)
+	const [page, setPage] = useState<any>(1)
+	//
 	useEffect(() => {
-		dispatch(packsThunks.getPacks())
-	}, [])
+		dispatch(packsThunks.getPacks({ page: page }))
+			.unwrap()
+			.then(res => {
+				setLastPage(res?.cardsPackTotalCount)
+			})
+	}, [page])
 	const handleCreatePack = () => {
 		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
 		dispatch(packsThunks.getPacks())
@@ -139,58 +148,70 @@ export const Packs = () => {
 					<img onClick={handleResetFilter} src={resetFilters} alt='resetFilters' />
 				</div>
 			</div>
-			<div className={style.table}>
-				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
-						<TableHead sx={{ backgroundColor: '#efefef', fontWeight: 600 }}>
-							<TableRow>
-								<TableCell sx={{ fontWeight: 700 }} align='left' width='28%'>
-									Name
-								</TableCell>
-								<TableCell sx={{ fontWeight: 700 }} align='left' width='22%'>
-									Cards
-								</TableCell>
-								<TableCell sx={{ fontWeight: 700 }} align='left' width='20%'>
-									Last Updated
-								</TableCell>
-								<TableCell sx={{ fontWeight: 700 }} align='left' width='18%'>
-									Created by
-								</TableCell>
-								<TableCell sx={{ fontWeight: 700 }} align='left' width='12%'>
-									Actions
-								</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{packs.map((row: any) => (
-								<TableRow key={row._id}>
-									<TableCell align='left'>{row.name}</TableCell>
-									<TableCell align='left'>{row.cardsCount}</TableCell>
-									<TableCell align='left'>{row.updated}</TableCell>
-									<TableCell align='left'>{row.user_name}</TableCell>
-									<TableCell align='left'>
-										<div className={style.actionButtons}>
-											<img src={teacherBtn} alt='teacherBtn' />
-											<img onClick={packsThunks.updatePackName} src={editBtn} alt='changeBtn' />
-											<img
-												onClick={() => {
-													dispatch(packsThunks.deletePack({ id: row._id }))
-													dispatch(packsThunks.getPacks())
-												}}
-												src={deleteBtn}
-												alt='deleteBtn'
-											/>
-										</div>
+
+			{
+				<div className={style.table}>
+					<TableContainer component={Paper}>
+						<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
+							<TableHead sx={{ backgroundColor: '#efefef', fontWeight: 600 }}>
+								<TableRow>
+									<TableCell sx={{ fontWeight: 700 }} align='left' width='28%'>
+										Name
+									</TableCell>
+									<TableCell sx={{ fontWeight: 700 }} align='left' width='22%'>
+										Cards
+									</TableCell>
+									<TableCell sx={{ fontWeight: 700 }} align='left' width='20%'>
+										Last Updated
+									</TableCell>
+									<TableCell sx={{ fontWeight: 700 }} align='left' width='18%'>
+										Created by
+									</TableCell>
+									<TableCell sx={{ fontWeight: 700 }} align='left' width='12%'>
+										Actions
 									</TableCell>
 								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</TableContainer>
-			</div>
+							</TableHead>
+							<TableBody>
+								{packs.map((row: any) => (
+									<TableRow key={row._id}>
+										<TableCell align='left'>{row.name}</TableCell>
+										<TableCell align='left'>{row.cardsCount}</TableCell>
+										<TableCell align='left'>{row.updated}</TableCell>
+										<TableCell align='left'>{row.user_name}</TableCell>
+										<TableCell align='left'>
+											<div className={style.actionButtons}>
+												<img src={teacherBtn} alt='teacherBtn' />
+												<img onClick={packsThunks.updatePackName} src={editBtn} alt='changeBtn' />
+												<img
+													onClick={() => {
+														dispatch(packsThunks.deletePack({ id: row._id }))
+														dispatch(packsThunks.getPacks())
+													}}
+													src={deleteBtn}
+													alt='deleteBtn'
+												/>
+											</div>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</div>
+			}
 			<div className={style.footer}>
 				<div className={style.pagination}>
-					<Pagination count={10} shape='rounded' color={'primary'} />
+					<Pagination
+						count={lastPage}
+						page={page}
+						onChange={(e: any) => {
+							setPage(Number(e.target.innerText))
+						}}
+						shape='rounded'
+						color={'primary'}
+						size={'small'}
+					/>
 				</div>
 				<div>Show</div>
 				<div className={style.select}>

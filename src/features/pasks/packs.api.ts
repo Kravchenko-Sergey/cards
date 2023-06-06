@@ -37,6 +37,13 @@ export type PackType = {
 
 export type GetPacksResponseType = {
 	cardPacks: PackType[]
+	cardPacksTotalCount: number
+	maxCardsCount: number
+	minCardsCount: number
+	page: number
+	pageCount: number
+	token: string
+	tokenDeathTime: number
 }
 
 export type CreatePackResponseType = {

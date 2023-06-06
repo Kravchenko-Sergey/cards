@@ -3,15 +3,14 @@ import { packsApi } from './packs.api'
 
 const getPacks = createAsyncThunk('packs/getPacks', async arg => {
 	try {
-		const res = await packsApi.getPacks({})
-		return { packs: res.data.cardPacks }
+		const res = await packsApi.getPacks(arg)
+		return { packs: res.data.cardPacks, cardsPackTotalCount: res.data.cardPacksTotalCount }
 	} catch (e) {
 		console.error(e)
 	}
 })
 
 const getMyPacks = createAsyncThunk('packs/getMyPacks', async arg => {
-	console.log(arg)
 	try {
 		const res = await packsApi.getPacks(arg)
 		return { packs: res.data.cardPacks }
