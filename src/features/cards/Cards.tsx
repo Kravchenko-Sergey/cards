@@ -123,10 +123,14 @@ export const Cards = () => {
 									<TableCell align='left'>
 										<div className={style.actionButtons}>
 											<img src={teacherBtn} alt='teacherBtn' />
-											<img onClick={packsThunks.updatePackName} src={editBtn} alt='changeBtn' />
+											<img
+												onClick={() => dispatch(packsThunks.updatePackName(row.name))}
+												src={editBtn}
+												alt='changeBtn'
+											/>
 											<img
 												onClick={() => {
-													dispatch(packsThunks.deletePack({ id: row._id }))
+													dispatch(packsThunks.deletePack({ _id: row._id }))
 													dispatch(packsThunks.getPacks({}))
 												}}
 												src={deleteBtn}

@@ -3,10 +3,15 @@ import axios from 'axios'
 import {
 	ArgsLoginType,
 	ArgsRegisterType,
-	ForgotPasswordType,
-	ProfileType,
+	ForgotPasswordResponseType,
+	UserProfileType,
 	RegisterResponseType,
-	UpdateProfileType
+	UpdateProfileType,
+	LogoutResponseType,
+	ArgsForgotPasswordType,
+	ArgsSetNewPassword,
+	SetNewPasswordResponseType,
+	ArgsUpdateProfile
 } from './auth.api.types'
 
 const settings = {
@@ -14,26 +19,29 @@ const settings = {
 }
 
 export const authApi = {
-	register(arg: ArgsRegisterType) {
-		return instance.post<RegisterResponseType>('auth/register', arg)
+	register(data: ArgsRegisterType) {
+		return instance.post<RegisterResponseType>('auth/register', data)
 	},
-	login(arg: ArgsLoginType) {
-		return instance.post<ProfileType>('auth/login', arg)
-	},
-	me() {
-		return instance.post<ProfileType>('auth/me', {})
+	login(data: ArgsLoginType) {
+		return instance.post<UserProfileType>('auth/login', data)
 	},
 	logout() {
-		return instance.delete<{ info: string }>('auth/me')
+		return instance.delete<LogoutResponseType>('auth/me')
 	},
-	updateProfile(arg: { name: string }) {
-		return instance.put<UpdateProfileType>('auth/me', arg)
+	me() {
+		return instance.post<UserProfileType>('auth/me', {})
 	},
-	forgotPassword(arg: { email: string; message: string }) {
-		console.log(arg)
-		return axios.post<ForgotPasswordType>('https://neko-back.herokuapp.com/2.0/auth/forgot', arg, settings)
+	forgotPassword(data: ArgsForgotPasswordType) {
+		return axios.post<ForgotPasswordResponseType>('https://neko-back.herokuapp.com/2.0/auth/forgot', data, settings)
 	},
-	setNewPassword(arg: any) {
-		return axios.post<any>('https://neko-back.herokuapp.com/2.0/auth/set-new-password', arg, settings)
+	setNewPassword(data: ArgsSetNewPassword) {
+		return axios.post<SetNewPasswordResponseType>(
+			'https://neko-back.herokuapp.com/2.0/auth/set-new-password',
+			data,
+			settings
+		)
+	},
+	updateProfile(data: ArgsUpdateProfile) {
+		return instance.put<UpdateProfileType>('auth/me', data)
 	}
 }

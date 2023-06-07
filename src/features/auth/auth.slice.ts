@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
 import { authApi } from './auth.api'
-import { ArgsRegisterType, ProfileType } from './auth.api.types'
+import {
+	ArgsForgotPasswordType,
+	ArgsLoginType,
+	ArgsRegisterType,
+	ArgsSetNewPassword,
+	ArgsUpdateProfile,
+	UserProfileType
+} from './auth.api.types'
 import { isAxiosError } from 'axios'
 import { thunkTryCatch } from 'common/utils/thunk-try-catch'
 
@@ -14,7 +21,7 @@ const THUNK_PREFIXES = {
 	SET_NEW_PASSWORD: 'auth/setNewPassword'
 }
 
-const register = createAppAsyncThunk<any, ArgsRegisterType>(THUNK_PREFIXES.REGISTER, async (arg, thunkAPI) => {
+const register = createAppAsyncThunk(THUNK_PREFIXES.REGISTER, async (arg: ArgsRegisterType, thunkAPI) => {
 	return thunkTryCatch(
 		thunkAPI,
 		async () => {
@@ -25,15 +32,12 @@ const register = createAppAsyncThunk<any, ArgsRegisterType>(THUNK_PREFIXES.REGIS
 	)
 })
 
-const login = createAppAsyncThunk(
-	/*<{ profile: ProfileType; isLoggedIn: boolean }, ArgsLoginType>*/ THUNK_PREFIXES.LOGIN,
-	async (arg: any, thunkAPI) => {
-		return thunkTryCatch(thunkAPI, async () => {
-			const res = await authApi.login(arg)
-			return { profile: res.data, isLoggedIn: true }
-		})
-	}
-)
+const login = createAppAsyncThunk(THUNK_PREFIXES.LOGIN, async (arg: ArgsLoginType, thunkAPI) => {
+	return thunkTryCatch(thunkAPI, async () => {
+		const res = await authApi.login(arg)
+		return { profile: res.data, isLoggedIn: true }
+	})
+})
 
 export const logout = createAppAsyncThunk(THUNK_PREFIXES.LOGOUT, async (arg, thunkAPI) => {
 	try {
@@ -46,7 +50,7 @@ export const logout = createAppAsyncThunk(THUNK_PREFIXES.LOGOUT, async (arg, thu
 
 export const changeUserName = createAppAsyncThunk(
 	THUNK_PREFIXES.CHANGE_USER_NAME,
-	async (arg: { name: string }, thunkAPI) => {
+	async (arg: ArgsUpdateProfile, thunkAPI) => {
 		try {
 			const res = await authApi.updateProfile(arg)
 			return { name: res.data.updatedUser.name }
@@ -58,7 +62,7 @@ export const changeUserName = createAppAsyncThunk(
 
 export const forgotPassword = createAppAsyncThunk(
 	THUNK_PREFIXES.FORGOT_PASSWORD,
-	async (arg: { email: string; message: string }, thunkAPI) => {
+	async (arg: ArgsForgotPasswordType, thunkAPI) => {
 		try {
 			const res = await authApi.forgotPassword(arg)
 		} catch (e) {
@@ -67,17 +71,20 @@ export const forgotPassword = createAppAsyncThunk(
 	}
 )
 
-export const setNewPassword = createAppAsyncThunk(THUNK_PREFIXES.SET_NEW_PASSWORD, async (arg, thunkAPI) => {
-	try {
-	} catch (e) {
-		return thunkAPI.rejectWithValue(e)
+export const setNewPassword = createAppAsyncThunk(
+	THUNK_PREFIXES.SET_NEW_PASSWORD,
+	async (arg: ArgsSetNewPassword, thunkAPI) => {
+		try {
+		} catch (e) {
+			return thunkAPI.rejectWithValue(e)
+		}
 	}
-})
+)
 
 const slice = createSlice({
 	name: 'auth',
 	initialState: {
-		profile: null as ProfileType | null,
+		profile: null as UserProfileType | null,
 		isLoggedIn: false,
 		isRegisteredIn: false,
 		error: null as null | string
@@ -125,4 +132,4 @@ const slice = createSlice({
 
 export const authReducer = slice.reducer
 export const authActions = slice.actions
-export const authThunks: any = { register, login, logout, changeUserName, forgotPassword, setNewPassword }
+export const authThunks = { register, login, logout, changeUserName, forgotPassword, setNewPassword }

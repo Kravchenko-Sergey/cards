@@ -1,65 +1,28 @@
 import { instance } from 'common/api/common.api'
+import {
+	ArgsCreatePacksType,
+	ArgsDeletePacksType,
+	ArgsGetPacksType,
+	ArgsUpdatePacksType,
+	CreatePackResponseType,
+	DeletePackResponseType,
+	GetPacksResponseType,
+	UpdatePackResponseType
+} from './packs.api.types'
 
 export const packsApi = {
-	getPacks(params: any) {
+	getPacks(data: ArgsGetPacksType) {
 		return instance.get<GetPacksResponseType>('cards/pack', {
-			params
+			data
 		})
 	},
-	createPack(data: any) {
+	createPack(data: ArgsCreatePacksType) {
 		return instance.post<CreatePackResponseType>('cards/pack', data)
 	},
-	deletePack(id: string) {
-		return instance.delete<DeletePackResponseType>(`cards/pack/?id=${id}`)
-	},
-	updatePackName(data: any) {
+	updatePackName(data: ArgsUpdatePacksType) {
 		return instance.put<UpdatePackResponseType>('cards/pack', data)
+	},
+	deletePack(data: ArgsDeletePacksType) {
+		return instance.delete<DeletePackResponseType>(`cards/pack/?id=${data._id}`)
 	}
-}
-
-export type PackType = {
-	_id: string
-	user_id: string
-	user_name: string
-	private: boolean
-	name: string
-	path: string
-	grade: number
-	shots: number
-	cardsCount: number
-	type: string
-	rating: number
-	created: string
-	updated: string
-	more_id: string
-	__v: number
-}
-
-export type GetPacksResponseType = {
-	cardPacks: PackType[]
-	cardPacksTotalCount: number
-	maxCardsCount: number
-	minCardsCount: number
-	page: number
-	pageCount: number
-	token: string
-	tokenDeathTime: number
-}
-
-export type CreatePackResponseType = {
-	newCardsPack: PackType
-	token: string
-	tokenDeathTime: number
-}
-
-export type DeletePackResponseType = {
-	deletedCardsPack: PackType
-	token: string
-	tokenDeathTime: number
-}
-
-export type UpdatePackResponseType = {
-	updatedCardsPack: PackType
-	token: string
-	tokenDeathTime: number
 }

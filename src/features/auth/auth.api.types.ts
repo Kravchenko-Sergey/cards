@@ -1,8 +1,8 @@
 export type RegisterResponseType = {
-	addedUser: Omit<ProfileType, 'token' | 'tokenDeathTime'>
+	addedUser: Omit<UserProfileType, 'token' | 'tokenDeathTime'>
 }
 
-export type ProfileType = {
+export type UserProfileType = {
 	_id: string
 	email: string
 	rememberMe: boolean
@@ -27,14 +27,38 @@ export type ArgsLoginType = {
 }
 
 export type UpdateProfileType = {
-	updatedUser: ProfileType
+	updatedUser: UserProfileType
 	token: string
 	tokenDeathTime: number
 }
 
-export type ForgotPasswordType = {
+export type ForgotPasswordResponseType = {
 	info: string
 	success: boolean
 	answer: boolean
 	html: boolean
+}
+
+export type LogoutResponseType = {
+	info: string
+}
+
+export type ArgsForgotPasswordType = {
+	email: string
+	message: string
+}
+
+export type ArgsSetNewPassword = {
+	password: string
+	resetPasswordToken?: string
+}
+
+export type SetNewPasswordResponseType = {
+	info: string
+	error: string
+}
+
+export type ArgsUpdateProfile = {
+	name?: string
+	avatar?: string
 }
