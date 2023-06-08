@@ -22,7 +22,7 @@ export const Login = () => {
 	const handleLogin = async (data: any) => {
 		try {
 			await dispatch(authThunks.login(data)).unwrap()
-			navigate('/profile')
+			navigate('/packs')
 		} catch (e: any) {
 			toast.error(e)
 		}

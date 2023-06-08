@@ -12,7 +12,6 @@ import {
 
 export const packsAPI = {
 	getPacks(data: any) {
-		console.log(data)
 		return instance.get<GetPacksResponseType>('cards/pack', { params: { ...data } })
 	},
 	createPack(data: ArgsCreatePacksType) {
@@ -22,6 +21,7 @@ export const packsAPI = {
 		return instance.put<UpdatePackResponseType>('cards/pack', data)
 	},
 	deletePack(data: ArgsDeletePacksType) {
+		console.log(data)
 		return instance.delete<DeletePackResponseType>(`cards/pack/?id=${data._id}`)
 	}
 }

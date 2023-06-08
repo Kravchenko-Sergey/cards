@@ -1,35 +1,39 @@
 import React, { useEffect, useState } from 'react'
-import style from '../BottomPanelTable/BottomPanelTable.module.css'
+import style from 'features/pasks/BottomPanelTable/BottomPanelTable.module.css'
 import Pagination from '@mui/material/Pagination'
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { packsThunks } from 'features/pasks/packsSlice'
-import { useAppDispatch } from 'common/hooks'
+import { useAppDispatch, useAppSelector } from 'common/hooks'
 
 export const BottomPanelTable = () => {
+	const params = useAppSelector(state => state.packs.searchParams)
 	const dispatch = useAppDispatch()
 
 	const [page, setPage] = useState(1)
-	const [lastPage, setLastPage] = useState(0)
+	const [totalPagesNumber, setTotalPagesNumber] = useState(1)
 	//select
 	const [age, setAge] = React.useState('')
 	const handleChangeEvent = (event: SelectChangeEvent) => {
 		setAge(event.target.value)
 	}
 
-	/*useEffect(() => {
-		dispatch(packsThunks.getPacks({ page: page, pageCount: Number(age) }))
+	const myId = useAppSelector(state => state.auth.profile?._id)
+	const packs = useAppSelector(state => state.packs.packs)
+	const pageCount = useAppSelector(state => state.packs.searchParams.pageCount)
+
+	useEffect(() => {
+		dispatch(packsThunks.getPacks({ ...params, page: page, pageCount: Number(age), user_id: '' }))
 			.unwrap()
 			.then(res => {
-				setLastPage(res!.cardsPackTotalCount)
-				//setSliderValue([res!.minCardsCount, res!.maxCardsCount])
+				setTotalPagesNumber(Math.ceil(res!.cardsPackTotalCount / res!.pageCount))
 			})
-	}, [page, age])*/
+	}, [page, age])
 
 	return (
 		<div className={style.footer}>
 			<div className={style.pagination}>
 				<Pagination
-					count={lastPage}
+					count={totalPagesNumber}
 					page={page}
 					onChange={(e: any) => {
 						setPage(Number(e.target.innerText))

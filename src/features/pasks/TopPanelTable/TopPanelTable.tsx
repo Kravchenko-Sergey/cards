@@ -1,14 +1,14 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
-import style from '../TopPanelTable/TopPanelTable.module.css'
+import style from 'features/pasks/TopPanelTable/TopPanelTable.module.css'
 import TextField from '@mui/material/TextField'
 import { Button, ButtonGroup, Slider } from '@mui/material'
-import resetFilters from '../../../assets/img/resetFilters.svg'
+import resetFilters from 'assets/img/resetFilters.svg'
 import { useAppDispatch, useAppSelector, useDebounce } from 'common/hooks'
 import { packsThunks } from 'features/pasks/packsSlice'
 
 export const TopPanelTable = () => {
 	const myId = useAppSelector(state => state.auth.profile?._id)
-	console.log(myId)
+
 	const params = useAppSelector(state => state.packs.searchParams)
 	const dispatch = useAppDispatch()
 	//search
@@ -19,10 +19,11 @@ export const TopPanelTable = () => {
 	}
 	//my all
 	const handleMyPacksButton = () => {
-		dispatch(packsThunks.getMyPacks({ ...params, user_id: myId }))
+		console.log(myId)
+		dispatch(packsThunks.getPacks({ ...params, user_id: myId }))
 	}
 	const handleAllPacksButton = () => {
-		dispatch(packsThunks.getAllPacks({ ...params, user_id: '' }))
+		dispatch(packsThunks.getPacks({ ...params, user_id: '' }))
 	}
 	//slider
 	const [sliderValue, setSliderValue] = React.useState<number[]>([0, 0])
@@ -41,9 +42,14 @@ export const TopPanelTable = () => {
 		//setPage(1)
 	}
 
-	useEffect(() => {
+	/*useEffect(() => {
 		dispatch(packsThunks.searchPack({ ...params, packName: debouncedValue }))
-	}, [debouncedValue, dispatch])
+			.unwrap()
+			.then((res: any) => {
+				setSliderValue([res.minCardsCount, res.maxCardsCount])
+			})
+			.catch(e => console.log(e))
+	}, [debouncedValue])*/
 
 	/*useEffect(() => {
 		dispatch(packsThunks.sliderFilter({ min: sliderValue[0], max: sliderValue[1] }))

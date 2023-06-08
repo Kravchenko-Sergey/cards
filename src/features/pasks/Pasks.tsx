@@ -6,16 +6,22 @@ import { packsThunks } from 'features/pasks/packsSlice'
 import { PacksList } from './PacksList/PacksList'
 import { TopPanelTable } from './TopPanelTable/TopPanelTable'
 import { BottomPanelTable } from './BottomPanelTable/BottomPanelTable'
+import { AddModal } from 'modals/AddModal'
+
+function DeleteModal() {
+	return null
+}
 
 export const Packs = () => {
 	const dispatch = useAppDispatch()
 
 	const handleCreatePack = () => {
 		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
-		dispatch(packsThunks.getAllPacks({}))
+		dispatch(packsThunks.getPacks({}))
 	}
 
 	const isLoggedIn = useAppSelector<any>(state => state.auth.isLoggedIn)
+
 	if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
 	}

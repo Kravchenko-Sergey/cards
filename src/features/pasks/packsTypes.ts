@@ -66,7 +66,7 @@ export type ArgsCreatePacksType = {
 
 export type ArgsUpdatePacksType = {
 	cardsPack: {
-		id: string
+		_id: string
 		name: string
 	}
 }

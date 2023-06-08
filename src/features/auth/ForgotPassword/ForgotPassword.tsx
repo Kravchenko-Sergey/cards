@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { authThunks } from 'features/auth/authSlice'
-import { useAppDispatch } from '../../../common/hooks/useAppDispatch'
+import { useAppDispatch } from '../../../common/hooks'
 
 type FormType = { email: string }
 
