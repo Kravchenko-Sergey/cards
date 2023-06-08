@@ -3,7 +3,7 @@ import s from 'features/auth/SetNewPassword/SetNewPassword.module.css'
 import { FormControl, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { useForm } from 'react-hook-form'
-import { authThunks } from 'features/auth/auth.slice'
+import { authThunks } from 'features/auth/authSlice'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch } from '../../../common/hooks/useAppDispatch'
 

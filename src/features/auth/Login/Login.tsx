@@ -1,5 +1,5 @@
 import React from 'react'
-import { authThunks } from 'features/auth/auth.slice'
+import { authThunks } from 'features/auth/authSlice'
 import s from 'features/auth/Login/Login.module.css'
 import TextField from '@mui/material/TextField'
 import { Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
@@ -7,7 +7,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
-import { ArgsLoginType } from '../auth.api.types'
+import { ArgsLoginType } from 'features/auth/authTypes'
 import { toast } from 'react-toastify'
 
 export const Login = () => {

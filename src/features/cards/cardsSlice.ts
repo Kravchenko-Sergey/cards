@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { cardsApi } from 'features/cards/cards.api'
+import { cardsAPI } from 'features/cards/cardsAPI'
 
 const getCards = createAsyncThunk('cards/getCards', async (arg: any) => {
 	try {
-		const res = await cardsApi.getCards(arg)
+		const res = await cardsAPI.getCards(arg)
 		console.log(res)
 		return { cards: res.data.cards }
 	} catch (e) {
@@ -14,7 +14,14 @@ const getCards = createAsyncThunk('cards/getCards', async (arg: any) => {
 const slice = createSlice({
 	name: 'cards',
 	initialState: {
-		cards: [] as any
+		cards: [] as any,
+		packName: '',
+		cardsTotalCount: 0,
+		maxGrade: 5,
+		minGrade: 0,
+		page: 1,
+		pageCount: 4,
+		packUserId: ''
 	},
 	reducers: {},
 	extraReducers: builder => {

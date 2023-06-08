@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { authApi } from 'features/auth/auth.api'
+import { authAPI } from 'features/auth/authAPI'
 import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
 import { isAxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
 export const initializeApp = createAppAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
 	try {
-		const res = await authApi.me()
+		const res = await authAPI.me()
 		return { isLoggedIn: true }
 	} catch (e) {
 		console.error(e)
@@ -17,7 +17,7 @@ export const initializeApp = createAppAsyncThunk('app/initializeApp', async (arg
 
 export const setIsLoading = createAppAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
 	try {
-		const res = await authApi.me()
+		const res = await authAPI.me()
 		return { isLoggedIn: true }
 	} catch (e) {
 		console.error(e)

@@ -1,4 +1,4 @@
-import { authThunks } from 'features/auth/auth.slice'
+import { authThunks } from 'features/auth/authSlice'
 import s from 'features/auth/register/Register.module.css'
 import TextField from '@mui/material/TextField'
 import { FormControl, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'

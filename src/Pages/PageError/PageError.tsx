@@ -1,6 +1,6 @@
 import React from 'react'
 import style from './PageError.module.css'
-import error404 from '../../../assets/img/error404.svg'
+import error404 from '../../assets/img/error404.svg'
 import { Link } from 'react-router-dom'
 
 export const PageError = () => {

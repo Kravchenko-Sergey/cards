@@ -12,13 +12,13 @@ import {
 	ArgsSetNewPassword,
 	SetNewPasswordResponseType,
 	ArgsUpdateProfile
-} from './auth.api.types'
+} from 'features/auth/authTypes'
 
 const settings = {
 	withCredentials: true
 }
 
-export const authApi = {
+export const authAPI = {
 	register(data: ArgsRegisterType) {
 		return instance.post<RegisterResponseType>('auth/register', data)
 	},

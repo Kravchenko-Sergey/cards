@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
-import { authApi } from './auth.api'
+import { authAPI } from 'features/auth/authAPI'
 import {
 	ArgsForgotPasswordType,
 	ArgsLoginType,
@@ -8,7 +8,7 @@ import {
 	ArgsSetNewPassword,
 	ArgsUpdateProfile,
 	UserProfileType
-} from './auth.api.types'
+} from 'features/auth/authTypes'
 import { isAxiosError } from 'axios'
 import { thunkTryCatch } from 'common/utils/thunk-try-catch'
 
@@ -25,7 +25,7 @@ const register = createAppAsyncThunk(THUNK_PREFIXES.REGISTER, async (arg: ArgsRe
 	return thunkTryCatch(
 		thunkAPI,
 		async () => {
-			const res = await authApi.register(arg)
+			const res = await authAPI.register(arg)
 			return { isRegisteredIn: true }
 		},
 		false
@@ -34,14 +34,14 @@ const register = createAppAsyncThunk(THUNK_PREFIXES.REGISTER, async (arg: ArgsRe
 
 const login = createAppAsyncThunk(THUNK_PREFIXES.LOGIN, async (arg: ArgsLoginType, thunkAPI) => {
 	return thunkTryCatch(thunkAPI, async () => {
-		const res = await authApi.login(arg)
+		const res = await authAPI.login(arg)
 		return { profile: res.data, isLoggedIn: true }
 	})
 })
 
 export const logout = createAppAsyncThunk(THUNK_PREFIXES.LOGOUT, async (arg, thunkAPI) => {
 	try {
-		const res = await authApi.logout()
+		const res = await authAPI.logout()
 		return { isLoggedIn: false }
 	} catch (e) {
 		return thunkAPI.rejectWithValue(e)
@@ -52,7 +52,7 @@ export const changeUserName = createAppAsyncThunk(
 	THUNK_PREFIXES.CHANGE_USER_NAME,
 	async (arg: ArgsUpdateProfile, thunkAPI) => {
 		try {
-			const res = await authApi.updateProfile(arg)
+			const res = await authAPI.updateProfile(arg)
 			return { name: res.data.updatedUser.name }
 		} catch (e) {
 			return thunkAPI.rejectWithValue(e)
@@ -64,7 +64,7 @@ export const forgotPassword = createAppAsyncThunk(
 	THUNK_PREFIXES.FORGOT_PASSWORD,
 	async (arg: ArgsForgotPasswordType, thunkAPI) => {
 		try {
-			const res = await authApi.forgotPassword(arg)
+			const res = await authAPI.forgotPassword(arg)
 		} catch (e) {
 			return thunkAPI.rejectWithValue(e)
 		}

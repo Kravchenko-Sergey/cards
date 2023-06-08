@@ -8,18 +8,17 @@ import {
 	DeletePackResponseType,
 	GetPacksResponseType,
 	UpdatePackResponseType
-} from './packs.api.types'
+} from 'features/pasks/packsTypes'
 
-export const packsApi = {
-	getPacks(data: ArgsGetPacksType) {
-		return instance.get<GetPacksResponseType>('cards/pack', {
-			data
-		})
+export const packsAPI = {
+	getPacks(data: any) {
+		console.log(data)
+		return instance.get<GetPacksResponseType>('cards/pack', { data })
 	},
 	createPack(data: ArgsCreatePacksType) {
 		return instance.post<CreatePackResponseType>('cards/pack', data)
 	},
-	updatePackName(data: ArgsUpdatePacksType) {
+	updatePack(data: ArgsUpdatePacksType) {
 		return instance.put<UpdatePackResponseType>('cards/pack', data)
 	},
 	deletePack(data: ArgsDeletePacksType) {

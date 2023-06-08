@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import React, { useEffect, useState } from 'react'
-import { packsThunks } from '../pasks/packs.slice'
+import { packsThunks } from 'features/pasks/packsSlice'
 import {
 	FormControl,
 	InputLabel,

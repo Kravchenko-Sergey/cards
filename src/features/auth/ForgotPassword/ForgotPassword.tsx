@@ -3,7 +3,7 @@ import s from 'features/auth/ForgotPassword/ForgotPassword.module.css'
 import TextField from '@mui/material/TextField'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { authThunks } from 'features/auth/auth.slice'
+import { authThunks } from 'features/auth/authSlice'
 import { useAppDispatch } from '../../../common/hooks/useAppDispatch'
 
 type FormType = { email: string }

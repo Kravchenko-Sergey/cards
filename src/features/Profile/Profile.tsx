@@ -1,14 +1,14 @@
 import React from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import s from './Profile.module.css'
-import { authThunks, logout } from 'features/auth/auth.slice'
+import { authThunks, logout } from 'features/auth/authSlice'
 import { EditableSpan } from 'components/EditableSpan/EditableSpan'
 import { useAppDispatch } from 'common/hooks'
 import { useAppSelector } from 'common/hooks'
-import avatar from '../../../assets/img/userPhoto.svg'
+import avatar from '../../assets/img/userPhoto.svg'
 import changePhoto from 'assets/img/changePhoto.svg'
-import logoutIcon from '../../../assets/img/logout.svg'
-import leftArrow from '../../../assets/img/leftArrow.svg'
+import logoutIcon from '../../assets/img/logout.svg'
+import leftArrow from '../../assets/img/leftArrow.svg'
 
 export const Profile = () => {
 	const dispatch = useAppDispatch()
