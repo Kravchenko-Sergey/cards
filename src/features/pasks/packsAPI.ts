@@ -13,7 +13,7 @@ import {
 export const packsAPI = {
 	getPacks(data: any) {
 		console.log(data)
-		return instance.get<GetPacksResponseType>('cards/pack', { data })
+		return instance.get<GetPacksResponseType>('cards/pack', { params: { ...data } })
 	},
 	createPack(data: ArgsCreatePacksType) {
 		return instance.post<CreatePackResponseType>('cards/pack', data)

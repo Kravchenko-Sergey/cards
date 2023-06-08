@@ -8,6 +8,8 @@ import { packsThunks } from 'features/pasks/packsSlice'
 
 export const TopPanelTable = () => {
 	const myId = useAppSelector(state => state.auth.profile?._id)
+	console.log(myId)
+	const params = useAppSelector(state => state.packs.searchParams)
 	const dispatch = useAppDispatch()
 	//search
 	const [searchValue, setSearchValue] = useState('')
@@ -17,10 +19,10 @@ export const TopPanelTable = () => {
 	}
 	//my all
 	const handleMyPacksButton = () => {
-		dispatch(packsThunks.getMyPacks({ user_id: '646f1ae252b61728bc5fb396' }))
+		dispatch(packsThunks.getMyPacks({ ...params, user_id: myId }))
 	}
 	const handleAllPacksButton = () => {
-		dispatch(packsThunks.getPacks({}))
+		dispatch(packsThunks.getAllPacks({ ...params, user_id: '' }))
 	}
 	//slider
 	const [sliderValue, setSliderValue] = React.useState<number[]>([0, 0])
@@ -28,7 +30,7 @@ export const TopPanelTable = () => {
 		setSliderValue(newValue as number[])
 	}
 	const handleSliderValueCommitted: any = () => {
-		dispatch(packsThunks.sliderFilter({ min: sliderValue[0], max: sliderValue[1] }))
+		dispatch(packsThunks.sliderFilter({ ...params, min: sliderValue[0], max: sliderValue[1] }))
 	}
 	//reset filter
 	const handleResetFilter = () => {
@@ -40,7 +42,7 @@ export const TopPanelTable = () => {
 	}
 
 	useEffect(() => {
-		dispatch(packsThunks.searchPack({ packName: debouncedValue }))
+		dispatch(packsThunks.searchPack({ ...params, packName: debouncedValue }))
 	}, [debouncedValue, dispatch])
 
 	/*useEffect(() => {

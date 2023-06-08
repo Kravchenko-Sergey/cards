@@ -40,6 +40,7 @@ export const PacksList = () => {
 							<Pack
 								key={pack._id}
 								_id={pack._id}
+								user_id={pack.user_id}
 								name={pack.name}
 								cardsCount={pack.cardsCount}
 								updated={pack.updated}

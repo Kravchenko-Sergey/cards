@@ -19,14 +19,12 @@ const THUNK_PREFIXES = {
 	RESET_FILTER: 'auth/resetFilter'
 }
 
-const getPacks = createAsyncThunk(THUNK_PREFIXES.GET_PACKS, async (arg: ArgsGetPacksType) => {
+const getAllPacks = createAsyncThunk(THUNK_PREFIXES.GET_PACKS, async (arg: ArgsGetPacksType) => {
 	try {
 		const res = await packsAPI.getPacks(arg)
 		return {
 			packs: res.data.cardPacks,
-			cardsPackTotalCount: res.data.cardPacksTotalCount,
-			minCardsCount: res.data.minCardsCount,
-			maxCardsCount: res.data.maxCardsCount
+			user_id: arg.user_id
 		}
 	} catch (e) {
 		console.error(e)
@@ -38,7 +36,7 @@ const getMyPacks = createAsyncThunk(THUNK_PREFIXES.GET_MY_PACKS, async (arg: Arg
 		console.log(arg)
 		const res = await packsAPI.getPacks(arg)
 		console.log(res)
-		return { packs: res.data.cardPacks }
+		return { packs: res.data.cardPacks, user_id: arg.user_id }
 	} catch (e) {
 		console.error(e)
 	}
@@ -84,7 +82,7 @@ const searchPack = createAsyncThunk(THUNK_PREFIXES.SEARCH_PACK, async (arg: Args
 const sliderFilter = createAsyncThunk(THUNK_PREFIXES.SLIDER_FILTER, async (arg: ArgsGetPacksType) => {
 	try {
 		const res = await packsAPI.getPacks(arg)
-		return { packs: res.data.cardPacks }
+		return { packs: res.data.cardPacks, min: arg.min, max: arg.max }
 	} catch (e) {
 		console.error(e)
 	}
@@ -93,7 +91,7 @@ const sliderFilter = createAsyncThunk(THUNK_PREFIXES.SLIDER_FILTER, async (arg: 
 const resetFilter = createAsyncThunk(THUNK_PREFIXES.RESET_FILTER, async (arg: ArgsGetPacksType) => {
 	try {
 		const res = await packsAPI.getPacks({})
-		return { packs: res.data.cardPacks }
+		return { packs: res.data.cardPacks, params: arg }
 	} catch (e) {
 		console.error(e)
 	}
@@ -120,14 +118,20 @@ const slice = createSlice({
 	reducers: {},
 	extraReducers: builder => {
 		builder
-			.addCase(getPacks.fulfilled, (state, action) => {
+			.addCase(getAllPacks.fulfilled, (state, action) => {
 				if (action.payload?.packs) {
 					state.packs = action.payload.packs
+				}
+				if (action.payload?.user_id) {
+					state.searchParams.user_id = action.payload.user_id
 				}
 			})
 			.addCase(getMyPacks.fulfilled, (state, action) => {
 				if (action.payload?.packs) {
 					state.packs = action.payload.packs
+				}
+				if (action.payload?.user_id) {
+					state.searchParams.user_id = action.payload.user_id
 				}
 			})
 			.addCase(createPack.fulfilled, (state, action) => {
@@ -168,10 +172,28 @@ const slice = createSlice({
 				if (action.payload?.packs) {
 					state.packs = action.payload.packs
 				}
+				if (action.payload?.min) {
+					state.searchParams.min = action.payload.min
+				}
+				if (action.payload?.max) {
+					state.searchParams.max = action.payload.max
+				}
 			})
 			.addCase(resetFilter.fulfilled, (state, action) => {
 				if (action.payload?.packs) {
 					state.packs = action.payload.packs
+				}
+				if (action.payload?.params) {
+					state.searchParams = {
+						packName: '',
+						min: 0,
+						max: 0,
+						sortPacks: '0updated',
+						page: 1,
+						pageCount: 4,
+						user_id: '',
+						block: false
+					}
 				}
 			})
 	}
@@ -180,7 +202,7 @@ const slice = createSlice({
 export const packsReducer = slice.reducer
 export const packsActions = slice.actions
 export const packsThunks = {
-	getPacks,
+	getAllPacks: getAllPacks,
 	getMyPacks,
 	createPack,
 	deletePack,

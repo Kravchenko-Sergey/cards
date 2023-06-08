@@ -33,11 +33,11 @@ export const Cards = () => {
 	const dispatch = useAppDispatch()
 	const cards = useAppSelector(state => state.cards.cards)
 	useEffect(() => {
-		dispatch(packsThunks.getPacks({}))
+		dispatch(packsThunks.getAllPacks({}))
 	}, [])
 	const handleCreatePack = () => {
 		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
-		dispatch(packsThunks.getPacks({}))
+		dispatch(packsThunks.getAllPacks({}))
 	}
 	//table
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
@@ -131,7 +131,7 @@ export const Cards = () => {
 											<img
 												onClick={() => {
 													dispatch(packsThunks.deletePack({ _id: row._id }))
-													dispatch(packsThunks.getPacks({}))
+													dispatch(packsThunks.getAllPacks({}))
 												}}
 												src={deleteBtn}
 												alt='deleteBtn'

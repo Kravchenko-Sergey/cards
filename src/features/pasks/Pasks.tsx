@@ -12,7 +12,7 @@ export const Packs = () => {
 
 	const handleCreatePack = () => {
 		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
-		dispatch(packsThunks.getPacks({}))
+		dispatch(packsThunks.getAllPacks({}))
 	}
 
 	const isLoggedIn = useAppSelector<any>(state => state.auth.isLoggedIn)

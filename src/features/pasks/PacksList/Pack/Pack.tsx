@@ -10,6 +10,7 @@ import { cardsThunks } from 'features/cards/cardsSlice'
 
 type PackPropsType = {
 	_id: string
+	user_id: string
 	user_name: string
 	name: string
 	cardsCount: number
@@ -33,7 +34,7 @@ export const Pack = (props: PackPropsType) => {
 
 	const handleDeleteBtn = (id: string) => {
 		dispatch(packsThunks.deletePack({ _id: id }))
-		dispatch(packsThunks.getPacks({}))
+		dispatch(packsThunks.getAllPacks({}))
 	}
 
 	return (
@@ -44,7 +45,7 @@ export const Pack = (props: PackPropsType) => {
 			<TableCell>{props.user_name}</TableCell>
 			<TableCell>
 				<div className={style.actionButtons}>
-					{props._id === myId ? (
+					{props.user_id === myId ? (
 						<>
 							<img onClick={handleTeacherBtn} src={teacherBtn} alt='teacherBtn' />
 							<img onClick={handleUpdateBtn} src={editBtn} alt='updateBtn' />
