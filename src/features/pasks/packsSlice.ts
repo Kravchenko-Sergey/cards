@@ -7,7 +7,7 @@ import {
 	ArgsUpdatePacksType,
 	PackType
 } from 'features/pasks/packsTypes'
-import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
+import { createAppAsyncThunk } from '../../common/utils/createAppAsyncThunk'
 
 const THUNK_PREFIXES = {
 	GET_PACKS: 'auth/getPacks',
@@ -59,7 +59,6 @@ const deletePack = createAppAsyncThunk<{}, ArgsDeletePacksType>(THUNK_PREFIXES.D
 	console.log(arg)
 	try {
 		const res = await packsAPI.deletePack(arg)
-		console.log(res)
 		thunkAPI.dispatch(getPacks({ user_id: res.request.user_id }))
 	} catch (e) {
 		console.error(e)
@@ -70,7 +69,7 @@ const updatePack = createAppAsyncThunk<any, any>(THUNK_PREFIXES.UPDATE_PACKS_NAM
 	try {
 		const res = await packsAPI.updatePack(arg)
 		console.log(res)
-		return { id: arg.cardsPack._id, name: 'update deck', packs: res.data.updatedCardsPack }
+		return { id: arg.cardsPack._id, name: 'update deck' }
 	} catch (e) {
 		console.error(e)
 	}
@@ -131,15 +130,9 @@ const slice = createSlice({
 		builder
 			.addCase(getPacks.fulfilled, (state, action) => {
 				state.packs = action.payload.packs
-				if (action.payload?.user_id) {
-					state.searchParams.user_id = action.payload.user_id
-				}
-				if (action.payload?.page) {
-					state.searchParams.page = action.payload.page
-				}
-				if (action.payload?.pageCount) {
-					state.searchParams.pageCount = action.payload.pageCount
-				}
+				state.searchParams.user_id = action.payload.user_id
+				state.searchParams.page = action.payload.page
+				state.searchParams.pageCount = action.payload.pageCount
 			})
 			/*.addCase(getMyPacks.fulfilled, (state, action) => {
 				if (action.payload?.packs) {

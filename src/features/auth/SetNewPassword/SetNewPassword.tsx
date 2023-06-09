@@ -4,13 +4,15 @@ import { FormControl, IconButton, Input, InputAdornment, InputLabel } from '@mui
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { useForm } from 'react-hook-form'
 import { authThunks } from 'features/auth/authSlice'
-import { useParams } from 'react-router-dom'
-import { useAppDispatch } from '../../../common/hooks/useAppDispatch'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useAppDispatch } from 'common/hooks'
 
 type FormType = { password: string }
 
 export const SetNewPassword = () => {
+	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
+	const { token } = useParams<{ token: string }>()
 
 	const [showPassword, setShowPassword] = React.useState(false)
 	const handleClickShowPassword = () => setShowPassword(show => !show)
@@ -24,7 +26,11 @@ export const SetNewPassword = () => {
 		handleSubmit
 	} = useForm<FormType>({ mode: 'onSubmit' })
 	const handleNewPassword = (data: FormType) => {
-		dispatch(authThunks.setNewPassword({ password: data.password }))
+		dispatch(authThunks.setNewPassword({ password: data.password, resetPasswordToken: token }))
+			.unwrap()
+			.then(() => {
+				navigate('/login')
+			})
 	}
 	//считывание токена из URL
 	const { resetPasswordToken } = useParams()

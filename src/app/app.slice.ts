@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { authAPI } from 'features/auth/authAPI'
-import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
+import { createAppAsyncThunk } from 'common/utils/createAppAsyncThunk'
 import { isAxiosError } from 'axios'
 import { toast } from 'react-toastify'
 

@@ -7,7 +7,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
-import { ArgsLoginType } from 'features/auth/authTypes'
+import { ArgLoginType } from 'features/auth/authTypes'
 import { toast } from 'react-toastify'
 
 export const Login = () => {
@@ -18,7 +18,7 @@ export const Login = () => {
 		register,
 		formState: { errors },
 		handleSubmit
-	} = useForm<ArgsLoginType>({ mode: 'onSubmit' })
+	} = useForm<ArgLoginType>({ mode: 'onSubmit' })
 	const handleLogin = async (data: any) => {
 		try {
 			await dispatch(authThunks.login(data)).unwrap()

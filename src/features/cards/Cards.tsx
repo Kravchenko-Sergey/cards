@@ -1,44 +1,23 @@
 import { useAppDispatch, useAppSelector } from 'common/hooks'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { packsThunks } from 'features/pasks/packsSlice'
-import {
-	FormControl,
-	InputLabel,
-	MenuItem,
-	Paper,
-	Rating,
-	Select,
-	SelectChangeEvent,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow
-} from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import style from './Cards.module.css'
 import TextField from '@mui/material/TextField'
 import Pagination from '@mui/material/Pagination'
-import { Link, Navigate } from 'react-router-dom'
-import teacherBtn from '../../assets/img/teacher.svg'
-import editBtn from '../../assets/img/edit.svg'
-import deleteBtn from '../../assets/img/delete.svg'
+import { Link } from 'react-router-dom'
 import leftArrow from '../../assets/img/leftArrow.svg'
 import settings from '../../assets/img/settings.svg'
+import { CardsList } from './CardsList/CardsList'
+import { cardsThunks } from './cardsSlice'
 
 export const Cards = () => {
-	//rating
-	const [value, setValue] = useState<any>(4)
-	//
-	const dispatch = useAppDispatch()
 	const cards = useAppSelector(state => state.cards.cards)
+	const myId = useAppSelector(state => state.auth.profile?._id)
+	const dispatch = useAppDispatch()
 	useEffect(() => {
 		dispatch(packsThunks.getPacks({}))
 	}, [])
-	const handleCreatePack = () => {
-		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
-		dispatch(packsThunks.getPacks({}))
-	}
 	//table
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
 		return { name, cards, lastUpdated, createdBy, actions }
@@ -53,6 +32,14 @@ export const Cards = () => {
 	/*if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
 	}*/
+	const handleCreateCard = () => {
+		dispatch(
+			cardsThunks.createCard({
+				card: { cardsPack_id: '648339f3b859820c1448eb46', question: 'test question', answer: 'test answer' }
+			})
+		)
+		dispatch(cardsThunks.getCards({}))
+	}
 
 	return (
 		<div className={style.container}>
@@ -65,7 +52,7 @@ export const Cards = () => {
 					<div className={style.pageName}>My Pack</div>
 					<img src={settings} alt='settings' />
 				</div>
-				<button onClick={handleCreatePack} className={style.button}>
+				<button onClick={handleCreateCard} className={style.button}>
 					Add new card
 				</button>
 			</div>
@@ -83,67 +70,7 @@ export const Cards = () => {
 					</div>
 				</div>
 			</div>
-			<div className={style.table}>
-				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
-						<TableHead sx={{ backgroundColor: '#efefef', fontWeight: 600 }}>
-							<TableRow>
-								<TableCell align='left' width='25%'>
-									Question
-								</TableCell>
-								<TableCell align='left' width='25%'>
-									Answer
-								</TableCell>
-								<TableCell align='left' width='20%'>
-									Last Updated
-								</TableCell>
-								<TableCell align='left' width='20%'>
-									Grade
-								</TableCell>
-								<TableCell align='left' width='10%'>
-									Actions
-								</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{cards.map((row: any) => (
-								<TableRow key={row._id}>
-									<TableCell align='left'>{`How "This" works in JavaScript?`}</TableCell>
-									<TableCell align='left'>{'This is how "This" works in JavaScript'}</TableCell>
-									<TableCell align='left'>{'18.03.2021'}</TableCell>
-									<TableCell align='left'>
-										<Rating
-											name='simple-controlled'
-											value={4}
-											onChange={(event, newValue) => {
-												setValue(newValue)
-											}}
-										/>
-									</TableCell>
-									<TableCell align='left'>
-										<div className={style.actionButtons}>
-											<img src={teacherBtn} alt='teacherBtn' />
-											<img
-												/*onClick={() => dispatch(packsThunks.updatePackName(row.name))}*/
-												src={editBtn}
-												alt='changeBtn'
-											/>
-											<img
-												onClick={() => {
-													dispatch(packsThunks.deletePack({ _id: row._id }))
-													dispatch(packsThunks.getPacks({}))
-												}}
-												src={deleteBtn}
-												alt='deleteBtn'
-											/>
-										</div>
-									</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</TableContainer>
-			</div>
+			<CardsList />
 			<div className={style.footer}>
 				<div className={style.pagination}>
 					<Pagination count={10} shape='rounded' color={'primary'} />

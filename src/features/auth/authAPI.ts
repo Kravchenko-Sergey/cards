@@ -1,16 +1,16 @@
 import { instance } from 'common/api/common.api'
 import axios from 'axios'
 import {
-	ArgsLoginType,
-	ArgsRegisterType,
-	ForgotPasswordResponseType,
-	UserProfileType,
-	RegisterResponseType,
+	ArgLoginType,
+	ArgRegisterType,
+	ForgotPasswordResType,
+	UserProfileResType,
+	RegisterResType,
 	UpdateProfileType,
-	LogoutResponseType,
-	ArgsForgotPasswordType,
-	ArgsSetNewPassword,
-	SetNewPasswordResponseType,
+	LogoutResType,
+	ArgForgotPasswordType,
+	ArgSetNewPassword,
+	SetNewPasswordResType,
 	ArgsUpdateProfile
 } from 'features/auth/authTypes'
 
@@ -19,29 +19,25 @@ const settings = {
 }
 
 export const authAPI = {
-	register(data: ArgsRegisterType) {
-		return instance.post<RegisterResponseType>('auth/register', data)
+	register(arg: ArgRegisterType) {
+		return instance.post<RegisterResType>('auth/register', arg)
 	},
-	login(data: ArgsLoginType) {
-		return instance.post<UserProfileType>('auth/login', data)
+	login(arg: ArgLoginType) {
+		return instance.post<UserProfileResType>('auth/login', arg)
 	},
 	logout() {
-		return instance.delete<LogoutResponseType>('auth/me')
+		return instance.delete<LogoutResType>('auth/me')
 	},
 	me() {
-		return instance.post<UserProfileType>('auth/me', {})
+		return instance.post<UserProfileResType>('auth/me', {})
 	},
-	forgotPassword(data: ArgsForgotPasswordType) {
-		return axios.post<ForgotPasswordResponseType>('https://neko-back.herokuapp.com/2.0/auth/forgot', data, settings)
+	forgotPassword(arg: ArgForgotPasswordType) {
+		return axios.post<ForgotPasswordResType>('https://neko-back.herokuapp.com/2.0/auth/forgot', arg, settings)
 	},
-	setNewPassword(data: ArgsSetNewPassword) {
-		return axios.post<SetNewPasswordResponseType>(
-			'https://neko-back.herokuapp.com/2.0/auth/set-new-password',
-			data,
-			settings
-		)
+	setNewPassword(arg: ArgSetNewPassword) {
+		return axios.post<SetNewPasswordResType>('https://neko-back.herokuapp.com/2.0/auth/set-new-password', arg, settings)
 	},
-	updateProfile(data: ArgsUpdateProfile) {
-		return instance.put<UpdateProfileType>('auth/me', data)
+	updateProfile(arg: ArgsUpdateProfile) {
+		return instance.put<UpdateProfileType>('auth/me', arg)
 	}
 }

@@ -7,6 +7,7 @@ import editBtn from 'assets/img/edit.svg'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { cardsThunks } from 'features/cards/cardsSlice'
 import { DeleteModal } from 'modals/DeleteModal'
+import { useNavigate } from 'react-router-dom'
 
 type PackPropsType = {
 	_id: string
@@ -22,15 +23,18 @@ export const Pack = (props: PackPropsType) => {
 	const params = useAppSelector(state => state.packs.searchParams)
 	const dispatch = useAppDispatch()
 
+	const navigate = useNavigate()
+
 	const handleRowName = (id: string) => {
 		dispatch(cardsThunks.getCards({ cardsPack_id: id }))
+		navigate('/cards')
 	}
 
 	const handleTeacherBtn = () => {}
 
 	const handleUpdateBtn = () => {
-		//dispatch(packsThunks.updatePackName({ cardsPack: { name: props.name, _id: props._id } }))
-		//dispatch(packsThunks.getPacks({}))
+		dispatch(packsThunks.updatePack({ cardsPack: { _id: props._id, name: 'updated deck' } }))
+		dispatch(packsThunks.getPacks({ ...params }))
 	}
 
 	const handleDeleteBtn = () => {

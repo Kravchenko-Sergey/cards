@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { createAppAsyncThunk } from 'common/utils/create-app-async-thunk'
+import { createAppAsyncThunk } from 'common/utils/createAppAsyncThunk'
 import { authAPI } from 'features/auth/authAPI'
 import {
-	ArgsForgotPasswordType,
-	ArgsLoginType,
-	ArgsRegisterType,
-	ArgsSetNewPassword,
+	ArgForgotPasswordType,
+	ArgLoginType,
+	ArgRegisterType,
+	ArgSetNewPassword,
 	ArgsUpdateProfile,
-	UserProfileType
+	UserProfileResType
 } from 'features/auth/authTypes'
 import { isAxiosError } from 'axios'
-import { thunkTryCatch } from 'common/utils/thunk-try-catch'
+import { thunkTryCatch } from 'common/utils/thunkTryCatch'
 
 const THUNK_PREFIXES = {
 	REGISTER: 'auth/register',
@@ -21,7 +21,7 @@ const THUNK_PREFIXES = {
 	SET_NEW_PASSWORD: 'auth/setNewPassword'
 }
 
-const register = createAppAsyncThunk<{ isRegisteredIn: boolean }, ArgsRegisterType>(
+const register = createAppAsyncThunk<{ isRegisteredIn: boolean }, ArgRegisterType>(
 	THUNK_PREFIXES.REGISTER,
 	async (arg, thunkAPI) => {
 		return thunkTryCatch(thunkAPI, async () => {
@@ -31,7 +31,7 @@ const register = createAppAsyncThunk<{ isRegisteredIn: boolean }, ArgsRegisterTy
 	}
 )
 
-const login = createAppAsyncThunk<{ profile: UserProfileType; isLoggedIn: boolean }, ArgsLoginType>(
+const login = createAppAsyncThunk<{ profile: UserProfileResType; isLoggedIn: boolean }, ArgLoginType>(
 	THUNK_PREFIXES.LOGIN,
 	async (arg, thunkAPI) => {
 		return thunkTryCatch(
@@ -67,21 +67,22 @@ export const changeUserName = createAppAsyncThunk<{ name: string }, ArgsUpdatePr
 	}
 )
 
-export const forgotPassword = createAppAsyncThunk<any, ArgsForgotPasswordType>(
+export const forgotPassword = createAppAsyncThunk<any, ArgForgotPasswordType>(
 	THUNK_PREFIXES.FORGOT_PASSWORD,
 	async (arg, thunkAPI) => {
 		try {
-			const res = await authAPI.forgotPassword(arg)
+			await authAPI.forgotPassword(arg)
 		} catch (e) {
 			return thunkAPI.rejectWithValue(e)
 		}
 	}
 )
 
-export const setNewPassword = createAppAsyncThunk<any, ArgsSetNewPassword>(
+export const setNewPassword = createAppAsyncThunk<any, ArgSetNewPassword>(
 	THUNK_PREFIXES.SET_NEW_PASSWORD,
 	async (arg, thunkAPI) => {
 		try {
+			await authAPI.setNewPassword(arg)
 		} catch (e) {
 			return thunkAPI.rejectWithValue(e)
 		}
@@ -91,7 +92,7 @@ export const setNewPassword = createAppAsyncThunk<any, ArgsSetNewPassword>(
 const slice = createSlice({
 	name: 'auth',
 	initialState: {
-		profile: null as UserProfileType | null,
+		profile: null as UserProfileResType | null,
 		isLoggedIn: false,
 		isRegisteredIn: false,
 		error: null as null | string

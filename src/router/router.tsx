@@ -31,16 +31,16 @@ export const router = createBrowserRouter([
 				element: <Register />
 			},
 			{
-				path: 'check-email',
-				element: <CheckEmail />
+				path: 'forgot-password',
+				element: <ForgotPassword />
 			},
 			{
-				path: 'set-new-password',
+				path: 'set-new-password/:token',
 				element: <SetNewPassword />
 			},
 			{
-				path: 'forgot-password',
-				element: <ForgotPassword />
+				path: 'check-email',
+				element: <CheckEmail />
 			},
 			{
 				path: 'profile',
