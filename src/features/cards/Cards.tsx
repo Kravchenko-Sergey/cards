@@ -124,7 +124,7 @@ export const Cards = () => {
 										<div className={style.actionButtons}>
 											<img src={teacherBtn} alt='teacherBtn' />
 											<img
-												onClick={() => dispatch(packsThunks.updatePackName(row.name))}
+												/*onClick={() => dispatch(packsThunks.updatePackName(row.name))}*/
 												src={editBtn}
 												alt='changeBtn'
 											/>

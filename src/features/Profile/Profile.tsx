@@ -16,7 +16,7 @@ export const Profile = () => {
 	const userName = useAppSelector(state => state.auth.profile?.name)
 	const userEmail = useAppSelector(state => state.auth.profile?.email)
 	const handleLogout = () => {
-		dispatch(logout())
+		dispatch(logout({}))
 	}
 
 	if (!isLoggedIn) {

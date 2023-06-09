@@ -47,9 +47,11 @@ export const PacksList = () => {
 						))}
 					</TableBody>
 				) : (
-					<div className={style.emptyArrayText}>
-						No decks with the entered name were found. Change request parameters
-					</div>
+					<TableBody sx={{ width: 1008 }} className={style.emptyArrayText}>
+						<TableRow>
+							<TableCell>No decks with the entered name were found. Change request parameters</TableCell>
+						</TableRow>
+					</TableBody>
 				)}
 			</Table>
 		</TableContainer>

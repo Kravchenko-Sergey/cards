@@ -21,25 +21,32 @@ const THUNK_PREFIXES = {
 	SET_NEW_PASSWORD: 'auth/setNewPassword'
 }
 
-const register = createAppAsyncThunk(THUNK_PREFIXES.REGISTER, async (arg: ArgsRegisterType, thunkAPI) => {
-	return thunkTryCatch(
-		thunkAPI,
-		async () => {
+const register = createAppAsyncThunk<{ isRegisteredIn: boolean }, ArgsRegisterType>(
+	THUNK_PREFIXES.REGISTER,
+	async (arg, thunkAPI) => {
+		return thunkTryCatch(thunkAPI, async () => {
 			const res = await authAPI.register(arg)
 			return { isRegisteredIn: true }
-		},
-		false
-	)
-})
+		})
+	}
+)
 
-const login = createAppAsyncThunk(THUNK_PREFIXES.LOGIN, async (arg: ArgsLoginType, thunkAPI) => {
-	return thunkTryCatch(thunkAPI, async () => {
-		const res = await authAPI.login(arg)
-		return { profile: res.data, isLoggedIn: true }
-	})
-})
+const login = createAppAsyncThunk<{ profile: UserProfileType; isLoggedIn: boolean }, ArgsLoginType>(
+	THUNK_PREFIXES.LOGIN,
+	async (arg, thunkAPI) => {
+		return thunkTryCatch(
+			thunkAPI,
+			async () => {
+				const res = await authAPI.login(arg)
+				return { profile: res.data, isLoggedIn: true }
+			},
+			{ showGlobalError: false }
+		)
+	}
+)
 
-export const logout = createAppAsyncThunk(THUNK_PREFIXES.LOGOUT, async (arg, thunkAPI) => {
+export const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, {}>(THUNK_PREFIXES.LOGOUT, async (arg, thunkAPI) => {
+	console.log(arg)
 	try {
 		const res = await authAPI.logout()
 		return { isLoggedIn: false }
@@ -48,9 +55,9 @@ export const logout = createAppAsyncThunk(THUNK_PREFIXES.LOGOUT, async (arg, thu
 	}
 })
 
-export const changeUserName = createAppAsyncThunk(
+export const changeUserName = createAppAsyncThunk<{ name: string }, ArgsUpdateProfile>(
 	THUNK_PREFIXES.CHANGE_USER_NAME,
-	async (arg: ArgsUpdateProfile, thunkAPI) => {
+	async (arg, thunkAPI) => {
 		try {
 			const res = await authAPI.updateProfile(arg)
 			return { name: res.data.updatedUser.name }
@@ -60,9 +67,9 @@ export const changeUserName = createAppAsyncThunk(
 	}
 )
 
-export const forgotPassword = createAppAsyncThunk(
+export const forgotPassword = createAppAsyncThunk<any, ArgsForgotPasswordType>(
 	THUNK_PREFIXES.FORGOT_PASSWORD,
-	async (arg: ArgsForgotPasswordType, thunkAPI) => {
+	async (arg, thunkAPI) => {
 		try {
 			const res = await authAPI.forgotPassword(arg)
 		} catch (e) {
@@ -71,9 +78,9 @@ export const forgotPassword = createAppAsyncThunk(
 	}
 )
 
-export const setNewPassword = createAppAsyncThunk(
+export const setNewPassword = createAppAsyncThunk<any, ArgsSetNewPassword>(
 	THUNK_PREFIXES.SET_NEW_PASSWORD,
-	async (arg: ArgsSetNewPassword, thunkAPI) => {
+	async (arg, thunkAPI) => {
 		try {
 		} catch (e) {
 			return thunkAPI.rejectWithValue(e)
@@ -93,9 +100,7 @@ const slice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(register.fulfilled, (state, action) => {
-				if (action.payload?.isRegisteredIn) {
-					state.isRegisteredIn = action.payload.isRegisteredIn
-				}
+				state.isRegisteredIn = action.payload.isRegisteredIn
 			})
 			.addCase(register.rejected, (state, action) => {
 				if (!isAxiosError(action.payload)) {
@@ -105,10 +110,8 @@ const slice = createSlice({
 				state.error = action.payload?.response?.data?.error
 			})
 			.addCase(login.fulfilled, (state, action) => {
-				if (action.payload?.profile) {
-					state.profile = action.payload.profile
-					state.isLoggedIn = action.payload.isLoggedIn
-				}
+				state.profile = action.payload.profile
+				state.isLoggedIn = action.payload.isLoggedIn
 			})
 			.addCase(login.rejected, (state, action) => {
 				if (!isAxiosError(action.payload)) {
@@ -118,9 +121,7 @@ const slice = createSlice({
 				state.error = action.payload?.response?.data?.error
 			})
 			.addCase(logout.fulfilled, (state, action) => {
-				if (action.payload?.isLoggedIn === false) {
-					state.isLoggedIn = action.payload.isLoggedIn
-				}
+				state.isLoggedIn = action.payload.isLoggedIn
 			})
 			.addCase(changeUserName.fulfilled, (state, action) => {
 				if (action.payload?.name) {

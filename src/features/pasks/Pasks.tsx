@@ -6,11 +6,6 @@ import { packsThunks } from 'features/pasks/packsSlice'
 import { PacksList } from './PacksList/PacksList'
 import { TopPanelTable } from './TopPanelTable/TopPanelTable'
 import { BottomPanelTable } from './BottomPanelTable/BottomPanelTable'
-import { AddModal } from 'modals/AddModal'
-
-function DeleteModal() {
-	return null
-}
 
 export const Packs = () => {
 	const dispatch = useAppDispatch()

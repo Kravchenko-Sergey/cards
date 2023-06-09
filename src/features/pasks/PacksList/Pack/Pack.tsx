@@ -29,7 +29,7 @@ export const Pack = (props: PackPropsType) => {
 	const handleTeacherBtn = () => {}
 
 	const handleUpdateBtn = () => {
-		dispatch(packsThunks.updatePackName({ cardsPack: { name: props.name, _id: props._id } }))
+		//dispatch(packsThunks.updatePackName({ cardsPack: { name: props.name, _id: props._id } }))
 		//dispatch(packsThunks.getPacks({}))
 	}
 

@@ -22,6 +22,7 @@ type BasicModalPropsType = {
 	img?: string
 	alt?: string
 	children: JSX.Element
+	title?: string
 }
 
 export const BasicModal = (props: BasicModalPropsType) => {

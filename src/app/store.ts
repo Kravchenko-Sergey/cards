@@ -10,7 +10,11 @@ export const store = configureStore({
 		auth: authReducer,
 		packs: packsReducer,
 		cards: cardsReducer
-	}
+	},
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware({
+			serializableCheck: false
+		})
 })
 
 export type AppDispatch = typeof store.dispatch

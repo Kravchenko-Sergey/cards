@@ -7,6 +7,7 @@ import {
 	ArgsUpdatePacksType,
 	PackType
 } from 'features/pasks/packsTypes'
+import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
 
 const THUNK_PREFIXES = {
 	GET_PACKS: 'auth/getPacks',
@@ -19,7 +20,7 @@ const THUNK_PREFIXES = {
 	RESET_FILTER: 'auth/resetFilter'
 }
 
-const getPacks = createAsyncThunk(THUNK_PREFIXES.GET_PACKS, async (arg: ArgsGetPacksType) => {
+const getPacks = createAppAsyncThunk<any, ArgsGetPacksType>(THUNK_PREFIXES.GET_PACKS, async arg => {
 	try {
 		const res = await packsAPI.getPacks(arg)
 		return {
@@ -45,7 +46,7 @@ const getPacks = createAsyncThunk(THUNK_PREFIXES.GET_PACKS, async (arg: ArgsGetP
 	}
 })*/
 
-const createPack = createAsyncThunk(THUNK_PREFIXES.CREATE_PACKS, async (arg: ArgsCreatePacksType) => {
+const createPack = createAppAsyncThunk<any, ArgsCreatePacksType>(THUNK_PREFIXES.CREATE_PACKS, async arg => {
 	try {
 		const res = await packsAPI.createPack(arg)
 		return { cardsPack: { name: 'new deck', deckCover: 'url or base64', private: false }, packs: res.data.newCardsPack }
@@ -54,7 +55,7 @@ const createPack = createAsyncThunk(THUNK_PREFIXES.CREATE_PACKS, async (arg: Arg
 	}
 })
 
-const deletePack = createAsyncThunk(THUNK_PREFIXES.DELETE_PACKS, async (arg: ArgsDeletePacksType, thunkAPI) => {
+const deletePack = createAppAsyncThunk<{}, ArgsDeletePacksType>(THUNK_PREFIXES.DELETE_PACKS, async (arg, thunkAPI) => {
 	console.log(arg)
 	try {
 		const res = await packsAPI.deletePack(arg)
@@ -65,7 +66,7 @@ const deletePack = createAsyncThunk(THUNK_PREFIXES.DELETE_PACKS, async (arg: Arg
 	}
 })
 
-const updatePackName = createAsyncThunk(THUNK_PREFIXES.UPDATE_PACKS_NAME, async (arg: ArgsUpdatePacksType) => {
+const updatePack = createAppAsyncThunk<any, any>(THUNK_PREFIXES.UPDATE_PACKS_NAME, async (arg: ArgsUpdatePacksType) => {
 	try {
 		const res = await packsAPI.updatePack(arg)
 		console.log(res)
@@ -75,7 +76,7 @@ const updatePackName = createAsyncThunk(THUNK_PREFIXES.UPDATE_PACKS_NAME, async 
 	}
 })
 
-const searchPack = createAsyncThunk(THUNK_PREFIXES.SEARCH_PACK, async (arg: ArgsGetPacksType) => {
+const searchPack = createAppAsyncThunk<any, ArgsGetPacksType>(THUNK_PREFIXES.SEARCH_PACK, async arg => {
 	try {
 		const res = await packsAPI.getPacks(arg)
 		return {
@@ -89,7 +90,7 @@ const searchPack = createAsyncThunk(THUNK_PREFIXES.SEARCH_PACK, async (arg: Args
 	}
 })
 
-const sliderFilter = createAsyncThunk(THUNK_PREFIXES.SLIDER_FILTER, async (arg: ArgsGetPacksType) => {
+const sliderFilter = createAppAsyncThunk<any, ArgsGetPacksType>(THUNK_PREFIXES.SLIDER_FILTER, async arg => {
 	try {
 		const res = await packsAPI.getPacks(arg)
 		return { packs: res.data.cardPacks, min: arg.min, max: arg.max }
@@ -98,7 +99,7 @@ const sliderFilter = createAsyncThunk(THUNK_PREFIXES.SLIDER_FILTER, async (arg: 
 	}
 })
 
-const resetFilter = createAsyncThunk(THUNK_PREFIXES.RESET_FILTER, async (arg: ArgsGetPacksType) => {
+const resetFilter = createAppAsyncThunk<any, ArgsGetPacksType>(THUNK_PREFIXES.RESET_FILTER, async arg => {
 	try {
 		const res = await packsAPI.getPacks({})
 		return { packs: res.data.cardPacks, params: arg }
@@ -129,9 +130,7 @@ const slice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(getPacks.fulfilled, (state, action) => {
-				if (action.payload?.packs) {
-					state.packs = action.payload.packs
-				}
+				state.packs = action.payload.packs
 				if (action.payload?.user_id) {
 					state.searchParams.user_id = action.payload.user_id
 				}
@@ -151,20 +150,20 @@ const slice = createSlice({
 				}
 			})*/
 			.addCase(createPack.fulfilled, (state, action) => {
-				if (action.payload?.cardsPack) {
+				/*if (action.payload?.cardsPack) {
 					console.log(action.payload.cardsPack)
 					state.packs.unshift(action.payload.cardsPack)
 				}
 				if (action.payload?.packs) {
 					state.packs = action.payload.packs
-				}
+				}*/
 			})
 			/*.addCase(deletePack.fulfilled, (state, action) => {
 				if (action.payload?.deletedCardsPack) {
 					return state.packs.packs.filter((pack: PackType) => pack._id !== action.payload!.deletedCardsPack._id)
 				}
 			})*/
-			/*.addCase(updatePackName.fulfilled, (state, action) => {
+			/*.addCase(updatePack.fulfilled, (state, action) => {
 				if (action.payload?.id) {
 					const packIndex = state.packs.findIndex((pack: PackType) => pack._id === action.payload!.id)
 					state.packs[packIndex].name = action.payload.name
@@ -219,7 +218,7 @@ export const packsThunks = {
 	/*getMyPacks,*/
 	createPack,
 	deletePack,
-	updatePackName,
+	updatePack,
 	searchPack,
 	sliderFilter,
 	resetFilter

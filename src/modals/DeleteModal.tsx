@@ -5,6 +5,7 @@ import deleteBtn from 'assets/img/delete.svg'
 
 type DeleteModalPropsType = {
 	callback?: any
+	setOpen?: any
 }
 
 export const DeleteModal = (props: DeleteModalPropsType) => {
@@ -14,9 +15,7 @@ export const DeleteModal = (props: DeleteModalPropsType) => {
 				<h1 className={style.title}>Delete Pack</h1>
 				<div className={style.text}>Do you really want to remove Pack Name? All cards will be deleted.</div>
 				<div className={style.btnBlock}>
-					<button onClick={props.handleClose} className={style.cancelBtn}>
-						Cancel
-					</button>
+					<button className={style.cancelBtn}>Cancel</button>
 					<button onClick={props.callback} className={style.deleteBtn}>
 						Delete
 					</button>
