@@ -38,7 +38,7 @@ export const Cards = () => {
 				card: { cardsPack_id: '648339f3b859820c1448eb46', question: 'test question', answer: 'test answer' }
 			})
 		)
-		dispatch(cardsThunks.getCards({}))
+		dispatch(cardsThunks.getCards({ cardsPack_id: '648339f3b859820c1448eb46' }))
 	}
 
 	return (

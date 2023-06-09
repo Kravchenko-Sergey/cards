@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { packsAPI } from 'features/pasks/packsAPI'
 import {
-	ArgsCreatePacksType,
-	ArgsDeletePacksType,
+	ArgCreatePacksType,
+	ArgDeletePacksType,
 	ArgsGetPacksType,
-	ArgsUpdatePacksType,
+	ArgUpdatePacksType,
 	PackType
 } from 'features/pasks/packsTypes'
 import { createAppAsyncThunk } from '../../common/utils/createAppAsyncThunk'
@@ -46,7 +46,7 @@ const getPacks = createAppAsyncThunk<any, ArgsGetPacksType>(THUNK_PREFIXES.GET_P
 	}
 })*/
 
-const createPack = createAppAsyncThunk<any, ArgsCreatePacksType>(THUNK_PREFIXES.CREATE_PACKS, async arg => {
+const createPack = createAppAsyncThunk<any, ArgCreatePacksType>(THUNK_PREFIXES.CREATE_PACKS, async arg => {
 	try {
 		const res = await packsAPI.createPack(arg)
 		return { cardsPack: { name: 'new deck', deckCover: 'url or base64', private: false }, packs: res.data.newCardsPack }
@@ -55,7 +55,7 @@ const createPack = createAppAsyncThunk<any, ArgsCreatePacksType>(THUNK_PREFIXES.
 	}
 })
 
-const deletePack = createAppAsyncThunk<{}, ArgsDeletePacksType>(THUNK_PREFIXES.DELETE_PACKS, async (arg, thunkAPI) => {
+const deletePack = createAppAsyncThunk<{}, ArgDeletePacksType>(THUNK_PREFIXES.DELETE_PACKS, async (arg, thunkAPI) => {
 	console.log(arg)
 	try {
 		const res = await packsAPI.deletePack(arg)
@@ -65,7 +65,7 @@ const deletePack = createAppAsyncThunk<{}, ArgsDeletePacksType>(THUNK_PREFIXES.D
 	}
 })
 
-const updatePack = createAppAsyncThunk<any, any>(THUNK_PREFIXES.UPDATE_PACKS_NAME, async (arg: ArgsUpdatePacksType) => {
+const updatePack = createAppAsyncThunk<any, any>(THUNK_PREFIXES.UPDATE_PACKS_NAME, async (arg: ArgUpdatePacksType) => {
 	try {
 		const res = await packsAPI.updatePack(arg)
 		console.log(res)

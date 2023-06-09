@@ -1,9 +1,9 @@
 import React from 'react'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import style from '../Cards.module.css'
-import { CardType } from '../cardsSlice'
-import { useAppSelector } from '../../../common/hooks'
+import style from 'features/cards/Cards.module.css'
+import { useAppSelector } from 'common/hooks'
 import { Card } from './Card/Card'
+import { CardType } from 'features/cards/cardsAPI'
 
 export const CardsList = () => {
 	const cards = useAppSelector(state => state.cards.cards)

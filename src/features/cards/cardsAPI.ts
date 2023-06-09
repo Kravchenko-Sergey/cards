@@ -1,23 +1,82 @@
 import { instance } from 'common/api/common.api'
-import { CardType } from './cardsSlice'
 
 export const cardsAPI = {
-	getCards(params: any) {
-		return instance.get<ArgGetCardsResponseType>('cards/card', { params })
+	getCards(arg: ArgGetCardsType) {
+		return instance.get<GetCardsResType>('cards/card', { params: { ...arg } })
 	},
-	createCard(data: any) {
-		return instance.post<any>('cards/card', data)
+	createCard(arg: ArgCreateCardType) {
+		return instance.post<CreateCardResType>('cards/card', arg)
 	},
-	updateCard(data: any) {
-		return instance.put<any>('cards/card', data)
+	updateCard(arg: ArgUpdateCardType) {
+		return instance.put<UpdateCardResType>('cards/card', arg)
 	},
-	deleteCard(data: any) {
-		console.log(data)
-		return instance.delete<any>(`cards/card/?id=${data._id}`)
+	deleteCard(arg: ArgDeleteCardType) {
+		console.log(arg)
+		return instance.delete<DeleteCardResType>(`cards/card/?id=${arg.id}`)
 	}
 }
 
-type ArgGetCardsResponseType = {
+export type ArgGetCardsType = {
+	cardAnswer?: string
+	cardQuestion?: string
+	cardsPack_id: string
+	min?: number
+	max?: number
+	sortCards?: string
+	page?: number
+	pageCount?: number
+}
+
+export type ArgCreateCardType = {
+	card: {
+		cardsPack_id: string
+		question?: string
+		answer?: string
+		grade?: number
+		shots?: number
+		answerImg?: string
+		questionImg?: string
+		questionVideo?: string
+		answerVideo?: string
+	}
+}
+
+export type ArgUpdateCardType = {
+	card: {
+		_id: string
+		question?: string
+		answer?: string
+		grade?: number
+		shots?: number
+		answerImg?: string
+		questionImg?: string
+		questionVideo?: string
+		answerVideo?: string
+	}
+}
+
+export type ArgDeleteCardType = {
+	id: string
+}
+
+export type CardType = {
+	_id: string
+	cardsPack_id: string
+	user_id: string
+	answer: string
+	question: string
+	grade: number
+	shots: number
+	comments: string
+	type: string
+	rating: number
+	more_id: string
+	created: string
+	updated: string
+	__v: number
+}
+
+export type GetCardsResType = {
 	cards: CardType[]
 	packUserId: string
 	packName: string
@@ -30,6 +89,24 @@ type ArgGetCardsResponseType = {
 	cardsTotalCount: number
 	minGrade: number
 	maxGrade: number
+	token: string
+	tokenDeathTime: number
+}
+
+export type CreateCardResType = {
+	newCard: CardType
+	token: string
+	tokenDeathTime: number
+}
+
+export type UpdateCardResType = {
+	updatedCard: CardType
+	token: string
+	tokenDeathTime: number
+}
+
+export type DeleteCardResType = {
+	deletedCard: CardType
 	token: string
 	tokenDeathTime: number
 }

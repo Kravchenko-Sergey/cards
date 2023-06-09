@@ -16,7 +16,7 @@ export type PackType = {
 	__v: number
 }
 
-export type GetPacksResponseType = {
+export type GetPacksResType = {
 	cardPacks: PackType[]
 	cardPacksTotalCount: number
 	maxCardsCount: number
@@ -27,19 +27,19 @@ export type GetPacksResponseType = {
 	tokenDeathTime: number
 }
 
-export type CreatePackResponseType = {
+export type CreatePackResType = {
 	newCardsPack: PackType
 	token: string
 	tokenDeathTime: number
 }
 
-export type DeletePackResponseType = {
+export type DeletePackResType = {
 	deletedCardsPack: PackType
 	token: string
 	tokenDeathTime: number
 }
 
-export type UpdatePackResponseType = {
+export type UpdatePackResType = {
 	updatedCardsPack: PackType
 	token: string
 	tokenDeathTime: number
@@ -56,7 +56,7 @@ export type ArgsGetPacksType = {
 	block?: boolean
 }
 
-export type ArgsCreatePacksType = {
+export type ArgCreatePacksType = {
 	cardsPack: {
 		name: string
 		deckCover: string
@@ -64,13 +64,13 @@ export type ArgsCreatePacksType = {
 	}
 }
 
-export type ArgsUpdatePacksType = {
+export type ArgUpdatePacksType = {
 	cardsPack: {
 		_id: string
 		name: string
 	}
 }
 
-export type ArgsDeletePacksType = {
+export type ArgDeletePacksType = {
 	_id: string
 }

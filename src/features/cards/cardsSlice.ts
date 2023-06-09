@@ -1,42 +1,44 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { cardsAPI } from 'features/cards/cardsAPI'
+import {
+	ArgCreateCardType,
+	ArgDeleteCardType,
+	ArgGetCardsType,
+	ArgUpdateCardType,
+	cardsAPI,
+	CardType
+} from 'features/cards/cardsAPI'
 import { createAppAsyncThunk } from 'common/utils'
 
-const getCards = createAppAsyncThunk<any, any>('cards/getCards', async arg => {
+const getCards = createAppAsyncThunk<any, ArgGetCardsType>('cards/getCards', async arg => {
 	try {
 		const res = await cardsAPI.getCards(arg)
-		console.log(res)
+		console.log(arg)
+		console.log(res.data.cards)
 		return { cards: res.data.cards }
 	} catch (e) {
 		console.error(e)
 	}
 })
 
-const createCard = createAppAsyncThunk<any, any>('cards/createCard', async arg => {
+const createCard = createAppAsyncThunk<{}, ArgCreateCardType>('cards/createCard', async arg => {
 	try {
-		const res = await cardsAPI.createCard(arg)
-		console.log(res)
-		return { cards: res.data.cards }
+		await cardsAPI.createCard(arg)
 	} catch (e) {
 		console.error(e)
 	}
 })
 
-const updateCard = createAppAsyncThunk<any, any>('cards/updateCard', async arg => {
+const updateCard = createAppAsyncThunk<{}, ArgUpdateCardType>('cards/updateCard', async arg => {
 	try {
-		const res = await cardsAPI.updateCard(arg)
-		console.log(res)
-		return { cards: res.data.cards }
+		await cardsAPI.updateCard(arg)
 	} catch (e) {
 		console.error(e)
 	}
 })
 
-const deleteCard = createAppAsyncThunk<any, any>('cards/deleteCard', async arg => {
+const deleteCard = createAppAsyncThunk<{}, ArgDeleteCardType>('cards/deleteCard', async arg => {
 	try {
-		const res = await cardsAPI.deleteCard(arg)
-		console.log(res)
-		return { cards: res.data.cards }
+		await cardsAPI.deleteCard(arg)
 	} catch (e) {
 		console.error(e)
 	}
@@ -69,21 +71,4 @@ export const cardsThunks = {
 	createCard,
 	updateCard,
 	deleteCard
-}
-
-export type CardType = {
-	_id: string
-	cardsPack_id: string
-	user_id: string
-	answer: string
-	question: string
-	grade: number
-	shots: number
-	comments: string
-	type: string
-	rating: number
-	more_id: string
-	created: string
-	updated: string
-	__v: number
 }

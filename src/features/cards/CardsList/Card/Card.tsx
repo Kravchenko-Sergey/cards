@@ -22,7 +22,7 @@ export const Card = (props: CardPropsType) => {
 	//
 	const handleUpdateBtn = () => {
 		dispatch(cardsThunks.updateCard({ card: { _id: props._id, question: 'update question' } }))
-		dispatch(cardsThunks.getCards({}))
+		dispatch(cardsThunks.getCards({ cardsPack_id: '648339f3b859820c1448eb46' }))
 	}
 	return (
 		<TableRow key={props._id}>
@@ -43,8 +43,8 @@ export const Card = (props: CardPropsType) => {
 					<img onClick={handleUpdateBtn} src={editBtn} alt='changeBtn' />
 					<img
 						onClick={() => {
-							dispatch(cardsThunks.deleteCard({ _id: props._id }))
-							dispatch(cardsThunks.getCards({}))
+							dispatch(cardsThunks.deleteCard({ id: props._id }))
+							dispatch(cardsThunks.getCards({ cardsPack_id: '648339f3b859820c1448eb46' }))
 						}}
 						src={deleteBtn}
 						alt='deleteBtn'

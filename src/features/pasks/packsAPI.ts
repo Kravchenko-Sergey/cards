@@ -1,27 +1,27 @@
 import { instance } from 'common/api/common.api'
 import {
-	ArgsCreatePacksType,
-	ArgsDeletePacksType,
+	ArgCreatePacksType,
+	ArgDeletePacksType,
 	ArgsGetPacksType,
-	ArgsUpdatePacksType,
-	CreatePackResponseType,
-	DeletePackResponseType,
-	GetPacksResponseType,
-	UpdatePackResponseType
+	ArgUpdatePacksType,
+	CreatePackResType,
+	DeletePackResType,
+	GetPacksResType,
+	UpdatePackResType
 } from 'features/pasks/packsTypes'
 
 export const packsAPI = {
-	getPacks(data: any) {
-		return instance.get<GetPacksResponseType>('cards/pack', { params: { ...data } })
+	getPacks(arg: ArgsGetPacksType) {
+		return instance.get<GetPacksResType>('cards/pack', { params: { ...arg } })
 	},
-	createPack(data: ArgsCreatePacksType) {
-		return instance.post<CreatePackResponseType>('cards/pack', data)
+	createPack(arg: ArgCreatePacksType) {
+		return instance.post<CreatePackResType>('cards/pack', arg)
 	},
-	updatePack(data: ArgsUpdatePacksType) {
-		return instance.put<UpdatePackResponseType>('cards/pack', data)
+	updatePack(arg: ArgUpdatePacksType) {
+		return instance.put<UpdatePackResType>('cards/pack', arg)
 	},
-	deletePack(data: ArgsDeletePacksType) {
-		console.log(data)
-		return instance.delete<DeletePackResponseType>(`cards/pack/?id=${data._id}`)
+	deletePack(arg: ArgDeletePacksType) {
+		console.log(arg)
+		return instance.delete<DeletePackResType>(`cards/pack/?id=${arg._id}`)
 	}
 }
