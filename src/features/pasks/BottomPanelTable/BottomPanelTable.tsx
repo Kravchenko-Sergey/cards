@@ -17,17 +17,15 @@ export const BottomPanelTable = () => {
 		setAge(event.target.value)
 	}
 
-	const myId = useAppSelector(state => state.auth.profile?._id)
-	const packs = useAppSelector(state => state.packs.packs)
-	const pageCount = useAppSelector(state => state.packs.searchParams.pageCount)
+	const myId = useAppSelector(state => state.packs.searchParams.user_id)
 
-	useEffect(() => {
-		dispatch(packsThunks.getPacks({ ...params, page: page, pageCount: Number(age), user_id: '' }))
+	/*useEffect(() => {
+		dispatch(packsThunks.getPacks({ ...params, page: page, pageCount: Number(age), user_id: myId }))
 			.unwrap()
 			.then(res => {
 				setTotalPagesNumber(Math.ceil(res!.cardsPackTotalCount / res!.pageCount))
 			})
-	}, [page, age])
+	}, [page, age, myId])*/
 
 	return (
 		<div className={style.footer}>

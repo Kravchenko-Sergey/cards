@@ -1,14 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import style from './PacksList.module.css'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { useAppSelector } from 'common/hooks'
+import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { Pack } from './Pack/Pack'
 import { PackType } from 'features/pasks/packsTypes'
+import { packsThunks } from 'features/pasks/packsSlice'
 /*import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'*/
 
 export const PacksList = () => {
 	const packs = useAppSelector(state => state.packs.packs)
+	const params = useAppSelector(state => state.packs.searchParams)
+	const dispatch = useAppDispatch()
+
+	useEffect(() => {
+		dispatch(packsThunks.getPacks({ ...params }))
+	}, [params])
 
 	return (
 		<TableContainer component={Paper} className={style.table}>

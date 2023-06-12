@@ -1,18 +1,17 @@
 import React from 'react'
-import style from './Packs.module.css'
+import style from 'features/pasks/Packs.module.css'
 import { Navigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { packsThunks } from 'features/pasks/packsSlice'
-import { PacksList } from './PacksList/PacksList'
-import { TopPanelTable } from './TopPanelTable/TopPanelTable'
-import { BottomPanelTable } from './BottomPanelTable/BottomPanelTable'
+import { PacksList } from 'features/pasks/PacksList/PacksList'
+import { TopPanelTable } from 'features/pasks/TopPanelTable/TopPanelTable'
+import { BottomPanelTable } from 'features/pasks/BottomPanelTable/BottomPanelTable'
 
 export const Packs = () => {
 	const dispatch = useAppDispatch()
 
 	const handleCreatePack = () => {
 		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
-		dispatch(packsThunks.getPacks({}))
 	}
 
 	const isLoggedIn = useAppSelector<any>(state => state.auth.isLoggedIn)

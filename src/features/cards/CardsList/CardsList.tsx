@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import style from 'features/cards/Cards.module.css'
-import { useAppSelector } from 'common/hooks'
+import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { Card } from './Card/Card'
 import { CardType } from 'features/cards/cardsAPI'
+import { cardsThunks } from 'features/cards/cardsSlice'
 
 export const CardsList = () => {
 	const cards = useAppSelector(state => state.cards.cards)
+	const searchParamsCard = useAppSelector(state => state.cards.searchParamsCard)
+	const dispatch = useAppDispatch()
 
 	return (
 		<TableContainer component={Paper} className={style.table}>
@@ -35,6 +38,7 @@ export const CardsList = () => {
 						<Card
 							key={card._id}
 							_id={card._id}
+							cardsPackId={card.cardsPack_id}
 							question={card.question}
 							answer={card.answer}
 							updated={card.updated}

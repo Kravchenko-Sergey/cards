@@ -21,25 +21,25 @@ type PackPropsType = {
 export const Pack = (props: PackPropsType) => {
 	const myId = useAppSelector(state => state.auth.profile?._id)
 	const params = useAppSelector(state => state.packs.searchParams)
-	const dispatch = useAppDispatch()
-
 	const navigate = useNavigate()
+	const dispatch = useAppDispatch()
 
 	const handleRowName = (id: string) => {
 		dispatch(cardsThunks.getCards({ cardsPack_id: id }))
-		navigate('/cards')
+			.unwrap()
+			.then(() => {
+				navigate('/cards')
+			})
 	}
 
 	const handleTeacherBtn = () => {}
 
 	const handleUpdateBtn = () => {
 		dispatch(packsThunks.updatePack({ cardsPack: { _id: props._id, name: 'updated deck' } }))
-		dispatch(packsThunks.getPacks({ ...params }))
 	}
 
 	const handleDeleteBtn = () => {
 		dispatch(packsThunks.deletePack({ _id: props._id }))
-		dispatch(packsThunks.getPacks({ ...params }))
 	}
 
 	return (

@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { Rating, TableCell, TableRow } from '@mui/material'
 import style from 'features/cards/Cards.module.css'
-import editBtn from '../../../../assets/img/edit.svg'
-import deleteBtn from '../../../../assets/img/delete.svg'
+import editBtn from 'assets/img/edit.svg'
+import deleteBtn from 'assets/img/delete.svg'
 import { useAppDispatch } from 'common/hooks'
-import { cardsThunks } from '../../cardsSlice'
-import { packsThunks } from '../../../pasks/packsSlice'
+import { cardsThunks } from 'features/cards/cardsSlice'
 
 export type CardPropsType = {
 	_id: string
+	cardsPackId: string
 	question: string
 	answer: string
 	updated: string
@@ -22,8 +22,9 @@ export const Card = (props: CardPropsType) => {
 	//
 	const handleUpdateBtn = () => {
 		dispatch(cardsThunks.updateCard({ card: { _id: props._id, question: 'update question' } }))
-		dispatch(cardsThunks.getCards({ cardsPack_id: '648339f3b859820c1448eb46' }))
+		dispatch(cardsThunks.getCards({ cardsPack_id: props.cardsPackId }))
 	}
+	console.log(Math.round(props.grade))
 	return (
 		<TableRow key={props._id}>
 			<TableCell align='left'>{props.question}</TableCell>
@@ -44,7 +45,7 @@ export const Card = (props: CardPropsType) => {
 					<img
 						onClick={() => {
 							dispatch(cardsThunks.deleteCard({ id: props._id }))
-							dispatch(cardsThunks.getCards({ cardsPack_id: '648339f3b859820c1448eb46' }))
+							dispatch(cardsThunks.getCards({ cardsPack_id: props.cardsPackId }))
 						}}
 						src={deleteBtn}
 						alt='deleteBtn'

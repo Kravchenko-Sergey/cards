@@ -1,14 +1,15 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react'
 import style from 'features/pasks/TopPanelTable/TopPanelTable.module.css'
 import TextField from '@mui/material/TextField'
 import { Button, ButtonGroup, Slider } from '@mui/material'
 import resetFilters from 'assets/img/resetFilters.svg'
 import { useAppDispatch, useAppSelector, useDebounce } from 'common/hooks'
-import { packsThunks } from 'features/pasks/packsSlice'
+import { packsActions, packsThunks } from 'features/pasks/packsSlice'
+
+type HandleSliderType = (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => void
 
 export const TopPanelTable = () => {
 	const myId = useAppSelector(state => state.auth.profile?._id)
-
 	const params = useAppSelector(state => state.packs.searchParams)
 	const dispatch = useAppDispatch()
 	//search
@@ -17,20 +18,21 @@ export const TopPanelTable = () => {
 	const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setSearchValue(e.currentTarget.value)
 	}
+
 	//my all
 	const handleMyPacksButton = () => {
-		console.log(myId)
 		dispatch(packsThunks.getPacks({ ...params, user_id: myId }))
 	}
 	const handleAllPacksButton = () => {
 		dispatch(packsThunks.getPacks({ ...params, user_id: '' }))
 	}
 	//slider
-	const [sliderValue, setSliderValue] = React.useState<number[]>([0, 0])
+	const [sliderValue, setSliderValue] = React.useState<number[]>([0, 100])
 	const handleChange = (event: Event, newValue: number | number[]) => {
 		setSliderValue(newValue as number[])
 	}
-	const handleSliderValueCommitted: any = () => {
+
+	const handleSliderValueCommitted: HandleSliderType = () => {
 		dispatch(packsThunks.sliderFilter({ ...params, min: sliderValue[0], max: sliderValue[1] }))
 	}
 	//reset filter
@@ -50,10 +52,6 @@ export const TopPanelTable = () => {
 			})
 			.catch(e => console.log(e))
 	}, [debouncedValue])*/
-
-	/*useEffect(() => {
-		dispatch(packsThunks.sliderFilter({ min: sliderValue[0], max: sliderValue[1] }))
-	}, [])*/
 
 	return (
 		<div className={style.headersTable}>

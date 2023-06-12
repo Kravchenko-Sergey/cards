@@ -1,28 +1,30 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { authAPI } from 'features/auth/authAPI'
 import { createAppAsyncThunk } from 'common/utils/createAppAsyncThunk'
 import { isAxiosError } from 'axios'
 import { toast } from 'react-toastify'
+import { UserProfileResType } from 'features/auth/authTypes'
 
-export const initializeApp = createAppAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
-	try {
-		const res = await authAPI.me()
-		return { isLoggedIn: true }
-	} catch (e) {
-		console.error(e)
-	} finally {
-		return { isAppInitialized: true }
+export const initializeApp = createAppAsyncThunk<{ isAppInitialized: boolean }, UserProfileResType | {}>(
+	'app/initializeApp',
+	async (arg, thunkAPI) => {
+		try {
+			await authAPI.me()
+			return { isAppInitialized: true }
+		} catch (e) {
+			thunkAPI.rejectWithValue(e)
+		} finally {
+			return { isAppInitialized: true }
+		}
 	}
-})
+)
 
-export const setIsLoading = createAppAsyncThunk('app/initializeApp', async (arg, thunkAPI) => {
+export const setIsLoading = createAppAsyncThunk<any, any>('app/setIsLoading', async () => {
 	try {
-		const res = await authAPI.me()
+		await authAPI.me()
 		return { isLoggedIn: true }
 	} catch (e) {
 		console.error(e)
-	} finally {
-		return { isAppInitialized: true }
 	}
 })
 
@@ -33,31 +35,20 @@ const slice = createSlice({
 		isLoading: true,
 		isAppInitialized: false
 	},
-	reducers: {
-		setIsAppInitialized: (state, action: PayloadAction<{ isAppInitialized: boolean }>) => {
-			state.isAppInitialized = action.payload.isAppInitialized
-		}
-	},
+	reducers: {},
 	extraReducers: builder => {
 		builder
-			.addCase(initializeApp.fulfilled, (state, action: any) => {
-				if (action.payload?.isLoggedIn) {
-					state.isLoading = action.payload.isLoggedIn
-				}
-				if (action.payload?.isAppInitialized) {
-					state.isAppInitialized = action.payload.isAppInitialized
-				}
+			.addCase(setIsLoading.fulfilled, (state, action) => {
+				state.isLoading = action.payload.isLoggedIn
 			})
-			.addCase(initializeApp.rejected, (state, action: any) => {
-				if (action.payload?.isAppInitialized) {
-					state.isAppInitialized = action.payload.isAppInitialized
-				}
+			.addCase(initializeApp.fulfilled, (state, action) => {
+				state.isAppInitialized = action.payload.isAppInitialized
 			})
 			.addMatcher(
 				action => {
 					return action.type.endsWith('/pending')
 				},
-				(state, action) => {
+				state => {
 					state.isLoading = true
 				}
 			)
@@ -65,7 +56,7 @@ const slice = createSlice({
 				action => {
 					return action.type.endsWith('/fulfilled')
 				},
-				(state, action) => {
+				state => {
 					state.isLoading = false
 				}
 			)
@@ -77,15 +68,14 @@ const slice = createSlice({
 					const { e, showGlobalError = true } = action.payload
 					state.isLoading = false
 					if (!showGlobalError) return
-					let errorMessage = ''
+					let errorMessage: string
 					if (isAxiosError(e)) {
 						errorMessage = e?.response?.data?.error ?? e.message
-					} else if (e instanceof Error) {
-						errorMessage = `Native error: ${e.message}`
 					} else {
-						errorMessage = JSON.stringify(e)
+						errorMessage = `Native error: ${e.message}`
 					}
 					toast.error(errorMessage)
+					state.isLoading = false
 				}
 			)
 	}
