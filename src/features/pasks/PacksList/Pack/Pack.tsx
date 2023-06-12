@@ -32,7 +32,13 @@ export const Pack = (props: PackPropsType) => {
 			})
 	}
 
-	const handleTeacherBtn = () => {}
+	const handleTeacherBtn = (id: string) => {
+		dispatch(cardsThunks.getCards({ cardsPack_id: id, pageCount: 100 }))
+			.unwrap()
+			.then(() => {
+				navigate('/learn')
+			})
+	}
 
 	const handleUpdateBtn = () => {
 		dispatch(packsThunks.updatePack({ cardsPack: { _id: props._id, name: 'updated deck' } }))
@@ -52,12 +58,12 @@ export const Pack = (props: PackPropsType) => {
 				<div className={style.actionButtons}>
 					{props.user_id === myId ? (
 						<>
-							<img onClick={handleTeacherBtn} src={teacherBtn} alt='teacherBtn' />
+							<img onClick={() => handleTeacherBtn(props._id)} src={teacherBtn} alt='teacherBtn' />
 							<img onClick={handleUpdateBtn} src={editBtn} alt='updateBtn' />
 							<DeleteModal callback={handleDeleteBtn} />
 						</>
 					) : (
-						<img onClick={handleTeacherBtn} src={teacherBtn} alt='teacherBtn' />
+						<img onClick={() => handleTeacherBtn(props._id)} src={teacherBtn} alt='teacherBtn' />
 					)}
 				</div>
 			</TableCell>
