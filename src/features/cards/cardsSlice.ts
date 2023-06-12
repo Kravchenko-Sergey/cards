@@ -44,6 +44,14 @@ const deleteCard = createAppAsyncThunk<{}, ArgDeleteCardType>('cards/deleteCard'
 	}
 })
 
+const updateGradeCard = createAppAsyncThunk<any, any>('cards/updateCard', async arg => {
+	try {
+		await cardsAPI.updateGradeCard(arg)
+	} catch (e) {
+		console.error(e)
+	}
+})
+
 const searchCard = createAppAsyncThunk<any, ArgGetCardsType>('cards/searchCard', async (arg, thunkAPI) => {
 	return thunkTryCatch(thunkAPI, async () => {
 		thunkAPI.dispatch(cardsThunks.getCards(arg))
@@ -93,6 +101,7 @@ export const cardsThunks = {
 	getCards,
 	createCard,
 	updateCard,
+	updateGradeCard,
 	deleteCard,
 	searchCard
 }

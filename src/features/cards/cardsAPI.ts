@@ -13,6 +13,9 @@ export const cardsAPI = {
 	deleteCard(arg: ArgDeleteCardType) {
 		console.log(arg)
 		return instance.delete<DeleteCardResType>(`cards/card/?id=${arg.id}`)
+	},
+	updateGradeCard(arg: ArgUpdateGradeCardType) {
+		return instance.put<any>('cards/grade', arg)
 	}
 }
 
@@ -109,4 +112,9 @@ export type DeleteCardResType = {
 	deletedCard: CardType
 	token: string
 	tokenDeathTime: number
+}
+
+type ArgUpdateGradeCardType = {
+	grade: number
+	card_id: string
 }

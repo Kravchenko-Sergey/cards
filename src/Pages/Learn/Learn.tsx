@@ -2,20 +2,36 @@ import React, { useState } from 'react'
 import style from './Learn.module.css'
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
 import leftArrow from 'assets/img/leftArrow.svg'
-import { Link } from 'react-router-dom'
-import { useAppSelector } from 'common/hooks'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from 'common/hooks'
+import { cardsThunks } from 'features/cards/cardsSlice'
 
 export const Learn = () => {
 	const cards = useAppSelector(state => state.cards.cards)
 	const packName = useAppSelector(state => state.cards.packName)
+	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 
 	const [showBtn, setShowBtn] = useState(false)
 	const [indexShowCard, setIndexShowCard] = useState(0)
+	const [radioValue, setRadioValue] = useState(0)
+
+	console.log(cards[indexShowCard]._id)
 
 	const handleNextButton = () => {
-		setIndexShowCard(indexShowCard + 1)
-		setShowBtn(false)
+		if (indexShowCard < cards.length - 1) {
+			setIndexShowCard(indexShowCard + 1)
+			setShowBtn(false)
+			dispatch(cardsThunks.updateGradeCard({ grade: radioValue, card_id: cards[indexShowCard]._id }))
+		}
 	}
+
+	const handleFinishLearnButton = () => {
+		dispatch(cardsThunks.updateGradeCard({ grade: radioValue, card_id: cards[indexShowCard]._id }))
+		navigate('/packs')
+	}
+
+	console.log(radioValue)
 
 	return (
 		<div className={style.container}>
@@ -39,7 +55,7 @@ export const Learn = () => {
 						</button>
 					) : (
 						<div className={style.answerBody}>
-							<div className={style.cardQuestion}>
+							<div className={style.cardAnswer}>
 								<span>Answer: </span>
 								{cards[indexShowCard].answer}
 							</div>
@@ -49,19 +65,40 @@ export const Learn = () => {
 								</FormLabel>
 								<RadioGroup
 									aria-labelledby='demo-radio-buttons-group-label'
-									defaultValue='Knew the answer'
+									defaultValue={1}
 									name='radio-buttons-group'
 								>
-									<FormControlLabel value='Did not know' control={<Radio />} label='Did not know' />
-									<FormControlLabel value='Forgot' control={<Radio />} label='Forgot' />
-									<FormControlLabel value='A lot of thought' control={<Radio />} label='A lot of thought' />
-									<FormControlLabel value='Сonfused' control={<Radio />} label='Сonfused' />
-									<FormControlLabel value='Knew the answer' control={<Radio />} label='Knew the answer' />
+									<FormControlLabel
+										onChange={() => setRadioValue(1)}
+										value={1}
+										control={<Radio />}
+										label='Did not know'
+									/>
+									<FormControlLabel onChange={() => setRadioValue(2)} value={2} control={<Radio />} label='Forgot' />
+									<FormControlLabel
+										onChange={() => setRadioValue(3)}
+										value={3}
+										control={<Radio />}
+										label='A lot of thought'
+									/>
+									<FormControlLabel onChange={() => setRadioValue(4)} value={4} control={<Radio />} label='Сonfused' />
+									<FormControlLabel
+										onChange={() => setRadioValue(5)}
+										value={5}
+										control={<Radio />}
+										label='Knew the answer'
+									/>
 								</RadioGroup>
 							</FormControl>
-							<button onClick={handleNextButton} className={style.button}>
-								Next
-							</button>
+							{indexShowCard < cards.length - 1 ? (
+								<button onClick={handleNextButton} className={style.button}>
+									Next
+								</button>
+							) : (
+								<button onClick={handleFinishLearnButton} className={style.button}>
+									Finish learn
+								</button>
+							)}
 						</div>
 					)}
 				</div>
