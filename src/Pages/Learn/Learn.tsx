@@ -10,13 +10,12 @@ export const Learn = () => {
 	const cards = useAppSelector(state => state.cards.cards)
 	const packName = useAppSelector(state => state.cards.packName)
 	const dispatch = useAppDispatch()
+
 	const navigate = useNavigate()
 
 	const [showBtn, setShowBtn] = useState(false)
 	const [indexShowCard, setIndexShowCard] = useState(0)
 	const [radioValue, setRadioValue] = useState(0)
-
-	console.log(cards[indexShowCard]._id)
 
 	const handleNextButton = () => {
 		if (indexShowCard < cards.length - 1) {

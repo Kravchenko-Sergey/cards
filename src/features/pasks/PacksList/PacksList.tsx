@@ -11,35 +11,35 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'*/
 export const PacksList = () => {
 	const packs = useAppSelector(state => state.packs.packs)
 	const params = useAppSelector(state => state.packs.searchParams)
+	const myId = useAppSelector(state => state.auth.profile?._id)
+	//const packUserId = useAppSelector((state: any) => state.packs.packs[0].user_id)
 	const dispatch = useAppDispatch()
-
-	useEffect(() => {
-		dispatch(packsThunks.getPacks({ ...params }))
-	}, [params])
 
 	return (
 		<TableContainer component={Paper} className={style.table}>
-			<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
-				<TableHead sx={{ backgroundColor: '#efefef' }}>
-					<TableRow>
-						<TableCell sx={{ fontWeight: 700 }} width='28%'>
-							Name
-						</TableCell>
-						<TableCell sx={{ fontWeight: 700 }} width='22%'>
-							Cards
-						</TableCell>
-						<TableCell sx={{ fontWeight: 700 }} width='20%'>
-							Last Updated
-						</TableCell>
-						<TableCell sx={{ fontWeight: 700 }} width='18%'>
-							Created by
-						</TableCell>
-						<TableCell sx={{ fontWeight: 700 }} width='12%'>
-							Actions
-						</TableCell>
-					</TableRow>
-				</TableHead>
-				{packs.length !== 0 ? (
+			{packs.length !== 0 ? (
+				<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
+					<TableHead sx={{ backgroundColor: '#efefef' }}>
+						<TableRow>
+							<TableCell sx={{ fontWeight: 700 }} width='28%'>
+								Name
+							</TableCell>
+							<TableCell sx={{ fontWeight: 700 }} width='22%'>
+								Cards
+							</TableCell>
+							<TableCell sx={{ fontWeight: 700 }} width='20%'>
+								Last Updated
+							</TableCell>
+							<TableCell sx={{ fontWeight: 700 }} width='18%'>
+								Created by
+							</TableCell>
+							{myId === '' && (
+								<TableCell sx={{ fontWeight: 700 }} width='12%'>
+									Actions
+								</TableCell>
+							)}
+						</TableRow>
+					</TableHead>
 					<TableBody sx={{ width: 1008 }}>
 						{packs.map((pack: PackType) => (
 							<Pack
@@ -53,14 +53,12 @@ export const PacksList = () => {
 							/>
 						))}
 					</TableBody>
-				) : (
-					<TableBody sx={{ width: 1008 }} className={style.emptyArrayText}>
-						<TableRow>
-							<TableCell>No decks with the entered name were found. Change request parameters</TableCell>
-						</TableRow>
-					</TableBody>
-				)}
-			</Table>
+				</Table>
+			) : (
+				<div className={style.emptyArrayText}>
+					No decks with the entered name were found 😔. Change request parameters
+				</div>
+			)}
 		</TableContainer>
 	)
 }

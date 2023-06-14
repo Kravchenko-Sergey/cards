@@ -8,6 +8,8 @@ import { TopPanelTable } from 'features/pasks/TopPanelTable/TopPanelTable'
 import { BottomPanelTable } from 'features/pasks/BottomPanelTable/BottomPanelTable'
 
 export const Packs = () => {
+	const myId = useAppSelector(state => state.auth.profile?._id)
+	//const packUserId = useAppSelector((state: any) => state.packs.packs[0].user_id)
 	const dispatch = useAppDispatch()
 
 	const handleCreatePack = () => {
@@ -23,11 +25,18 @@ export const Packs = () => {
 	return (
 		<div className={style.container}>
 			<div className={style.head}>
-				<div className={style.pageName}>Packs list</div>
-				<button onClick={handleCreatePack} className={style.button}>
-					Add new pack
-				</button>
+				{myId === '' ? (
+					<>
+						<div className={style.pageName}>All packs</div>
+						<button onClick={handleCreatePack} className={style.button}>
+							Add new pack
+						</button>
+					</>
+				) : (
+					<div className={style.pageName}>Friends packs</div>
+				)}
 			</div>
+
 			<TopPanelTable />
 			<PacksList />
 			<BottomPanelTable />

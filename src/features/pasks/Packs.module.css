@@ -3,6 +3,7 @@
 }
 
 .head {
+    margin: 0 0 40px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -14,7 +15,7 @@
 }
 
 .button {
-    margin: 65px 0 31px 0;
+
     padding: 8px 28px;
     background-color: #366eff;
     color: #FFF;

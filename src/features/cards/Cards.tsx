@@ -14,6 +14,7 @@ import { packsThunks } from 'features/pasks/packsSlice'
 export const Cards = () => {
 	const cards = useAppSelector(state => state.cards.cards)
 	const myId = useAppSelector(state => state.auth.profile?._id)
+	//const packUserId = useAppSelector((state: any) => state.packs.packs[0].user_id)
 	const searchParamsCard = useAppSelector(state => state.cards.searchParamsCard)
 	const packName = useAppSelector(state => state.cards.packName)
 	const cardsPackId = useAppSelector(state => state.cards.searchParamsCard.cardsPack_id)
@@ -66,9 +67,11 @@ export const Cards = () => {
 					<div className={style.pageName}>{packName}</div>
 					<img src={settings} alt='settings' />
 				</div>
-				<button onClick={handleCreateCard} className={style.button}>
-					Add new card
-				</button>
+				{myId === '' && (
+					<button onClick={handleCreateCard} className={style.button}>
+						Add new card
+					</button>
+				)}
 			</div>
 			<div className={style.headersTable}>
 				<div className={`${style.labelBlock} ${style.search}`}>
@@ -95,10 +98,15 @@ export const Cards = () => {
 				<div className={style.select}>
 					<FormControl sx={{ minWidth: 60 }} size='small'>
 						<InputLabel id='demo-select-small-label'></InputLabel>
-						<Select labelId='demo-select-small-label' id='demo-select-small' onChange={handleChange2}>
-							<MenuItem value={5}>5</MenuItem>
-							<MenuItem value={10}>10</MenuItem>
-							<MenuItem value={20}>20</MenuItem>
+						<Select
+							labelId='demo-select-small-label'
+							id='demo-select-small'
+							onChange={handleChange2}
+							sx={{ minWidth: 64, height: 24 }}
+						>
+							<MenuItem value={4}>4</MenuItem>
+							<MenuItem value={8}>8</MenuItem>
+							<MenuItem value={16}>16</MenuItem>
 						</Select>
 					</FormControl>
 				</div>

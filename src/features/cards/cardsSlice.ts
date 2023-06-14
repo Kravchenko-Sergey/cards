@@ -78,8 +78,8 @@ const slice = createSlice({
 		maxGrade: 5,
 		minGrade: 0,
 		page: 1,
-		pageCount: 4,
-		packUserId: ''
+		pageCount: 4
+		/*packUserId: ''*/
 	},
 	reducers: {},
 	extraReducers: builder => {

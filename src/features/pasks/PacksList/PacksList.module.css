@@ -1,9 +1,11 @@
 .table {
-    min-height: 40vh;
+    min-height: 28vh;
     margin: 24px 0 36px 0;
 }
 
 .emptyArrayText {
-
+    min-height: 28vh;
+    padding: 114px 0 0 0;
+    width: 1008px;
     font-size: 18px;
 }

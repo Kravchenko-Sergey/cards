@@ -4,13 +4,14 @@ import TextField from '@mui/material/TextField'
 import { Button, ButtonGroup, Slider } from '@mui/material'
 import resetFilters from 'assets/img/resetFilters.svg'
 import { useAppDispatch, useAppSelector, useDebounce } from 'common/hooks'
-import { packsActions, packsThunks } from 'features/pasks/packsSlice'
+import { packsThunks } from 'features/pasks/packsSlice'
 
 type HandleSliderType = (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => void
 
 export const TopPanelTable = () => {
 	const myId = useAppSelector(state => state.auth.profile?._id)
 	const params = useAppSelector(state => state.packs.searchParams)
+	const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
 	const dispatch = useAppDispatch()
 	//search
 	const [searchValue, setSearchValue] = useState('')
@@ -22,6 +23,7 @@ export const TopPanelTable = () => {
 	//my all
 	const handleMyPacksButton = () => {
 		dispatch(packsThunks.getPacks({ ...params, user_id: myId }))
+		console.log(params)
 	}
 	const handleAllPacksButton = () => {
 		dispatch(packsThunks.getPacks({ ...params, user_id: '' }))
@@ -33,25 +35,32 @@ export const TopPanelTable = () => {
 	}
 
 	const handleSliderValueCommitted: HandleSliderType = () => {
-		dispatch(packsThunks.sliderFilter({ ...params, min: sliderValue[0], max: sliderValue[1] }))
+		console.log(params)
+		dispatch(packsThunks.getPacks({ ...params, min: sliderValue[0], max: sliderValue[1] }))
 	}
 	//reset filter
 	const handleResetFilter = () => {
-		dispatch(packsThunks.resetFilter({}))
+		dispatch(
+			packsThunks.getPacks({
+				packName: '',
+				min: 0,
+				max: 0,
+				sortPacks: '0updated',
+				page: 1,
+				pageCount: 4,
+				user_id: '',
+				block: false
+			})
+		)
 		setSearchValue('')
 		sliderValue[0] = 0
 		sliderValue[1] = 100
 		//setPage(1)
 	}
 
-	/*useEffect(() => {
-		dispatch(packsThunks.searchPack({ ...params, packName: debouncedValue }))
-			.unwrap()
-			.then((res: any) => {
-				setSliderValue([res.minCardsCount, res.maxCardsCount])
-			})
-			.catch(e => console.log(e))
-	}, [debouncedValue])*/
+	useEffect(() => {
+		dispatch(packsThunks.getPacks({ ...params, packName: debouncedValue }))
+	}, [debouncedValue])
 
 	return (
 		<div className={style.headersTable}>

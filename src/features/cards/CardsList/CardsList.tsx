@@ -13,40 +13,44 @@ export const CardsList = () => {
 
 	return (
 		<TableContainer component={Paper} className={style.table}>
-			<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
-				<TableHead sx={{ backgroundColor: '#efefef', fontWeight: 600 }}>
-					<TableRow>
-						<TableCell align='left' width='25%'>
-							Question
-						</TableCell>
-						<TableCell align='left' width='25%'>
-							Answer
-						</TableCell>
-						<TableCell align='left' width='20%'>
-							Last Updated
-						</TableCell>
-						<TableCell align='left' width='20%'>
-							Grade
-						</TableCell>
-						<TableCell align='left' width='10%'>
-							Actions
-						</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{cards.map((card: CardType) => (
-						<Card
-							key={card._id}
-							_id={card._id}
-							cardsPackId={card.cardsPack_id}
-							question={card.question}
-							answer={card.answer}
-							updated={card.updated}
-							grade={card.grade}
-						/>
-					))}
-				</TableBody>
-			</Table>
+			{cards.length > 0 ? (
+				<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
+					<TableHead sx={{ backgroundColor: '#efefef', fontWeight: 600 }}>
+						<TableRow>
+							<TableCell align='left' width='25%'>
+								Question
+							</TableCell>
+							<TableCell align='left' width='25%'>
+								Answer
+							</TableCell>
+							<TableCell align='left' width='20%'>
+								Last Updated
+							</TableCell>
+							<TableCell align='left' width='20%'>
+								Grade
+							</TableCell>
+							<TableCell align='left' width='10%'>
+								Actions
+							</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{cards.map((card: CardType) => (
+							<Card
+								key={card._id}
+								_id={card._id}
+								cardsPackId={card.cardsPack_id}
+								question={card.question}
+								answer={card.answer}
+								updated={card.updated}
+								grade={card.grade}
+							/>
+						))}
+					</TableBody>
+				</Table>
+			) : (
+				<div className={style.emptyArrayText}>This pack is empty. Click add new card to fill this pack</div>
+			)}
 		</TableContainer>
 	)
 }

@@ -3,7 +3,7 @@ import { Rating, TableCell, TableRow } from '@mui/material'
 import style from 'features/cards/Cards.module.css'
 import editBtn from 'assets/img/edit.svg'
 import deleteBtn from 'assets/img/delete.svg'
-import { useAppDispatch } from 'common/hooks'
+import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { cardsThunks } from 'features/cards/cardsSlice'
 
 export type CardPropsType = {
@@ -16,6 +16,8 @@ export type CardPropsType = {
 }
 
 export const Card = (props: CardPropsType) => {
+	const myId = useAppSelector(state => state.auth.profile?._id)
+	//const packUserId = useAppSelector((state: any) => state.packs.packs[0].user_id)
 	const dispatch = useAppDispatch()
 	//rating
 	const [value, setValue] = useState<any>(4)
@@ -39,19 +41,21 @@ export const Card = (props: CardPropsType) => {
 					}}
 				/>
 			</TableCell>
-			<TableCell align='left'>
-				<div className={style.actionButtons}>
-					<img onClick={handleUpdateBtn} src={editBtn} alt='changeBtn' />
-					<img
-						onClick={() => {
-							dispatch(cardsThunks.deleteCard({ id: props._id }))
-							dispatch(cardsThunks.getCards({ cardsPack_id: props.cardsPackId }))
-						}}
-						src={deleteBtn}
-						alt='deleteBtn'
-					/>
-				</div>
-			</TableCell>
+			{myId === '' && (
+				<TableCell align='left'>
+					<div className={style.actionButtons}>
+						<img onClick={handleUpdateBtn} src={editBtn} alt='changeBtn' />
+						<img
+							onClick={() => {
+								dispatch(cardsThunks.deleteCard({ id: props._id }))
+								dispatch(cardsThunks.getCards({ cardsPack_id: props.cardsPackId }))
+							}}
+							src={deleteBtn}
+							alt='deleteBtn'
+						/>
+					</div>
+				</TableCell>
+			)}
 		</TableRow>
 	)
 }

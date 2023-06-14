@@ -120,3 +120,17 @@
 .select {
     margin: 0 6px;
 }
+
+.emptyText {
+    margin: 86px 0 32px 0;
+    font-size: 16px;
+    line-height: 20px;
+    opacity: 0.5;
+}
+
+.emptyArrayText {
+    height: 256px;
+    padding: 24px 0 0 0;
+    width: 1008px;
+    font-size: 18px;
+}

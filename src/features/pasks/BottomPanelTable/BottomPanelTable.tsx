@@ -7,14 +7,21 @@ import { useAppDispatch, useAppSelector } from 'common/hooks'
 
 export const BottomPanelTable = () => {
 	const params = useAppSelector(state => state.packs.searchParams)
+	const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
+	const pageCount = useAppSelector(state => state.packs.searchParams.pageCount)
 	const dispatch = useAppDispatch()
 
 	const [page, setPage] = useState(1)
 	const [totalPagesNumber, setTotalPagesNumber] = useState(1)
 	//select
-	const [age, setAge] = React.useState('')
+	const [age, setAge] = React.useState('4')
 	const handleChangeEvent = (event: SelectChangeEvent) => {
 		setAge(event.target.value)
+		dispatch(packsThunks.getPacks({ ...params, pageCount: Number(event.target.value) }))
+			.unwrap()
+			.then(res => {
+				setTotalPagesNumber(Math.ceil(res.cardPacksTotalCount / res.pageCount))
+			})
 	}
 
 	const myId = useAppSelector(state => state.packs.searchParams.user_id)
@@ -27,14 +34,25 @@ export const BottomPanelTable = () => {
 			})
 	}, [page, age, myId])*/
 
+	useEffect(() => {
+		setTimeout(() => {
+			dispatch(packsThunks.getPacks({ ...params, page: 1, pageCount: 4 }))
+			setTotalPagesNumber(Math.ceil(cardPacksTotalCount / pageCount))
+		}, 1000)
+	}, [])
+
 	return (
 		<div className={style.footer}>
 			<div className={style.pagination}>
 				<Pagination
-					count={totalPagesNumber}
+					count={Math.ceil(cardPacksTotalCount / pageCount)}
 					page={page}
 					onChange={(e: any) => {
 						setPage(Number(e.target.innerText))
+						dispatch(
+							packsThunks.getPacks({ ...params, page: Number(e.currentTarget.innerText), pageCount: Number(age) })
+						)
+						setTotalPagesNumber(Math.ceil(cardPacksTotalCount / pageCount))
 					}}
 					shape='rounded'
 					color={'primary'}
