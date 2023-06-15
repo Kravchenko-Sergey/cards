@@ -30,6 +30,13 @@
     font-weight: 600;
 }
 
+.popover {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
 .button {
     padding: 8px 28px;
     background-color: #366eff;
@@ -134,3 +141,4 @@
     width: 1008px;
     font-size: 18px;
 }
+

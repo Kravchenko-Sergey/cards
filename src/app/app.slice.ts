@@ -39,7 +39,7 @@ const slice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(setIsLoading.fulfilled, (state, action) => {
-				state.isLoading = action.payload.isLoggedIn
+				state.isLoading = action.payload.isLoading
 			})
 			.addCase(initializeApp.fulfilled, (state, action) => {
 				state.isAppInitialized = action.payload.isAppInitialized

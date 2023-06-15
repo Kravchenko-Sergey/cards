@@ -9,12 +9,13 @@ import avatar from 'assets/img/userPhoto.svg'
 import changePhoto from 'assets/img/changePhoto.svg'
 import logoutIcon from 'assets/img/logout.svg'
 import leftArrow from 'assets/img/leftArrow.svg'
+import { selectIsLoggedIn, selectUserEmail, selectUserName } from 'features/auth/authSelectors'
 
 export const Profile = () => {
+	const isLoggedIn = useAppSelector(selectIsLoggedIn)
+	const userName = useAppSelector(selectUserName)
+	const userEmail = useAppSelector(selectUserEmail)
 	const dispatch = useAppDispatch()
-	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-	const userName = useAppSelector(state => state.auth.profile?.name)
-	const userEmail = useAppSelector(state => state.auth.profile?.email)
 	const handleLogout = () => {
 		dispatch(logout({}))
 	}

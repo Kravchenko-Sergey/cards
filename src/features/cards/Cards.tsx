@@ -1,27 +1,37 @@
 import { useAppDispatch, useAppSelector, useDebounce } from 'common/hooks'
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import React, { ChangeEvent, useState } from 'react'
+import { FormControl, InputLabel, MenuItem, Popover, Select, SelectChangeEvent, Typography } from '@mui/material'
 import style from 'features/cards/Cards.module.css'
 import TextField from '@mui/material/TextField'
 import Pagination from '@mui/material/Pagination'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import leftArrow from 'assets/img/leftArrow.svg'
 import settings from 'assets/img/settings.svg'
 import { CardsList } from 'features/cards/CardsList/CardsList'
 import { cardsThunks } from 'features/cards/cardsSlice'
-import { packsThunks } from 'features/pasks/packsSlice'
+import teacherBtn from 'assets/img/teacher.svg'
+import editBtn from 'assets/img/edit.svg'
+import deleteBtn from 'assets/img/delete.svg'
+import { selectMyId } from 'features/pasks/packsSelectors'
+import { selectCardsPackId, selectPackName } from 'features/cards/cardsSelectors'
+import { selectIsLoggedIn } from 'features/auth/authSelectors'
 
 export const Cards = () => {
-	const cards = useAppSelector(state => state.cards.cards)
-	const myId = useAppSelector(state => state.auth.profile?._id)
-	//const packUserId = useAppSelector((state: any) => state.packs.packs[0].user_id)
-	const searchParamsCard = useAppSelector(state => state.cards.searchParamsCard)
-	const packName = useAppSelector(state => state.cards.packName)
-	const cardsPackId = useAppSelector(state => state.cards.searchParamsCard.cardsPack_id)
+	const isLoggedIn = useAppSelector(selectIsLoggedIn)
+	const myId = useAppSelector(selectMyId)
+	const packName = useAppSelector(selectPackName)
+	const cardsPackId = useAppSelector(selectCardsPackId)
 	const dispatch = useAppDispatch()
-	/*useEffect(() => {
-		dispatch(packsThunks.getPacks({}))
-	}, [])*/
+	//popover
+	const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+	const handleClick = (event: any) => {
+		setAnchorEl(event.currentTarget)
+	}
+	const handleClose = () => {
+		setAnchorEl(null)
+	}
+	const open = Boolean(anchorEl)
+	const id = open ? 'simple-popover' : undefined
 	//search
 	const [searchValue, setSearchValue] = useState('')
 	const debouncedValue = useDebounce(searchValue, 500)
@@ -39,10 +49,6 @@ export const Cards = () => {
 		setAge(event.target.value)
 	}
 	//
-	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-	/*if (!isLoggedIn) {
-		return <Navigate to={'/login'} />
-	}*/
 	const handleCreateCard = () => {
 		dispatch(
 			cardsThunks.createCard({
@@ -52,9 +58,9 @@ export const Cards = () => {
 		dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }))
 	}
 
-	/*useEffect(() => {
-		dispatch(cardsThunks.searchCard({ ...searchParamsCard, cardsPack_id: cardsPackId, cardAnswer: debouncedValue }))
-	}, [debouncedValue])*/
+	if (!isLoggedIn) {
+		return <Navigate to={'/login'} />
+	}
 
 	return (
 		<div className={style.container}>
@@ -65,9 +71,27 @@ export const Cards = () => {
 			<div className={style.head}>
 				<div className={style.myPackBlock}>
 					<div className={style.pageName}>{packName}</div>
-					<img src={settings} alt='settings' />
+					<>
+						<img src={settings} alt='settings' onClick={handleClick} />
+						<Popover
+							id={id}
+							open={open}
+							anchorEl={anchorEl}
+							onClose={handleClose}
+							anchorOrigin={{
+								vertical: 'bottom',
+								horizontal: 'left'
+							}}
+						>
+							<Typography className={style.popover}>
+								<img src={teacherBtn} alt='teacherBtn' />
+								<img src={editBtn} alt='editBtn' />
+								<img src={deleteBtn} alt='deleteBtn' />
+							</Typography>
+						</Popover>
+					</>
 				</div>
-				{myId === '' && (
+				{myId !== '' && (
 					<button onClick={handleCreateCard} className={style.button}>
 						Add new card
 					</button>
@@ -92,7 +116,7 @@ export const Cards = () => {
 			<CardsList />
 			<div className={style.footer}>
 				<div className={style.pagination}>
-					<Pagination count={10} shape='rounded' color={'primary'} />
+					<Pagination count={10} shape='rounded' color={'primary'} size={'small'} />
 				</div>
 				<div>Show</div>
 				<div className={style.select}>

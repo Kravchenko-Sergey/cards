@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import style from './Learn.module.css'
+import style from 'features/cards/Learn/Learn.module.css'
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
 import leftArrow from 'assets/img/leftArrow.svg'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { cardsThunks } from 'features/cards/cardsSlice'
+import { selectCards, selectPackName } from 'features/cards/cardsSelectors'
 
 export const Learn = () => {
-	const cards = useAppSelector(state => state.cards.cards)
-	const packName = useAppSelector(state => state.cards.packName)
+	const cards = useAppSelector(selectCards)
+	const packName = useAppSelector(selectPackName)
 	const dispatch = useAppDispatch()
 
 	const navigate = useNavigate()
@@ -29,8 +30,6 @@ export const Learn = () => {
 		dispatch(cardsThunks.updateGradeCard({ grade: radioValue, card_id: cards[indexShowCard]._id }))
 		navigate('/packs')
 	}
-
-	console.log(radioValue)
 
 	return (
 		<div className={style.container}>

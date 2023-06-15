@@ -4,13 +4,15 @@ import s from 'features/auth/Login/Login.module.css'
 import TextField from '@mui/material/TextField'
 import { Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornment, InputLabel } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { ArgLoginType } from 'features/auth/authTypes'
 import { toast } from 'react-toastify'
+import { selectIsLoggedIn } from 'features/auth/authSelectors'
 
 export const Login = () => {
+	const isLoggedIn = useAppSelector(selectIsLoggedIn)
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
@@ -34,11 +36,9 @@ export const Login = () => {
 		event.preventDefault()
 	}
 
-	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-
-	/*if (isLoggedIn) {
+	if (isLoggedIn) {
 		return <Navigate to={'/profile'} />
-	}*/
+	}
 
 	return (
 		<div className={s.container}>

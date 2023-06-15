@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import style from './PacksList.module.css'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { Pack } from './Pack/Pack'
 import { PackType } from 'features/pasks/packsTypes'
-import { packsThunks } from 'features/pasks/packsSlice'
-/*import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'*/
 
 export const PacksList = () => {
 	const packs = useAppSelector(state => state.packs.packs)
 	const params = useAppSelector(state => state.packs.searchParams)
 	const myId = useAppSelector(state => state.auth.profile?._id)
-	//const packUserId = useAppSelector((state: any) => state.packs.packs[0].user_id)
 	const dispatch = useAppDispatch()
 
 	return (
@@ -33,11 +29,9 @@ export const PacksList = () => {
 							<TableCell sx={{ fontWeight: 700 }} width='18%'>
 								Created by
 							</TableCell>
-							{myId === '' && (
-								<TableCell sx={{ fontWeight: 700 }} width='12%'>
-									Actions
-								</TableCell>
-							)}
+							<TableCell sx={{ fontWeight: 700 }} width='12%'>
+								Actions
+							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody sx={{ width: 1008 }}>

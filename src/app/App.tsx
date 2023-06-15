@@ -8,12 +8,12 @@ import { useAppSelector } from 'common/hooks/useAppSelector'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { router } from 'router/router'
-import { packsThunks } from 'features/pasks/packsSlice'
+import { selectIsInitialized, selectIsLoading } from 'app/AppSelectors'
 
 export const App = () => {
+	const isInitialized = useAppSelector(selectIsInitialized)
+	const isLoading = useAppSelector(selectIsLoading)
 	const dispatch = useAppDispatch()
-	const isInitialized = useAppSelector(state => state.app.isAppInitialized)
-	const isLoading = useAppSelector(state => state.app.isLoading)
 
 	useEffect(() => {
 		dispatch(appThunks.initializeApp({}))

@@ -6,6 +6,7 @@ import { packsThunks } from 'features/pasks/packsSlice'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 
 export const BottomPanelTable = () => {
+	const isLoading = useAppSelector(state => state.app.isLoading)
 	const params = useAppSelector(state => state.packs.searchParams)
 	const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
 	const pageCount = useAppSelector(state => state.packs.searchParams.pageCount)
@@ -25,14 +26,6 @@ export const BottomPanelTable = () => {
 	}
 
 	const myId = useAppSelector(state => state.packs.searchParams.user_id)
-
-	/*useEffect(() => {
-		dispatch(packsThunks.getPacks({ ...params, page: page, pageCount: Number(age), user_id: myId }))
-			.unwrap()
-			.then(res => {
-				setTotalPagesNumber(Math.ceil(res!.cardsPackTotalCount / res!.pageCount))
-			})
-	}, [page, age, myId])*/
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -57,6 +50,7 @@ export const BottomPanelTable = () => {
 					shape='rounded'
 					color={'primary'}
 					size={'small'}
+					disabled={isLoading}
 				/>
 			</div>
 			<div>Show</div>
@@ -66,6 +60,7 @@ export const BottomPanelTable = () => {
 					<Select
 						labelId='demo-select-small-label'
 						id='demo-select-small'
+						value={age}
 						onChange={handleChangeEvent}
 						sx={{ minWidth: 64, height: 24 }}
 					>

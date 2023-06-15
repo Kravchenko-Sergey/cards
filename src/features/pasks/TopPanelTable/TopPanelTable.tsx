@@ -9,9 +9,9 @@ import { packsThunks } from 'features/pasks/packsSlice'
 type HandleSliderType = (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => void
 
 export const TopPanelTable = () => {
+	const isLoading = useAppSelector(state => state.app.isLoading)
 	const myId = useAppSelector(state => state.auth.profile?._id)
 	const params = useAppSelector(state => state.packs.searchParams)
-	const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
 	const dispatch = useAppDispatch()
 	//search
 	const [searchValue, setSearchValue] = useState('')
@@ -19,21 +19,21 @@ export const TopPanelTable = () => {
 	const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setSearchValue(e.currentTarget.value)
 	}
-
 	//my all
+	const [activeAll, setActiveAll] = useState(true)
 	const handleMyPacksButton = () => {
 		dispatch(packsThunks.getPacks({ ...params, user_id: myId }))
-		console.log(params)
+		setActiveAll(!activeAll)
 	}
 	const handleAllPacksButton = () => {
 		dispatch(packsThunks.getPacks({ ...params, user_id: '' }))
+		setActiveAll(!activeAll)
 	}
 	//slider
 	const [sliderValue, setSliderValue] = React.useState<number[]>([0, 100])
 	const handleChange = (event: Event, newValue: number | number[]) => {
 		setSliderValue(newValue as number[])
 	}
-
 	const handleSliderValueCommitted: HandleSliderType = () => {
 		console.log(params)
 		dispatch(packsThunks.getPacks({ ...params, min: sliderValue[0], max: sliderValue[1] }))
@@ -85,10 +85,18 @@ export const TopPanelTable = () => {
 					aria-label='Disabled elevation buttons'
 					className={style.muAllBtnBlock}
 				>
-					<Button onClick={handleMyPacksButton} className={style.muAllBtn}>
+					<Button
+						onClick={handleMyPacksButton}
+						className={!activeAll ? style.activeBtn : style.muAllBtn}
+						disabled={isLoading}
+					>
 						My
 					</Button>
-					<Button onClick={handleAllPacksButton} className={style.muAllBtn}>
+					<Button
+						onClick={handleAllPacksButton}
+						className={activeAll ? style.activeBtn : style.muAllBtn}
+						disabled={isLoading}
+					>
 						All
 					</Button>
 				</ButtonGroup>
@@ -106,9 +114,9 @@ export const TopPanelTable = () => {
 					<div className={style.sliderValue}>{sliderValue[1]}</div>
 				</div>
 			</div>
-			<div className={style.icons}>
-				<img onClick={handleResetFilter} src={resetFilters} alt='resetFilters' />
-			</div>
+			<button onClick={handleResetFilter} className={style.icons} disabled={isLoading}>
+				<img src={resetFilters} alt='resetFilters' />
+			</button>
 		</div>
 	)
 }

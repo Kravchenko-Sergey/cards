@@ -21,7 +21,6 @@ export const packsAPI = {
 		return instance.put<UpdatePackResType>('cards/pack', arg)
 	},
 	deletePack(arg: ArgDeletePacksType) {
-		console.log(arg)
 		return instance.delete<DeletePackResType>(`cards/pack/?id=${arg._id}`)
 	}
 }

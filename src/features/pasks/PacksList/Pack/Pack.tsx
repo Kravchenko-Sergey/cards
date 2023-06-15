@@ -19,6 +19,7 @@ type PackPropsType = {
 }
 
 export const Pack = (props: PackPropsType) => {
+	const isLoading = useAppSelector(state => state.app.isLoading)
 	const myId = useAppSelector(state => state.auth.profile?._id)
 	const params = useAppSelector(state => state.packs.searchParams)
 	const navigate = useNavigate()
@@ -56,14 +57,14 @@ export const Pack = (props: PackPropsType) => {
 			<TableCell>{props.user_name}</TableCell>
 			<TableCell>
 				<div className={style.actionButtons}>
-					{props.user_id === myId ? (
+					{props.cardsCount !== 0 && (
+						<img onClick={() => handleTeacherBtn(props._id)} src={teacherBtn} alt='teacherBtn' />
+					)}
+					{props.user_id === myId && (
 						<>
-							<img onClick={() => handleTeacherBtn(props._id)} src={teacherBtn} alt='teacherBtn' />
 							<img onClick={handleUpdateBtn} src={editBtn} alt='updateBtn' />
 							<DeleteModal callback={handleDeleteBtn} />
 						</>
-					) : (
-						<img onClick={() => handleTeacherBtn(props._id)} src={teacherBtn} alt='teacherBtn' />
 					)}
 				</div>
 			</TableCell>

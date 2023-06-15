@@ -9,7 +9,7 @@ import { SetNewPassword } from 'features/auth/SetNewPassword/SetNewPassword'
 import { ForgotPassword } from 'features/auth/ForgotPassword/ForgotPassword'
 import { Packs } from 'features/pasks/Pasks'
 import { Cards } from 'features/cards/Cards'
-import { Learn } from 'Pages/Learn/Learn'
+import { Learn } from 'features/cards/Learn/Learn'
 import React from 'react'
 
 export const router = createBrowserRouter([

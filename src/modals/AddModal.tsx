@@ -1,12 +1,28 @@
 import React from 'react'
 import { BasicModal } from './BasicModal'
+import style from './DeleteModal.module.css'
+import { useAppSelector } from 'common/hooks'
+import { selectIsLoading } from 'app/AppSelectors'
 
-export const AddModal = () => {
+type AddModalPropsType = {
+	callback?: any
+	setOpen?: any
+}
+
+export const AddModal = (props: AddModalPropsType) => {
+	const isLoading = useAppSelector(selectIsLoading)
+
 	return (
 		<BasicModal>
-			<div>
-				<h1>Add modal</h1>
-				<button>Add</button>
+			<div className={style.container}>
+				<h1 className={style.title}>Delete Pack</h1>
+				<div className={style.text}>Do you really want to remove Pack Name? All cards will be deleted.</div>
+				<div className={style.btnBlock}>
+					<button className={style.cancelBtn}>Cancel</button>
+					<button onClick={props.callback} className={style.deleteBtn} disabled={isLoading}>
+						Delete
+					</button>
+				</div>
 			</div>
 		</BasicModal>
 	)

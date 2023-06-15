@@ -8,6 +8,7 @@ import { cardsThunks } from 'features/cards/cardsSlice'
 
 export const CardsList = () => {
 	const cards = useAppSelector(state => state.cards.cards)
+	const myId = useAppSelector(state => state.packs.searchParams.user_id)
 	const searchParamsCard = useAppSelector(state => state.cards.searchParamsCard)
 	const dispatch = useAppDispatch()
 
@@ -29,9 +30,11 @@ export const CardsList = () => {
 							<TableCell align='left' width='20%'>
 								Grade
 							</TableCell>
-							<TableCell align='left' width='10%'>
-								Actions
-							</TableCell>
+							{myId !== '' && (
+								<TableCell align='left' width='10%'>
+									Actions
+								</TableCell>
+							)}
 						</TableRow>
 					</TableHead>
 					<TableBody>

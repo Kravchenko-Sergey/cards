@@ -25,7 +25,7 @@ const register = createAppAsyncThunk<{ isRegisteredIn: boolean }, ArgRegisterTyp
 	THUNK_PREFIXES.REGISTER,
 	async (arg, thunkAPI) => {
 		return thunkTryCatch(thunkAPI, async () => {
-			const res = await authAPI.register(arg)
+			await authAPI.register(arg)
 			return { isRegisteredIn: true }
 		})
 	}
@@ -48,7 +48,7 @@ const login = createAppAsyncThunk<{ profile: UserProfileResType; isLoggedIn: boo
 export const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, {}>(THUNK_PREFIXES.LOGOUT, async (arg, thunkAPI) => {
 	console.log(arg)
 	try {
-		const res = await authAPI.logout()
+		await authAPI.logout()
 		return { isLoggedIn: false }
 	} catch (e) {
 		return thunkAPI.rejectWithValue(e)

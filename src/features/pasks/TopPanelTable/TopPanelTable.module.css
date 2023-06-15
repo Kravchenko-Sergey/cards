@@ -34,6 +34,17 @@
 .muAllBtn {
     width: 84px;
     height: 36px;
+    color: #1976d2;
+    background-color: #f9f9fa;
+    border: 1px solid rgba(0, 0, 0, 0.1)
+}
+
+.activeBtn {
+    width: 84px;
+    height: 36px;
+    color: #f9f9fa;
+    background-color: #1976d2;
+    border: 1px solid rgba(0, 0, 0, 0.1)
 }
 
 .slider {

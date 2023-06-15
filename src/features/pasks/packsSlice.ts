@@ -18,8 +18,6 @@ const THUNK_PREFIXES = {
 const getPacks = createAppAsyncThunk<any, ArgsGetPacksType>(THUNK_PREFIXES.GET_PACKS, async (arg, thunkAPI) => {
 	return thunkTryCatch(thunkAPI, async () => {
 		const res = await packsAPI.getPacks(arg)
-		console.log(arg)
-		console.log(res)
 		return {
 			packName: arg.packName,
 			sortPacks: arg.sortPacks,

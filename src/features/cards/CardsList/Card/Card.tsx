@@ -16,8 +16,7 @@ export type CardPropsType = {
 }
 
 export const Card = (props: CardPropsType) => {
-	const myId = useAppSelector(state => state.auth.profile?._id)
-	//const packUserId = useAppSelector((state: any) => state.packs.packs[0].user_id)
+	const myId = useAppSelector(state => state.packs.searchParams.user_id)
 	const dispatch = useAppDispatch()
 	//rating
 	const [value, setValue] = useState<any>(4)
@@ -41,7 +40,7 @@ export const Card = (props: CardPropsType) => {
 					}}
 				/>
 			</TableCell>
-			{myId === '' && (
+			{myId !== '' && (
 				<TableCell align='left'>
 					<div className={style.actionButtons}>
 						<img onClick={handleUpdateBtn} src={editBtn} alt='changeBtn' />

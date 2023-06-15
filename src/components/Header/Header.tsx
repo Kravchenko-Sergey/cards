@@ -8,15 +8,12 @@ import { Avatar } from '@mui/material'
 export const Header = () => {
 	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 	const userName = useAppSelector(state => state.auth.profile?.name)
-	const handleLogin = (data: any) => {}
 
 	return (
 		<div className={style.headerContainer}>
 			<img src={incubatorLogo} alt='incubatorLogo' />
 			{!isLoggedIn ? (
-				<button onClick={handleLogin} className={style.button}>
-					Sign in
-				</button>
+				<button className={style.button}>Sign in</button>
 			) : (
 				<Link to={'/profile'} className={style.avatarBlock}>
 					<div className={style.userName}>{userName}</div>
