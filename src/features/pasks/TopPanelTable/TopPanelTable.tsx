@@ -5,13 +5,15 @@ import { Button, ButtonGroup, Slider } from '@mui/material'
 import resetFilters from 'assets/img/resetFilters.svg'
 import { useAppDispatch, useAppSelector, useDebounce } from 'common/hooks'
 import { packsThunks } from 'features/pasks/packsSlice'
+import { appSelectors } from 'app/AppSelectors'
+import { packsSelectors } from 'features/pasks/packsSelectors'
 
 type HandleSliderType = (event: Event | SyntheticEvent<Element, Event>, value: number | number[]) => void
 
 export const TopPanelTable = () => {
-	const isLoading = useAppSelector(state => state.app.isLoading)
+	const isLoading = useAppSelector(appSelectors.selectIsLoading)
 	const myId = useAppSelector(state => state.auth.profile?._id)
-	const params = useAppSelector(state => state.packs.searchParams)
+	const params = useAppSelector(packsSelectors.selectParams)
 	const dispatch = useAppDispatch()
 	//search
 	const [searchValue, setSearchValue] = useState('')

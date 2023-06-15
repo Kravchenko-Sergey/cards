@@ -4,7 +4,7 @@ import { FormControl, InputLabel, MenuItem, Popover, Select, SelectChangeEvent, 
 import style from 'features/cards/Cards.module.css'
 import TextField from '@mui/material/TextField'
 import Pagination from '@mui/material/Pagination'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import leftArrow from 'assets/img/leftArrow.svg'
 import settings from 'assets/img/settings.svg'
 import { CardsList } from 'features/cards/CardsList/CardsList'
@@ -12,16 +12,21 @@ import { cardsThunks } from 'features/cards/cardsSlice'
 import teacherBtn from 'assets/img/teacher.svg'
 import editBtn from 'assets/img/edit.svg'
 import deleteBtn from 'assets/img/delete.svg'
-import { selectMyId } from 'features/pasks/packsSelectors'
-import { selectCardsPackId, selectPackName } from 'features/cards/cardsSelectors'
-import { selectIsLoggedIn } from 'features/auth/authSelectors'
+import { packsSelectors } from 'features/pasks/packsSelectors'
+import { cardsSelectors } from 'features/cards/cardsSelectors'
+import { authSelectors } from 'features/auth/authSelectors'
+import { packsThunks } from 'features/pasks/packsSlice'
+import { DeleteModal } from 'modals/DeleteModal'
 
 export const Cards = () => {
-	const isLoggedIn = useAppSelector(selectIsLoggedIn)
-	const myId = useAppSelector(selectMyId)
-	const packName = useAppSelector(selectPackName)
-	const cardsPackId = useAppSelector(selectCardsPackId)
+	const params = useAppSelector(packsSelectors.selectParams)
+	const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
+	const myId = useAppSelector(packsSelectors.selectMyId)
+	const packName = useAppSelector(cardsSelectors.selectPackName)
+	const cardsPackId = useAppSelector(cardsSelectors.selectCardsPackId)
+	const cardsTotalCount = useAppSelector(state => state.cards.cardsTotalCount)
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 	//popover
 	const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 	const handleClick = (event: any) => {
@@ -32,6 +37,31 @@ export const Cards = () => {
 	}
 	const open = Boolean(anchorEl)
 	const id = open ? 'simple-popover' : undefined
+
+	const handleTeacherBtn = () => {
+		dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId, pageCount: 100 }))
+			.unwrap()
+			.then(() => {
+				navigate('/learn')
+			})
+	}
+	const handleUpdateBtn = () => {
+		dispatch(packsThunks.updatePack({ cardsPack: { _id: cardsPackId, name: 'updated deck' } }))
+		setTimeout(() => {
+			dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }))
+				.unwrap()
+				.then(() => {
+					navigate('/cards')
+				})
+		}, 1000)
+	}
+	const handleDeleteBtn = () => {
+		dispatch(packsThunks.deletePack({ _id: cardsPackId }))
+			.unwrap()
+			.then(() => {
+				navigate('/packs')
+			})
+	}
 	//search
 	const [searchValue, setSearchValue] = useState('')
 	const debouncedValue = useDebounce(searchValue, 500)
@@ -71,25 +101,40 @@ export const Cards = () => {
 			<div className={style.head}>
 				<div className={style.myPackBlock}>
 					<div className={style.pageName}>{packName}</div>
-					<>
-						<img src={settings} alt='settings' onClick={handleClick} />
-						<Popover
-							id={id}
-							open={open}
-							anchorEl={anchorEl}
-							onClose={handleClose}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'left'
-							}}
-						>
-							<Typography className={style.popover}>
-								<img src={teacherBtn} alt='teacherBtn' />
-								<img src={editBtn} alt='editBtn' />
-								<img src={deleteBtn} alt='deleteBtn' />
-							</Typography>
-						</Popover>
-					</>
+					{(cardsTotalCount !== 0 || myId !== '') && (
+						<>
+							<img src={settings} alt='settings' onClick={handleClick} />
+							<Popover
+								id={id}
+								open={open}
+								anchorEl={anchorEl}
+								onClose={handleClose}
+								anchorOrigin={{
+									vertical: 'bottom',
+									horizontal: 'left'
+								}}
+							>
+								<Typography className={style.popover}>
+									{cardsTotalCount !== 0 && myId !== '' && (
+										<>
+											<img src={teacherBtn} alt='teacherBtn' onClick={handleTeacherBtn} />
+											<img src={editBtn} alt='editBtn' onClick={handleUpdateBtn} />
+											<DeleteModal callback={handleDeleteBtn} />
+										</>
+									)}
+									{cardsTotalCount === 0 && myId !== '' && (
+										<>
+											<img src={editBtn} alt='editBtn' onClick={handleUpdateBtn} />
+											<DeleteModal callback={handleDeleteBtn} />
+										</>
+									)}
+									{cardsTotalCount !== 0 && myId === '' && (
+										<img src={teacherBtn} alt='teacherBtn' onClick={handleTeacherBtn} />
+									)}
+								</Typography>
+							</Popover>
+						</>
+					)}
 				</div>
 				{myId !== '' && (
 					<button onClick={handleCreateCard} className={style.button}>

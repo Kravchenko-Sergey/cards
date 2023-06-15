@@ -6,12 +6,15 @@ import { packsThunks } from 'features/pasks/packsSlice'
 import { PacksList } from 'features/pasks/PacksList/PacksList'
 import { TopPanelTable } from 'features/pasks/TopPanelTable/TopPanelTable'
 import { BottomPanelTable } from 'features/pasks/BottomPanelTable/BottomPanelTable'
-import { AddModal } from '../../modals/AddModal'
+import { AddModal } from 'modals/AddModal'
+import { appSelectors } from 'app/AppSelectors'
+import { authSelectors } from 'features/auth/authSelectors'
+import { packsSelectors } from 'features/pasks/packsSelectors'
 
 export const Packs = () => {
-	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-	const isLoading = useAppSelector(state => state.app.isLoading)
-	const myId = useAppSelector(state => state.packs.searchParams.user_id)
+	const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
+	const isLoading = useAppSelector(appSelectors.selectIsLoading)
+	const myId = useAppSelector(packsSelectors.selectMyId)
 	const dispatch = useAppDispatch()
 
 	const handleCreatePack = () => {
@@ -26,9 +29,9 @@ export const Packs = () => {
 		<div className={style.container}>
 			<div className={style.head}>
 				<div className={style.pageName}>{myId === '' ? 'All packs' : 'My packs'}</div>
-				{/*<button onClick={handleCreatePack} className={style.button} disabled={isLoading}>
+				<button onClick={handleCreatePack} className={style.button} disabled={isLoading}>
 					Add new pack
-				</button>*/}
+				</button>
 				<AddModal callback={handleCreatePack} />
 			</div>
 			<TopPanelTable />

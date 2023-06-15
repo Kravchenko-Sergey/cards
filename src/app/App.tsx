@@ -7,12 +7,12 @@ import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { useAppSelector } from 'common/hooks/useAppSelector'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { router } from 'router/router'
-import { selectIsInitialized, selectIsLoading } from 'app/AppSelectors'
+import { router } from 'router/Router'
+import { appSelectors } from 'app/AppSelectors'
 
 export const App = () => {
-	const isInitialized = useAppSelector(selectIsInitialized)
-	const isLoading = useAppSelector(selectIsLoading)
+	const isInitialized = useAppSelector(appSelectors.selectIsInitialized)
+	const isLoading = useAppSelector(appSelectors.selectIsLoading)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {

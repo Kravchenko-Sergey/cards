@@ -9,10 +9,10 @@ import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { ArgLoginType } from 'features/auth/authTypes'
 import { toast } from 'react-toastify'
-import { selectIsLoggedIn } from 'features/auth/authSelectors'
+import { authSelectors } from 'features/auth/authSelectors'
 
 export const Login = () => {
-	const isLoggedIn = useAppSelector(selectIsLoggedIn)
+	const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 

@@ -5,11 +5,11 @@ import leftArrow from 'assets/img/leftArrow.svg'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { cardsThunks } from 'features/cards/cardsSlice'
-import { selectCards, selectPackName } from 'features/cards/cardsSelectors'
+import { cardsSelectors } from 'features/cards/cardsSelectors'
 
 export const Learn = () => {
-	const cards = useAppSelector(selectCards)
-	const packName = useAppSelector(selectPackName)
+	const cards = useAppSelector(cardsSelectors.selectCards)
+	const packName = useAppSelector(cardsSelectors.selectPackName)
 	const dispatch = useAppDispatch()
 
 	const navigate = useNavigate()

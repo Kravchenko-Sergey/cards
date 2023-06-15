@@ -1,15 +1,13 @@
 import React from 'react'
 import style from './PacksList.module.css'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { useAppDispatch, useAppSelector } from 'common/hooks'
+import { useAppSelector } from 'common/hooks'
 import { Pack } from './Pack/Pack'
 import { PackType } from 'features/pasks/packsTypes'
+import { packsSelectors } from 'features/pasks/packsSelectors'
 
 export const PacksList = () => {
-	const packs = useAppSelector(state => state.packs.packs)
-	const params = useAppSelector(state => state.packs.searchParams)
-	const myId = useAppSelector(state => state.auth.profile?._id)
-	const dispatch = useAppDispatch()
+	const packs = useAppSelector(packsSelectors.selectPacks)
 
 	return (
 		<TableContainer component={Paper} className={style.table}>

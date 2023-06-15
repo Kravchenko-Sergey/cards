@@ -22,8 +22,8 @@ export const Pack = (props: PackPropsType) => {
 	const isLoading = useAppSelector(state => state.app.isLoading)
 	const myId = useAppSelector(state => state.auth.profile?._id)
 	const params = useAppSelector(state => state.packs.searchParams)
-	const navigate = useNavigate()
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 
 	const handleRowName = (id: string) => {
 		dispatch(cardsThunks.getCards({ cardsPack_id: id }))

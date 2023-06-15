@@ -14,7 +14,12 @@ const getCards = createAppAsyncThunk<any, ArgGetCardsType>('cards/getCards', asy
 		const res = await cardsAPI.getCards(arg)
 		console.log(arg)
 		console.log(res)
-		return { cards: res.data.cards, cardsPack_id: arg.cardsPack_id, packName: res.data.packName }
+		return {
+			cards: res.data.cards,
+			cardsPack_id: arg.cardsPack_id,
+			packName: res.data.packName,
+			cardsTotalCount: res.data.cardsTotalCount
+		}
 	} catch (e) {
 		console.error(e)
 	}
@@ -88,6 +93,7 @@ const slice = createSlice({
 				state.cards = action.payload.cards
 				state.searchParamsCard.cardsPack_id = action.payload.cardsPack_id
 				state.packName = action.payload.packName
+				state.cardsTotalCount = action.payload.cardsTotalCount
 			})
 			.addCase(searchCard.fulfilled, (state, action) => {
 				state.searchParamsCard.cardAnswer = action.payload.cardAnswer

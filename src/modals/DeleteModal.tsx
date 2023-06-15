@@ -3,7 +3,7 @@ import { BasicModal } from './BasicModal'
 import style from './DeleteModal.module.css'
 import deleteBtn from 'assets/img/delete.svg'
 import { useAppSelector } from 'common/hooks'
-import { selectIsLoading } from 'app/AppSelectors'
+import { appSelectors } from 'app/AppSelectors'
 
 type DeleteModalPropsType = {
 	callback?: any
@@ -11,7 +11,7 @@ type DeleteModalPropsType = {
 }
 
 export const DeleteModal = (props: DeleteModalPropsType) => {
-	const isLoading = useAppSelector(selectIsLoading)
+	const isLoading = useAppSelector(appSelectors.selectIsLoading)
 	return (
 		<BasicModal img={deleteBtn} alt={'deleteBtn'}>
 			<div className={style.container}>

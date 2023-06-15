@@ -1,4 +1,6 @@
 import { RootState } from 'app/store'
 
-export const selectIsInitialized = (state: RootState) => state.app.isAppInitialized
-export const selectIsLoading = (state: RootState) => state.app.isLoading
+export const appSelectors = {
+	selectIsInitialized: (state: RootState) => state.app.isAppInitialized,
+	selectIsLoading: (state: RootState) => state.app.isLoading
+}

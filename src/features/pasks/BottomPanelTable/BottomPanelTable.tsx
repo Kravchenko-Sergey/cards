@@ -4,12 +4,14 @@ import Pagination from '@mui/material/Pagination'
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { packsThunks } from 'features/pasks/packsSlice'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
+import { appSelectors } from 'app/AppSelectors'
+import { packsSelectors } from 'features/pasks/packsSelectors'
 
 export const BottomPanelTable = () => {
-	const isLoading = useAppSelector(state => state.app.isLoading)
-	const params = useAppSelector(state => state.packs.searchParams)
-	const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
-	const pageCount = useAppSelector(state => state.packs.searchParams.pageCount)
+	const isLoading = useAppSelector(appSelectors.selectIsLoading)
+	const params = useAppSelector(packsSelectors.selectParams)
+	const cardPacksTotalCount = useAppSelector(packsSelectors.selectCardPacksTotalCount)
+	const pageCount = useAppSelector(packsSelectors.selectPageCount)
 	const dispatch = useAppDispatch()
 
 	const [page, setPage] = useState(1)

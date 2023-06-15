@@ -9,20 +9,16 @@ import avatar from 'assets/img/userPhoto.svg'
 import changePhoto from 'assets/img/changePhoto.svg'
 import logoutIcon from 'assets/img/logout.svg'
 import leftArrow from 'assets/img/leftArrow.svg'
-import { selectIsLoggedIn, selectUserEmail, selectUserName } from 'features/auth/authSelectors'
+import { authSelectors } from 'features/auth/authSelectors'
 
 export const Profile = () => {
-	const isLoggedIn = useAppSelector(selectIsLoggedIn)
-	const userName = useAppSelector(selectUserName)
-	const userEmail = useAppSelector(selectUserEmail)
+	const userName = useAppSelector(authSelectors.selectUserName)
+	const userEmail = useAppSelector(authSelectors.selectUserEmail)
 	const dispatch = useAppDispatch()
 	const handleLogout = () => {
 		dispatch(logout({}))
 	}
 
-	if (!isLoggedIn) {
-		return <Navigate to={'/login'} />
-	}
 	return (
 		<div className={s.s}>
 			<Link to='/packs' className={s.backPackList}>

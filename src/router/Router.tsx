@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				element: <Profile />
+				element: <Packs />
 			},
 			{
 				path: 'login',

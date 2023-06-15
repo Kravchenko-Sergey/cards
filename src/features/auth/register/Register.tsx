@@ -8,7 +8,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppSelector } from 'common/hooks/useAppSelector'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
-import { selectIsRegisteredIn } from 'features/auth/authSelectors'
+import { authSelectors } from 'features/auth/authSelectors'
 
 type RegType = {
 	email: string
@@ -17,7 +17,7 @@ type RegType = {
 }
 
 export const Register = () => {
-	const isRegisteredIn = useAppSelector(selectIsRegisteredIn)
+	const isRegisteredIn = useAppSelector(authSelectors.selectIsRegisteredIn)
 	const dispatch = useAppDispatch()
 
 	const {

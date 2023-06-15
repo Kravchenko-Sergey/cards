@@ -3,10 +3,10 @@ import s from 'features/auth/CheckEmail/CheckEmail.module.css'
 import checkEmail from 'assets/img/checkEmail.svg'
 import { useAppSelector } from 'common/hooks'
 import { Link } from 'react-router-dom'
-import { selectUserEmail } from 'features/auth/authSelectors'
+import { authSelectors } from 'features/auth/authSelectors'
 
 export const CheckEmail = () => {
-	const userEmail = useAppSelector(selectUserEmail)
+	const userEmail = useAppSelector(authSelectors.selectUserEmail)
 
 	return (
 		<div className={s.container}>
