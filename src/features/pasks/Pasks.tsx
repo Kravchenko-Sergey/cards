@@ -32,7 +32,7 @@ export const Packs = () => {
 				<button onClick={handleCreatePack} className={style.button} disabled={isLoading}>
 					Add new pack
 				</button>
-				<AddModal callback={handleCreatePack} />
+				{/*<AddModal callback={handleCreatePack} />*/}
 			</div>
 			<TopPanelTable />
 			<PacksList />

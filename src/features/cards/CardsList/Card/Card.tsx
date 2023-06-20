@@ -25,7 +25,6 @@ export const Card = (props: CardPropsType) => {
 		dispatch(cardsThunks.updateCard({ card: { _id: props._id, question: 'update question' } }))
 		dispatch(cardsThunks.getCards({ cardsPack_id: props.cardsPackId }))
 	}
-	console.log(Math.round(props.grade))
 	return (
 		<TableRow key={props._id}>
 			<TableCell align='left'>{props.question}</TableCell>

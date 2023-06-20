@@ -37,7 +37,6 @@ export const TopPanelTable = () => {
 		setSliderValue(newValue as number[])
 	}
 	const handleSliderValueCommitted: HandleSliderType = () => {
-		console.log(params)
 		dispatch(packsThunks.getPacks({ ...params, min: sliderValue[0], max: sliderValue[1] }))
 	}
 	//reset filter
@@ -61,6 +60,8 @@ export const TopPanelTable = () => {
 	}
 
 	useEffect(() => {
+		console.log(params)
+		console.log(debouncedValue)
 		dispatch(packsThunks.getPacks({ ...params, packName: debouncedValue }))
 	}, [debouncedValue])
 

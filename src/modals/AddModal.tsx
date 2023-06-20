@@ -5,8 +5,8 @@ import { useAppSelector } from 'common/hooks'
 import { appSelectors } from 'app/AppSelectors'
 
 type AddModalPropsType = {
-	callback?: any
-	setOpen?: any
+	callback?: () => void
+	setOpen?: boolean
 }
 
 export const AddModal = (props: AddModalPropsType) => {

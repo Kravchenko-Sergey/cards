@@ -9,10 +9,10 @@ export const initializeApp = createAppAsyncThunk<{ isAppInitialized: boolean }, 
 	'app/initializeApp',
 	async (arg, thunkAPI) => {
 		try {
-			await authAPI.me()
-			return { isAppInitialized: true }
+			const res = await authAPI.me()
+			return { isAppInitialized: true, profile: res.data }
 		} catch (e) {
-			thunkAPI.rejectWithValue(e)
+			return thunkAPI.rejectWithValue(e)
 		} finally {
 			return { isAppInitialized: true }
 		}

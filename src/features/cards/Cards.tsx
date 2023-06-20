@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector, useDebounce } from 'common/hooks'
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { FormControl, InputLabel, MenuItem, Popover, Select, SelectChangeEvent, Typography } from '@mui/material'
 import style from 'features/cards/Cards.module.css'
 import TextField from '@mui/material/TextField'
@@ -19,7 +19,7 @@ import { packsThunks } from 'features/pasks/packsSlice'
 import { DeleteModal } from 'modals/DeleteModal'
 
 export const Cards = () => {
-	const params = useAppSelector(packsSelectors.selectParams)
+	const params = useAppSelector(state => state.cards.searchParamsCard)
 	const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
 	const myId = useAppSelector(packsSelectors.selectMyId)
 	const packName = useAppSelector(cardsSelectors.selectPackName)
@@ -68,6 +68,12 @@ export const Cards = () => {
 	const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setSearchValue(e.currentTarget.value)
 	}
+
+	useEffect(() => {
+		console.log(params)
+		console.log(debouncedValue)
+		dispatch(cardsThunks.getCards({ cardsPack_id: params.cardsPack_id, cardQuestion: debouncedValue }))
+	}, [debouncedValue])
 
 	//table
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
@@ -145,17 +151,16 @@ export const Cards = () => {
 			<div className={style.headersTable}>
 				<div className={`${style.labelBlock} ${style.search}`}>
 					<div className={style.label}>Search</div>
-					<div className={style.input}>
-						<TextField
-							id='outlined-basic'
-							value={searchValue}
-							onChange={handleSearchValue}
-							placeholder={'Provide your text'}
-							variant='outlined'
-							size='small'
-							sx={{ width: '100%' }}
-						/>
-					</div>
+					<TextField
+						id='outlined-basic'
+						value={searchValue}
+						onChange={handleSearchValue}
+						placeholder={'🔍 Provide your text'}
+						variant='outlined'
+						size='small'
+						sx={{ width: '100%' }}
+						className={style.input}
+					/>
 				</div>
 			</div>
 			<CardsList />

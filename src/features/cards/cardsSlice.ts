@@ -12,13 +12,12 @@ import { createAppAsyncThunk, thunkTryCatch } from 'common/utils'
 const getCards = createAppAsyncThunk<any, ArgGetCardsType>('cards/getCards', async arg => {
 	try {
 		const res = await cardsAPI.getCards(arg)
-		console.log(arg)
-		console.log(res)
 		return {
 			cards: res.data.cards,
 			cardsPack_id: arg.cardsPack_id,
-			packName: res.data.packName,
-			cardsTotalCount: res.data.cardsTotalCount
+			cardsTotalCount: res.data.cardsTotalCount,
+			cardAnswer: arg.cardAnswer,
+			cardQuestion: arg.cardQuestion
 		}
 	} catch (e) {
 		console.error(e)
@@ -76,7 +75,7 @@ const slice = createSlice({
 			max: 5,
 			sortCards: '0grade',
 			page: 1,
-			pageCountL: 7
+			pageCount: 7
 		},
 		packName: '',
 		cardsTotalCount: 0,
@@ -92,7 +91,8 @@ const slice = createSlice({
 			.addCase(getCards.fulfilled, (state, action) => {
 				state.cards = action.payload.cards
 				state.searchParamsCard.cardsPack_id = action.payload.cardsPack_id
-				state.packName = action.payload.packName
+				state.searchParamsCard.cardAnswer = action.payload.cardAnswer
+				state.searchParamsCard.cardQuestion = action.payload.cardQuestion
 				state.cardsTotalCount = action.payload.cardsTotalCount
 			})
 			.addCase(searchCard.fulfilled, (state, action) => {
