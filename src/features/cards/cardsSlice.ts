@@ -14,10 +14,15 @@ const getCards = createAppAsyncThunk<any, ArgGetCardsType>('cards/getCards', asy
 		const res = await cardsAPI.getCards(arg)
 		return {
 			cards: res.data.cards,
-			cardsPack_id: arg.cardsPack_id,
 			cardsTotalCount: res.data.cardsTotalCount,
 			cardAnswer: arg.cardAnswer,
-			cardQuestion: arg.cardQuestion
+			cardQuestion: arg.cardQuestion,
+			cardsPack_id: arg.cardsPack_id,
+			min: arg.min,
+			max: arg.max,
+			sortCards: arg.sortCards,
+			pageCount: arg.pageCount,
+			page: arg.page
 		}
 	} catch (e) {
 		console.error(e)
@@ -75,7 +80,7 @@ const slice = createSlice({
 			max: 5,
 			sortCards: '0grade',
 			page: 1,
-			pageCount: 7
+			pageCount: 4
 		},
 		packName: '',
 		cardsTotalCount: 0,
@@ -87,17 +92,18 @@ const slice = createSlice({
 	},
 	reducers: {},
 	extraReducers: builder => {
-		builder
-			.addCase(getCards.fulfilled, (state, action) => {
-				state.cards = action.payload.cards
-				state.searchParamsCard.cardsPack_id = action.payload.cardsPack_id
-				state.searchParamsCard.cardAnswer = action.payload.cardAnswer
-				state.searchParamsCard.cardQuestion = action.payload.cardQuestion
-				state.cardsTotalCount = action.payload.cardsTotalCount
-			})
-			.addCase(searchCard.fulfilled, (state, action) => {
-				state.searchParamsCard.cardAnswer = action.payload.cardAnswer
-			})
+		builder.addCase(getCards.fulfilled, (state, action) => {
+			state.cards = action.payload.cards
+			state.cardsTotalCount = action.payload.cardsTotalCount
+			state.searchParamsCard.cardAnswer = action.payload.cardAnswer
+			state.searchParamsCard.cardQuestion = action.payload.cardQuestion
+			state.searchParamsCard.cardsPack_id = action.payload.cardsPack_id
+			state.searchParamsCard.min = action.payload.min
+			state.searchParamsCard.max = action.payload.max
+			state.searchParamsCard.sortCards = action.payload.sortCards
+			state.searchParamsCard.page = action.payload.page
+			state.searchParamsCard.pageCount = action.payload.pageCount
+		})
 	}
 })
 
@@ -108,6 +114,5 @@ export const cardsThunks = {
 	createCard,
 	updateCard,
 	updateGradeCard,
-	deleteCard,
-	searchCard
+	deleteCard
 }

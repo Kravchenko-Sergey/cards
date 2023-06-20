@@ -17,14 +17,17 @@ import { cardsSelectors } from 'features/cards/cardsSelectors'
 import { authSelectors } from 'features/auth/authSelectors'
 import { packsThunks } from 'features/pasks/packsSlice'
 import { DeleteModal } from 'modals/DeleteModal'
+import { appSelectors } from 'app/AppSelectors'
 
 export const Cards = () => {
+	const isLoading = useAppSelector(appSelectors.selectIsLoading)
 	const params = useAppSelector(state => state.cards.searchParamsCard)
 	const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
 	const myId = useAppSelector(packsSelectors.selectMyId)
 	const packName = useAppSelector(cardsSelectors.selectPackName)
 	const cardsPackId = useAppSelector(cardsSelectors.selectCardsPackId)
 	const cardsTotalCount = useAppSelector(state => state.cards.cardsTotalCount)
+	const pageCount = useAppSelector(state => state.cards.pageCount)
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 	//popover
@@ -70,20 +73,34 @@ export const Cards = () => {
 	}
 
 	useEffect(() => {
-		console.log(params)
-		console.log(debouncedValue)
-		dispatch(cardsThunks.getCards({ cardsPack_id: params.cardsPack_id, cardQuestion: debouncedValue }))
+		dispatch(cardsThunks.getCards({ ...params, cardQuestion: debouncedValue }))
 	}, [debouncedValue])
 
 	//table
 	function createData(name: string, cards: number, lastUpdated: number, createdBy: number, actions: number) {
 		return { name, cards, lastUpdated, createdBy, actions }
 	}
+	const [page, setPage] = useState(1)
+	const [totalPagesNumber, setTotalPagesNumber] = useState(1)
 	//select
-	const [age, setAge] = React.useState('')
+	const [age, setAge] = React.useState('4')
 	const handleChange2 = (event: SelectChangeEvent) => {
 		setAge(event.target.value)
+		dispatch(cardsThunks.getCards({ ...params, pageCount: Number(event.target.value) }))
+			.unwrap()
+			.then(res => {
+				setTotalPagesNumber(Math.ceil(res.cardsTotalCount / res.pageCount))
+			})
+		console.log(params)
 	}
+
+	useEffect(() => {
+		setTimeout(() => {
+			dispatch(cardsThunks.getCards({ ...params, page: 1, pageCount: 4 }))
+			setTotalPagesNumber(Math.ceil(cardsTotalCount / pageCount))
+		}, 1000)
+	}, [])
+
 	//
 	const handleCreateCard = () => {
 		dispatch(
@@ -166,7 +183,21 @@ export const Cards = () => {
 			<CardsList />
 			<div className={style.footer}>
 				<div className={style.pagination}>
-					<Pagination count={10} shape='rounded' color={'primary'} size={'small'} />
+					<Pagination
+						count={Math.ceil(cardsTotalCount / pageCount)}
+						page={page}
+						onChange={(e: any) => {
+							setPage(Number(e.target.innerText))
+							dispatch(
+								cardsThunks.getCards({ ...params, page: Number(e.currentTarget.innerText), pageCount: Number(age) })
+							)
+							setTotalPagesNumber(Math.ceil(cardsTotalCount / pageCount))
+						}}
+						shape='rounded'
+						color={'primary'}
+						size={'small'}
+						disabled={isLoading}
+					/>
 				</div>
 				<div>Show</div>
 				<div className={style.select}>
@@ -175,6 +206,7 @@ export const Cards = () => {
 						<Select
 							labelId='demo-select-small-label'
 							id='demo-select-small'
+							value={age}
 							onChange={handleChange2}
 							sx={{ minWidth: 64, height: 24 }}
 						>
