@@ -60,8 +60,6 @@ export const TopPanelTable = () => {
 	}
 
 	useEffect(() => {
-		console.log(params)
-		console.log(debouncedValue)
 		dispatch(packsThunks.getPacks({ ...params, packName: debouncedValue }))
 	}, [debouncedValue])
 

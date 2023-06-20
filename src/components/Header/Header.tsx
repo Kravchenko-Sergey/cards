@@ -8,6 +8,7 @@ import { Avatar } from '@mui/material'
 export const Header = () => {
 	const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 	const userName = useAppSelector(state => state.auth.profile?.name)
+	const userAvatar: any = useAppSelector(state => state.auth.profile?.avatar)
 
 	return (
 		<div className={style.headerContainer}>
@@ -17,7 +18,7 @@ export const Header = () => {
 			) : (
 				<Link to={'/profile'} className={style.avatarBlock}>
 					<div className={style.userName}>{userName}</div>
-					<Avatar alt={userName} src='/static/images/avatar/1.jpg' />
+					<Avatar src={userAvatar} alt={userAvatar} />
 				</Link>
 			)}
 		</div>

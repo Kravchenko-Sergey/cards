@@ -42,9 +42,15 @@
     border-radius: 100px;
 }
 
+.avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 100px;
+}
+
 .changeAvatar {
     position: absolute;
-    bottom: 0; right: 0;
+    bottom: 16px; left: 24px;
 }
 
 .name {

@@ -55,12 +55,12 @@ export const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, {}>(THUNK_PRE
 	}
 })
 
-export const changeUserName = createAppAsyncThunk<{ name: string }, ArgsUpdateProfile>(
+export const changeUser = createAppAsyncThunk<{ name: string; avatar: any }, ArgsUpdateProfile>(
 	THUNK_PREFIXES.CHANGE_USER_NAME,
 	async (arg, thunkAPI) => {
 		try {
 			const res = await authAPI.updateProfile(arg)
-			return { name: res.data.updatedUser.name }
+			return { name: res.data.updatedUser.name, avatar: res.data.updatedUser.avatar }
 		} catch (e) {
 			return thunkAPI.rejectWithValue(e)
 		}
@@ -124,9 +124,10 @@ const slice = createSlice({
 			.addCase(logout.fulfilled, (state, action) => {
 				state.isLoggedIn = action.payload.isLoggedIn
 			})
-			.addCase(changeUserName.fulfilled, (state, action) => {
+			.addCase(changeUser.fulfilled, (state, action) => {
 				if (action.payload?.name) {
 					state!.profile!.name = action.payload.name
+					state!.profile!.avatar = action.payload.avatar
 				}
 			})
 	}
@@ -134,4 +135,4 @@ const slice = createSlice({
 
 export const authReducer = slice.reducer
 export const authActions = slice.actions
-export const authThunks = { register, login, logout, changeUserName, forgotPassword, setNewPassword }
+export const authThunks = { register, login, logout, changeUser, forgotPassword, setNewPassword }
