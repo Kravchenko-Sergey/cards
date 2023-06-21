@@ -18,6 +18,7 @@ import { authSelectors } from 'features/auth/authSelectors'
 import { packsThunks } from 'features/pasks/packsSlice'
 import { DeleteModal } from 'modals/DeleteModal'
 import { appSelectors } from 'app/AppSelectors'
+import { AddCardModal } from 'modals/AddCardModal'
 
 export const Cards = () => {
 	const isLoading = useAppSelector(appSelectors.selectIsLoading)
@@ -102,14 +103,14 @@ export const Cards = () => {
 	}, [])
 
 	//
-	const handleCreateCard = () => {
+	/*const handleCreateCard = () => {
 		dispatch(
 			cardsThunks.createCard({
 				card: { cardsPack_id: cardsPackId, question: 'test question', answer: 'test answer' }
 			})
 		)
 		dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }))
-	}
+	}*/
 
 	if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
@@ -160,9 +161,10 @@ export const Cards = () => {
 					)}
 				</div>
 				{myId !== '' && (
-					<button onClick={handleCreateCard} className={style.button}>
+					/*<button onClick={handleCreateCard} className={style.button}>
 						Add new card
-					</button>
+					</button>*/
+					<AddCardModal />
 				)}
 			</div>
 			<div className={style.headersTable}>
