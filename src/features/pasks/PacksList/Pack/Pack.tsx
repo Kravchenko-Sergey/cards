@@ -42,10 +42,6 @@ export const Pack = (props: PackPropsType) => {
 			})
 	}
 
-	const handleUpdateBtn = () => {
-		dispatch(packsThunks.updatePack({ cardsPack: { _id: props._id, name: 'updated deck' } }))
-	}
-
 	const handleDeleteBtn = () => {
 		dispatch(packsThunks.deletePack({ _id: props._id }))
 	}
@@ -64,7 +60,7 @@ export const Pack = (props: PackPropsType) => {
 					)}
 					{props.user_id === myId && (
 						<>
-							<UpdateModal callback={handleUpdateBtn} />
+							<UpdateModal id={props._id} />
 							{/*<img onClick={handleUpdateBtn} src={editBtn} alt='updateBtn' />*/}
 							<DeleteModal callback={handleDeleteBtn} />
 						</>
