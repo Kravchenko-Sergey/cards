@@ -15,19 +15,22 @@ export const PacksList = () => {
 				<Table sx={{ minWidth: 650, fontWeight: 400 }} aria-label='simple table'>
 					<TableHead sx={{ backgroundColor: '#efefef' }}>
 						<TableRow>
-							<TableCell sx={{ fontWeight: 700 }} width='28%'>
+							<TableCell sx={{ fontWeight: 700 }} width='10%'>
+								Cover
+							</TableCell>
+							<TableCell sx={{ fontWeight: 700 }} width='26%'>
 								Name
 							</TableCell>
-							<TableCell sx={{ fontWeight: 700 }} width='22%'>
+							<TableCell sx={{ fontWeight: 700 }} width='20%'>
 								Cards
 							</TableCell>
-							<TableCell sx={{ fontWeight: 700 }} width='20%'>
+							<TableCell sx={{ fontWeight: 700 }} width='18%'>
 								Last Updated
 							</TableCell>
-							<TableCell sx={{ fontWeight: 700 }} width='18%'>
+							<TableCell sx={{ fontWeight: 700 }} width='16%'>
 								Created by
 							</TableCell>
-							<TableCell sx={{ fontWeight: 700 }} width='12%'>
+							<TableCell sx={{ fontWeight: 700 }} width='10%'>
 								Actions
 							</TableCell>
 						</TableRow>

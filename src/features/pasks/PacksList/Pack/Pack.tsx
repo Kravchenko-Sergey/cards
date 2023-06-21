@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { cardsThunks } from 'features/cards/cardsSlice'
 import { DeleteModal } from 'modals/DeleteModal'
 import { useNavigate } from 'react-router-dom'
+import { UpdateModal } from 'modals/UpdateModal'
 
 type PackPropsType = {
 	_id: string
@@ -51,6 +52,7 @@ export const Pack = (props: PackPropsType) => {
 
 	return (
 		<TableRow>
+			<TableCell>{props.cardsCount}</TableCell>
 			<TableCell onClick={() => handleRowName(props._id)}>{props.name}</TableCell>
 			<TableCell>{props.cardsCount}</TableCell>
 			<TableCell>{props.updated}</TableCell>
@@ -62,7 +64,8 @@ export const Pack = (props: PackPropsType) => {
 					)}
 					{props.user_id === myId && (
 						<>
-							<img onClick={handleUpdateBtn} src={editBtn} alt='updateBtn' />
+							<UpdateModal callback={handleUpdateBtn} />
+							{/*<img onClick={handleUpdateBtn} src={editBtn} alt='updateBtn' />*/}
 							<DeleteModal callback={handleDeleteBtn} />
 						</>
 					)}

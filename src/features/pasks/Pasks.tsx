@@ -17,10 +17,6 @@ export const Packs = () => {
 	const myId = useAppSelector(packsSelectors.selectMyId)
 	const dispatch = useAppDispatch()
 
-	const handleCreatePack = () => {
-		dispatch(packsThunks.createPack({ cardsPack: { name: 'test deck', deckCover: 'url or base64', private: false } }))
-	}
-
 	if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
 	}
@@ -29,10 +25,7 @@ export const Packs = () => {
 		<div className={style.container}>
 			<div className={style.head}>
 				<div className={style.pageName}>{myId === '' ? 'All packs' : 'My packs'}</div>
-				<button onClick={handleCreatePack} className={style.button} disabled={isLoading}>
-					Add new pack
-				</button>
-				{/*<AddModal callback={handleCreatePack} />*/}
+				<AddModal />
 			</div>
 			<TopPanelTable />
 			<PacksList />

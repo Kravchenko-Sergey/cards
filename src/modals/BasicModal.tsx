@@ -21,6 +21,9 @@ type BasicModalPropsType = {
 	alt?: string
 	children: JSX.Element
 	title?: string
+	type?: string
+	text?: string
+	className?: string
 }
 
 export const BasicModal = (props: BasicModalPropsType) => {
@@ -30,7 +33,13 @@ export const BasicModal = (props: BasicModalPropsType) => {
 
 	return (
 		<div>
-			<img onClick={handleOpen} src={props.img} alt={props.alt} />
+			{props.type === 'btn' ? (
+				<button onClick={handleOpen} className={props.className}>
+					{props.text}
+				</button>
+			) : (
+				<img onClick={handleOpen} src={props.img} alt={props.alt} />
+			)}
 			<Modal
 				open={open}
 				onClose={handleClose}

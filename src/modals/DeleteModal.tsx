@@ -8,6 +8,7 @@ import { appSelectors } from 'app/AppSelectors'
 type DeleteModalPropsType = {
 	callback?: any
 	setOpen?: any
+	onClose?: any
 }
 
 export const DeleteModal = (props: DeleteModalPropsType) => {
