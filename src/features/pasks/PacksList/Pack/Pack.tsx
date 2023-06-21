@@ -62,7 +62,7 @@ export const Pack = (props: PackPropsType) => {
 						<>
 							<UpdateModal id={props._id} />
 							{/*<img onClick={handleUpdateBtn} src={editBtn} alt='updateBtn' />*/}
-							<DeleteModal callback={handleDeleteBtn} />
+							<DeleteModal callback={handleDeleteBtn} id={props._id} />
 						</>
 					)}
 				</div>

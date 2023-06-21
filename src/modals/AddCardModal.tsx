@@ -4,9 +4,8 @@ import style from './AddModal.module.css'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { appSelectors } from 'app/AppSelectors'
 import TextField from '@mui/material/TextField'
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { packsThunks } from 'features/pasks/packsSlice'
 import Box from '@mui/material/Box'
 import { cardsThunks } from 'features/cards/cardsSlice'
 import { cardsSelectors } from 'features/cards/cardsSelectors'
@@ -24,7 +23,6 @@ export const AddCardModal = (props: AddCardModalPropsType) => {
 
 	const { register, handleSubmit, reset } = useForm()
 	const onSubmit = (data: any) => {
-		console.log(data)
 		dispatch(
 			cardsThunks.createCard({
 				card: { cardsPack_id: cardsPackId, question: data.question, answer: data.answer }

@@ -12,6 +12,7 @@ type AddModalPropsType = {
 	callback?: any
 	setOpen?: any
 	onClose?: any
+	id?: string
 }
 
 export const AddModal = (props: AddModalPropsType) => {
