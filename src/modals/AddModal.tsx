@@ -21,6 +21,7 @@ export const AddModal = (props: AddModalPropsType) => {
 	const dispatch = useAppDispatch()
 
 	const [file, setFile] = useState('')
+	const [fileDownload, setFileDownload] = useState(false)
 
 	const { register, handleSubmit, reset } = useForm()
 	const onSubmit = (data: any) => {
@@ -66,8 +67,9 @@ export const AddModal = (props: AddModalPropsType) => {
 					/>
 					<label>
 						<input type='file' onChange={handleUpload} style={{ display: 'none' }} />
-						<div className={style.downloadBtn}>download deck cover</div>
+						<div className={style.downloadBtn}>{file === '' ? 'download deck cover' : 'change deck cover'}</div>
 					</label>
+					{file === '' ? <div></div> : <img className={style.deckCover} src={file} alt='deckCover' />}
 					<FormControlLabel
 						control={<Checkbox defaultChecked={false} {...register('private')} />}
 						label='Private pack'
