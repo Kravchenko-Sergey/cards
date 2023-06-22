@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { BasicModal } from './BasicModal'
 import style from './AddModal.module.css'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField'
 import { Checkbox, FormControlLabel } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { packsThunks } from 'features/pasks/packsSlice'
+import { cardsThunks } from 'features/cards/cardsSlice'
 
 type AddModalPropsType = {
 	callback?: any
@@ -19,12 +20,34 @@ export const AddModal = (props: AddModalPropsType) => {
 	const isLoading = useAppSelector(appSelectors.selectIsLoading)
 	const dispatch = useAppDispatch()
 
+	const [file, setFile] = useState('')
+
 	const { register, handleSubmit, reset } = useForm()
 	const onSubmit = (data: any) => {
-		dispatch(
-			packsThunks.createPack({ cardsPack: { name: data.packName, deckCover: 'url or base64', private: data.private } })
-		)
+		dispatch(packsThunks.createPack({ cardsPack: { name: data.packName, deckCover: file, private: data.private } }))
 		reset()
+	}
+
+	const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files && e.target.files.length) {
+			const file = e.target.files[0]
+			console.log('file ', file)
+
+			if (file.size < 4000000) {
+				// https://developer.mozilla.org/ru/docs/Web/API/FileReader/FileReader
+				const reader = new FileReader()
+
+				reader.onloadend = () => {
+					const file64 = reader.result as string
+					console.log('file64: ', file64)
+					setFile(file64)
+				}
+				// https://developer.mozilla.org/ru/docs/Web/API/FileReader/readAsDataURL
+				reader.readAsDataURL(file)
+			} else {
+				console.error('Error: ', 'Файл слишком большого размера')
+			}
+		}
 	}
 
 	return (
@@ -41,6 +64,10 @@ export const AddModal = (props: AddModalPropsType) => {
 						sx={{ width: 332, mt: 1 }}
 						{...register('packName')}
 					/>
+					<label>
+						<input type='file' onChange={handleUpload} style={{ display: 'none' }} />
+						<div className={style.downloadBtn}>download deck cover</div>
+					</label>
 					<FormControlLabel
 						control={<Checkbox defaultChecked={false} {...register('private')} />}
 						label='Private pack'

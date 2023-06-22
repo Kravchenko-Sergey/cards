@@ -47,7 +47,9 @@ export const Pack = (props: PackPropsType) => {
 
 	return (
 		<TableRow>
-			<TableCell>{props.deckCover}</TableCell>
+			<TableCell>
+				<img className={style.deckCover} src={props.deckCover} alt='deckCover'></img>
+			</TableCell>
 			<TableCell onClick={() => handleRowName(props._id)}>{props.name}</TableCell>
 			<TableCell>{props.cardsCount}</TableCell>
 			<TableCell>{props.updated}</TableCell>

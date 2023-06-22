@@ -5,6 +5,7 @@ import { Pack } from './Pack/Pack'
 import { PackType } from 'features/pasks/packsTypes'
 import { packsSelectors } from 'features/pasks/packsSelectors'
 import { packsThunks } from 'features/pasks/packsSlice'
+import noCover from 'assets/img/noCover.png'
 
 export const PacksList = () => {
 	const packs = useAppSelector(packsSelectors.selectPacks)
@@ -65,7 +66,7 @@ export const PacksList = () => {
 								key={pack._id}
 								_id={pack._id}
 								user_id={pack.user_id}
-								deckCover={pack.name}
+								deckCover={pack.deckCover ? pack.deckCover : noCover}
 								name={pack.name}
 								cardsCount={pack.cardsCount}
 								updated={pack.updated}
