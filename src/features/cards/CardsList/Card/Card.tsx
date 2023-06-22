@@ -6,6 +6,7 @@ import deleteBtn from 'assets/img/delete.svg'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { cardsThunks } from 'features/cards/cardsSlice'
 import { UpdateCardModal } from 'modals/UpadateCardModal'
+import { DeleteCardModal } from 'modals/DeleteCardModal'
 
 export type CardPropsType = {
 	_id: string
@@ -45,13 +46,20 @@ export const Card = (props: CardPropsType) => {
 					<div className={style.actionButtons}>
 						{/*<img onClick={handleUpdateBtn} src={editBtn} alt='changeBtn' />*/}
 						<UpdateCardModal id={props._id} />
-						<img
+						{/*<img
 							onClick={() => {
 								dispatch(cardsThunks.deleteCard({ id: props._id }))
 								dispatch(cardsThunks.getCards({ cardsPack_id: props.cardsPackId }))
 							}}
 							src={deleteBtn}
 							alt='deleteBtn'
+						/>*/}
+						<DeleteCardModal
+							callback={() => {
+								dispatch(cardsThunks.deleteCard({ id: props._id }))
+								dispatch(cardsThunks.getCards({ cardsPack_id: props.cardsPackId }))
+							}}
+							question={props.question}
 						/>
 					</div>
 				</TableCell>
