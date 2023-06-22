@@ -37,7 +37,7 @@ const createCard = createAppAsyncThunk<{}, ArgCreateCardType>('cards/createCard'
 	}
 })
 
-const updateCard = createAppAsyncThunk<{}, ArgUpdateCardType>('cards/updateCard', async arg => {
+const updateCard = createAppAsyncThunk<{}, ArgUpdateCardType>('cards/updateCard', async (arg, thunkAPI) => {
 	try {
 		await cardsAPI.updateCard(arg)
 	} catch (e) {

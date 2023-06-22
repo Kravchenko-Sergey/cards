@@ -160,12 +160,7 @@ export const Cards = () => {
 						</>
 					)}
 				</div>
-				{myId !== '' && (
-					/*<button onClick={handleCreateCard} className={style.button}>
-						Add new card
-					</button>*/
-					<AddCardModal />
-				)}
+				{myId !== '' && <AddCardModal />}
 			</div>
 			<div className={style.headersTable}>
 				<div className={`${style.labelBlock} ${style.search}`}>

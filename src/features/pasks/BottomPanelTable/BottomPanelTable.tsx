@@ -33,7 +33,7 @@ export const BottomPanelTable = () => {
 		setTimeout(() => {
 			dispatch(packsThunks.getPacks({ ...params, page: 1, pageCount: 4 }))
 			setTotalPagesNumber(Math.ceil(cardPacksTotalCount / pageCount))
-		}, 1000)
+		}, 2000)
 	}, [])
 
 	return (
