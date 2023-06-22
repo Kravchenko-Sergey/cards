@@ -1,9 +1,7 @@
-import React from 'react'
 import { TableCell, TableRow } from '@mui/material'
 import style from 'features/pasks/PacksList/Pack/Pack.module.css'
 import teacherBtn from 'assets/img/teacher.svg'
 import { packsThunks } from 'features/pasks/packsSlice'
-import editBtn from 'assets/img/edit.svg'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { cardsThunks } from 'features/cards/cardsSlice'
 import { DeleteModal } from 'modals/DeleteModal'
@@ -17,6 +15,7 @@ type PackPropsType = {
 	name: string
 	cardsCount: number
 	updated: string
+	deckCover: string
 }
 
 export const Pack = (props: PackPropsType) => {
@@ -48,7 +47,7 @@ export const Pack = (props: PackPropsType) => {
 
 	return (
 		<TableRow>
-			<TableCell>{props.cardsCount}</TableCell>
+			<TableCell>{props.deckCover}</TableCell>
 			<TableCell onClick={() => handleRowName(props._id)}>{props.name}</TableCell>
 			<TableCell>{props.cardsCount}</TableCell>
 			<TableCell>{props.updated}</TableCell>

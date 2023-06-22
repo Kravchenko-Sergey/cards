@@ -81,6 +81,7 @@ const slice = createSlice({
 			state.searchParams.max = action.payload.max
 			state.searchParams.page = action.payload.page
 			state.searchParams.pageCount = action.payload.pageCount
+			state.searchParams.sortPacks = action.payload.sortPacks
 			state.searchParams.user_id = action.payload.user_id
 			state.packs = action.payload.packs
 			state.cardPacksTotalCount = action.payload.cardPacksTotalCount
