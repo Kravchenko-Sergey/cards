@@ -11,7 +11,6 @@ import { CardsList } from 'features/cards/CardsList/CardsList'
 import { cardsThunks } from 'features/cards/cardsSlice'
 import teacherBtn from 'assets/img/teacher.svg'
 import editBtn from 'assets/img/edit.svg'
-import deleteBtn from 'assets/img/delete.svg'
 import { packsSelectors } from 'features/pasks/packsSelectors'
 import { cardsSelectors } from 'features/cards/cardsSelectors'
 import { authSelectors } from 'features/auth/authSelectors'
@@ -97,7 +96,7 @@ export const Cards = () => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			dispatch(cardsThunks.getCards({ ...params, page: 1, pageCount: 4 }))
+			dispatch(cardsThunks.getCards({ ...params, page: 1, pageCount: 4, sortCards: '' }))
 			setTotalPagesNumber(Math.ceil(cardsTotalCount / pageCount))
 		}, 1000)
 	}, [])

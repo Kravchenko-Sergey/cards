@@ -28,6 +28,7 @@ export type ArgGetCardsType = {
 	sortCards?: string
 	page?: number
 	pageCount?: number
+	grade?: number
 }
 
 export type ArgCreateCardType = {

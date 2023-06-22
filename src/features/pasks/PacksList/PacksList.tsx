@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import style from './PacksList.module.css'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
@@ -13,6 +12,15 @@ export const PacksList = () => {
 	const sortPacks = useAppSelector(state => state.packs.searchParams.sortPacks)
 	const dispatch = useAppDispatch()
 
+	const sortDecks = (property: string) => {
+		dispatch(
+			packsThunks.getPacks({
+				...params,
+				sortPacks: sortPacks === '' ? `0${property}` : sortPacks[0] === '0' ? `1${property}` : ''
+			})
+		)
+	}
+
 	return (
 		<TableContainer component={Paper} className={style.table}>
 			{packs.length !== 0 ? (
@@ -24,40 +32,19 @@ export const PacksList = () => {
 							</TableCell>
 							<TableCell
 								onClick={() => {
-									dispatch(
-										packsThunks.getPacks({
-											...params,
-											sortPacks: sortPacks === '' ? '0name' : sortPacks[0] === '0' ? '1name' : ''
-										})
-									)
+									sortDecks('name')
 								}}
 								sx={{ fontWeight: 700 }}
 								width='26%'
 							>
 								Name
 							</TableCell>
-							<TableCell
-								onClick={() => {
-									dispatch(
-										packsThunks.getPacks({
-											...params,
-											sortPacks: sortPacks === '' ? '0cardsCount' : sortPacks[0] === '0' ? '1cardsCount' : ''
-										})
-									)
-								}}
-								sx={{ fontWeight: 700 }}
-								width='20%'
-							>
+							<TableCell onClick={() => sortDecks('cardsCount')} sx={{ fontWeight: 700 }} width='20%'>
 								Cards
 							</TableCell>
 							<TableCell
 								onClick={() => {
-									dispatch(
-										packsThunks.getPacks({
-											...params,
-											sortPacks: sortPacks === '' ? '0updated' : sortPacks[0] === '0' ? '1updated' : ''
-										})
-									)
+									sortDecks('updated')
 								}}
 								sx={{ fontWeight: 700 }}
 								width='18%'
