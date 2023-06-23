@@ -1,0 +1,10 @@
+.actionButtons {
+    display: flex;
+    column-gap: 14px;
+}
+
+.cardQuestionImg {
+    width: 118px;
+    height: 48px;
+    border-radius: 2px;
+}

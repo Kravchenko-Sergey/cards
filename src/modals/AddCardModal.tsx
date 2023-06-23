@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { BasicModal } from './BasicModal'
 import style from './AddModal.module.css'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
@@ -23,13 +23,21 @@ export const AddCardModal = (props: AddCardModalPropsType) => {
 
 	const { register, handleSubmit, reset } = useForm()
 	const onSubmit = (data: any) => {
+		if (age === 'Text') {
+			dispatch(
+				cardsThunks.createCard({
+					card: { cardsPack_id: cardsPackId, question: data.question, answer: data.answer }
+				})
+			)
+			dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }))
+			reset()
+		}
 		dispatch(
 			cardsThunks.createCard({
-				card: { cardsPack_id: cardsPackId, question: data.question, answer: data.answer }
+				card: { cardsPack_id: cardsPackId, questionImg: question, answerImg: answer }
 			})
 		)
 		dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }))
-		reset()
 	}
 	//select
 	const [age, setAge] = React.useState('')
@@ -37,6 +45,24 @@ export const AddCardModal = (props: AddCardModalPropsType) => {
 		setAge(event.target.value as string)
 	}
 	//
+	const [question, setQuestion] = useState('')
+	const [answer, setAnswer] = useState('')
+	const handleUpload = (e: ChangeEvent<HTMLInputElement>, setState: any) => {
+		if (e.target.files && e.target.files.length) {
+			const file = e.target.files[0]
+			if (file.size < 4000000) {
+				const reader = new FileReader()
+				reader.onloadend = () => {
+					const file64 = reader.result as string
+					setState(file64)
+				}
+				reader.readAsDataURL(file)
+			} else {
+				console.error('Error: ', 'Файл слишком большого размера')
+			}
+		}
+	}
+
 	return (
 		<BasicModal type='btn' text='Add new card' className={style.addBtn}>
 			<div className={style.container}>
@@ -44,12 +70,11 @@ export const AddCardModal = (props: AddCardModalPropsType) => {
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<Box sx={{ minWidth: 120 }}>
 						<FormControl fullWidth>
-							<InputLabel id='demo-simple-select-label'>Age</InputLabel>
+							<InputLabel id='demo-simple-select-label'></InputLabel>
 							<Select
 								labelId='demo-simple-select-label'
 								id='demo-simple-select'
 								value={age}
-								label='Age'
 								onChange={handleChange}
 								size={'small'}
 							>
@@ -59,23 +84,45 @@ export const AddCardModal = (props: AddCardModalPropsType) => {
 						</FormControl>
 					</Box>
 					<div className={style.namePack}>Question</div>
-					<TextField
-						id='outlined-basic'
-						label='Question'
-						variant='outlined'
-						size='small'
-						sx={{ width: 332, mt: 1 }}
-						{...register('question')}
-					/>
+					{age === 'Text' ? (
+						<TextField
+							id='outlined-basic'
+							label='Question'
+							variant='outlined'
+							size='small'
+							sx={{ width: 332, mt: 1 }}
+							{...register('question')}
+						/>
+					) : (
+						<>
+							<label>
+								<input type='file' onChange={e => handleUpload(e, setQuestion)} style={{ display: 'none' }} />
+								<div className={style.downloadBtn}>
+									{question === '' ? 'upload question image' : 'change question image'}
+								</div>
+							</label>
+							{question === '' ? <div></div> : <img className={style.deckCover} src={question} alt='deckCover' />}
+						</>
+					)}
 					<div className={style.namePack}>Answer</div>
-					<TextField
-						id='outlined-basic'
-						label='Answer'
-						variant='outlined'
-						size='small'
-						sx={{ width: 332, mt: 1 }}
-						{...register('answer')}
-					/>
+					{age === 'Text' ? (
+						<TextField
+							id='outlined-basic'
+							label='Answer'
+							variant='outlined'
+							size='small'
+							sx={{ width: 332, mt: 1 }}
+							{...register('answer')}
+						/>
+					) : (
+						<>
+							<label>
+								<input type='file' onChange={e => handleUpload(e, setAnswer)} style={{ display: 'none' }} />
+								<div className={style.downloadBtn}>{answer === '' ? 'upload answer image' : 'change answer image'}</div>
+							</label>
+							{answer === '' ? <div></div> : <img className={style.deckCover} src={answer} alt='deckCover' />}
+						</>
+					)}
 					<div className={style.btnBlock}>
 						<button type={'button'} className={style.cancelBtn}>
 							Cancel

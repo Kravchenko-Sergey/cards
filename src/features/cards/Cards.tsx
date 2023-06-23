@@ -111,6 +111,8 @@ export const Cards = () => {
 		dispatch(cardsThunks.getCards({ cardsPack_id: cardsPackId }))
 	}*/
 
+	console.log(packName)
+
 	if (!isLoggedIn) {
 		return <Navigate to={'/login'} />
 	}

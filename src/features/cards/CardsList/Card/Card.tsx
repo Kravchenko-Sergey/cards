@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Rating, TableCell, TableRow } from '@mui/material'
-import style from 'features/cards/Cards.module.css'
-import editBtn from 'assets/img/edit.svg'
-import deleteBtn from 'assets/img/delete.svg'
+import style from 'features/cards/CardsList/Card/Card.module.css'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { cardsThunks } from 'features/cards/cardsSlice'
 import { UpdateCardModal } from 'modals/UpadateCardModal'
@@ -12,7 +10,9 @@ export type CardPropsType = {
 	_id: string
 	cardsPackId: string
 	question: string
+	questionImg: string
 	answer: string
+	answerImg: string
 	updated: string
 	grade: number
 }
@@ -29,14 +29,22 @@ export const Card = (props: CardPropsType) => {
 	}
 	return (
 		<TableRow key={props._id}>
-			<TableCell align='left'>{props.question}</TableCell>
-			<TableCell align='left'>{props.answer}</TableCell>
+			<TableCell align='left'>
+				{!props.questionImg ? (
+					props.question
+				) : (
+					<img className={style.cardQuestionImg} src={props.questionImg} alt='dsaf' />
+				)}
+			</TableCell>
+			<TableCell align='left'>
+				{!props.answerImg ? props.answer : <img className={style.cardQuestionImg} src={props.answerImg} alt='dsaf' />}
+			</TableCell>
 			<TableCell align='left'>{props.updated}</TableCell>
 			<TableCell align='left'>
 				<Rating
 					name='simple-controlled'
 					value={Math.round(props.grade)}
-					onChange={(event, newValue) => {
+					onChange={newValue => {
 						setValue(newValue)
 					}}
 				/>
@@ -44,16 +52,7 @@ export const Card = (props: CardPropsType) => {
 			{myId !== '' && (
 				<TableCell align='left'>
 					<div className={style.actionButtons}>
-						{/*<img onClick={handleUpdateBtn} src={editBtn} alt='changeBtn' />*/}
 						<UpdateCardModal id={props._id} />
-						{/*<img
-							onClick={() => {
-								dispatch(cardsThunks.deleteCard({ id: props._id }))
-								dispatch(cardsThunks.getCards({ cardsPack_id: props.cardsPackId }))
-							}}
-							src={deleteBtn}
-							alt='deleteBtn'
-						/>*/}
 						<DeleteCardModal
 							callback={() => {
 								dispatch(cardsThunks.deleteCard({ id: props._id }))

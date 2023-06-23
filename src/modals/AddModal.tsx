@@ -21,7 +21,6 @@ export const AddModal = (props: AddModalPropsType) => {
 	const dispatch = useAppDispatch()
 
 	const [file, setFile] = useState('')
-	const [fileDownload, setFileDownload] = useState(false)
 
 	const { register, handleSubmit, reset } = useForm()
 	const onSubmit = (data: any) => {

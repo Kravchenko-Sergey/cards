@@ -12,7 +12,6 @@ import { createAppAsyncThunk, thunkTryCatch } from 'common/utils'
 const getCards = createAppAsyncThunk<any, ArgGetCardsType>('cards/getCards', async arg => {
 	try {
 		const res = await cardsAPI.getCards(arg)
-		console.log(arg)
 		return {
 			cards: res.data.cards,
 			cardsTotalCount: res.data.cardsTotalCount,

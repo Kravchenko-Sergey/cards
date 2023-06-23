@@ -56,7 +56,9 @@ export const CardsList = () => {
 								_id={card._id}
 								cardsPackId={card.cardsPack_id}
 								question={card.question}
+								questionImg={card.questionImg}
 								answer={card.answer}
+								answerImg={card.answerImg}
 								updated={card.updated}
 								grade={card.grade}
 							/>
